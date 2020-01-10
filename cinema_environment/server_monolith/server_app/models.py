@@ -21,27 +21,24 @@ class Film(models.Model):
     title = models.CharField(
         verbose_name="Назва",
         max_length=256,
-        error_messages="Помилка введеного значення",
-        help_text="Назва фільму (до 256 символів)",
-        unique=True
+        help_text="Назва фільму"
+
     )
 
     description = models.TextField(
         verbose_name="Опис",
         max_length=512,
-        error_messages="Помилка введеного значення",
-        help_text="Опис фільму (до 512 символів)"
+        help_text="Опис фільму"
     )
 
     date = models.DateField(
         verbose_name="Дата",
         auto_now_add=True,
-        error_messages="Помилка введеного значення",
-        help_text="Дата прем'єри")
+        help_text="Дата прем'єри"
+    )
 
     duration = models.IntegerField(
         verbose_name="Тривалість",
-        error_messages="Помилка введеного значення",
         help_text="Тривалість фільму"
     )
 
@@ -74,29 +71,25 @@ class Cinema(models.Model):
     name = models.CharField(
         verbose_name="Назва",
         max_length=256,
-        error_messages="Помилка введеного значення",
-        help_text="Назва кінотеатру (до 256 символів)"
+        help_text="Назва кінотеатру"
     )
 
     address = models.TextField(
         verbose_name="Адреса",
         max_length=256,
-        error_messages="Помилка введеного значення",
-        help_text="Адреса кінотеатру (до 256 символів)"
+        help_text="Адреса кінотеатру"
     )
 
     city = models.CharField(
         verbose_name="Місто",
         max_length=128,
-        error_messages="Помилка введеного значення",
-        help_text="Назва міста (до 128 символів)"
     )
 
+    # TODO: regexp
     telephone = models.CharField(
         verbose_name="Телефон",
         max_length=20,
-        error_messages="Помилка введеного значення",
-        help_text="Telephone regexp !!!"
+        help_text="Контактний телефон"
     )
 
     geo_lat = models.FloatField(
@@ -153,11 +146,13 @@ class Timeline(models.Model):
     )
 
     time = models.TimeField(
-        verbose_name="Час"
+        verbose_name="Час",
+        help_text="Час показу"
     )
 
     date = models.DateField(
-        verbose_name="Дата"
+        verbose_name="Дата",
+        help_text="Дата показу"
     )
 
 
@@ -172,7 +167,7 @@ class Hall(models.Model):
     name = models.CharField(
         verbose_name="Назва залу",
         max_length=128,
-        help_text="Назва залу"
+        help_text="Найменування залу"
     )
 
     cinema_id = models.ForeignKey(
@@ -213,8 +208,7 @@ class Ticket(models.Model):
     place = models.CharField(
         verbose_name="Місце",
         max_length=32,
-        error_messages="Помилка введеного значення",
-        help_text="Місце в залі"
+        help_text="Місце у залі"
     )
 
     code = models.CharField(
@@ -225,7 +219,8 @@ class Ticket(models.Model):
     status = models.PositiveIntegerField(
         choices=STATUS,
         default=2,
-        verbose_name="Статус"
+        verbose_name="Статус",
+        help_text="Статус квитка"
     )
 
     user = models.ForeignKey(

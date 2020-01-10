@@ -1,13 +1,14 @@
-from django.conf.urls import url
-from django.conf.urls.static import static
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
 from .views import *
 
 app_name = 'film'
 urlpatterns = [
-    path('films/', api_films),
-
-
+    path('film/', api_film),
+    path('cinema/', api_cinema),
+    path('timeline/', api_timeline),
+    path('poster/', api_poster),
+    path('hall/', api_hall),
+    path('ticket/', api_ticket),
+    path('user/', api_user),
 ]

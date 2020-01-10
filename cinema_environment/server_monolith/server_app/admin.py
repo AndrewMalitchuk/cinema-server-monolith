@@ -3,9 +3,6 @@ from django.contrib import admin
 from .models import Film, Cinema, Poster, Timeline, Hall, Ticket
 
 
-# Register your models here.
-
-
 class FilmAdmin(admin.ModelAdmin):
     list_display = ('title', 'date', 'duration', 'genre')
     list_display_links = ('title', 'date', 'duration', 'genre')
