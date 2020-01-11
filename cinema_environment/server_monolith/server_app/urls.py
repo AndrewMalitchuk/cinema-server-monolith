@@ -11,4 +11,5 @@ urlpatterns = [
     path('hall/', api_hall),
     path('ticket/', api_ticket),
     path('user/', api_user),
+    path('user/create',api_registration)
 ]

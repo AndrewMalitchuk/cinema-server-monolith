@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from .models import Film, Cinema, Timeline, Poster, Hall, Ticket
 from .serializers import FilmSerializer, CinemaSerializer, TimelineSerializer, PosterSerializer, HallSerializer, \
-    TicketSerializer
+    TicketSerializer, RegistrationSerializer
 
 
 @api_view(['GET'])
@@ -152,3 +152,14 @@ def api_user(request):
             'is_staff': user.is_staff,
             'is_active': user.is_active
         })
+
+
+@api_view(['POST'])
+def api_registration(request):
+    if request.method == 'POST':
+        serializer = RegistrationSerializer(data=request.data)
+        if serializer.is_valid():
+            account = serializer.create()
+            data={}
+            data['username']=account.username
+            return Response(data)
