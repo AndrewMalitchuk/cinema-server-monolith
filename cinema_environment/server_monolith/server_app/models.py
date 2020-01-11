@@ -1,5 +1,8 @@
+from django.contrib.auth.base_user import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
 
 
 class Film(models.Model):
@@ -227,3 +230,6 @@ class Ticket(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
+
+
+

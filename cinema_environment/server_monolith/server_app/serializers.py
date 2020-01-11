@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from rest_framework.serializers import ModelSerializer
+from rest_framework.validators import UniqueValidator
 
 from .models import Film, Cinema, Timeline, Poster, Hall, Ticket
-
-UserModel = get_user_model()
 
 
 class FilmSerializer(serializers.ModelSerializer):
@@ -49,22 +49,26 @@ class TicketSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class RegistrationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'username', 'password', 'email', 'first_name', 'last_name')
-        write_only_fields = ('password',)
-        read_only_fields = ('id',)
+UserModel = get_user_model()
 
+class UserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    # Тут в ...objects.create(..)  можеш додати ті поля які треба передати
+    # і додай їх в Мету
+    # і прошу тебе, Андрей, зоть деколи дивись що ти робиш
+    # username обезательно бо воно юнік (хз крч)
     def create(self, validated_data):
-        user = User.objects.create(
-            username=validated_data['username'],
+        user = UserModel.objects.create(
             email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
+            username=validated_data['username'],
+            is_staff=validated_data['is_staff'],
         )
-
         user.set_password(validated_data['password'])
         user.save()
 
         return user
+
+    class Meta:
+        model = UserModel
+        fields = ("id", "email", "password","username","is_staff")

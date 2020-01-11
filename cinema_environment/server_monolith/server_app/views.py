@@ -1,9 +1,14 @@
-from rest_framework.decorators import api_view
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
+from rest_framework import status, generics, permissions
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Film, Cinema, Timeline, Poster, Hall, Ticket
-from .serializers import FilmSerializer, CinemaSerializer, TimelineSerializer, PosterSerializer, HallSerializer, \
-    TicketSerializer, RegistrationSerializer
+from .serializers import *
 
 
 @api_view(['GET'])
@@ -154,12 +159,9 @@ def api_user(request):
         })
 
 
-@api_view(['POST'])
-def api_registration(request):
-    if request.method == 'POST':
-        serializer = RegistrationSerializer(data=request.data)
-        if serializer.is_valid():
-            account = serializer.create()
-            data={}
-            data['username']=account.username
-            return Response(data)
+class CreateUserView(CreateAPIView):
+    model = get_user_model()
+    permission_classes = [
+        permissions.AllowAny  # Or anon users can't register
+    ]
+    serializer_class = UserSerializer
