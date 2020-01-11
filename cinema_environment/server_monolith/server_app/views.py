@@ -11,7 +11,7 @@ from .models import Film, Cinema, Timeline, Poster, Hall, Ticket
 from .serializers import *
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST', 'PUT'])
 def api_film(request):
     if request.method == 'GET':
         films = Film.objects.all()
@@ -36,9 +36,37 @@ def api_film(request):
             serializer = FilmSerializer(films, many=True)
 
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = FilmSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            film = Film.objects.get(pk=id)
+            serializer = FilmSerializer(film, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def api_cinema(request):
     if request.method == 'GET':
         cinemas = Cinema.objects.all()
@@ -59,9 +87,20 @@ def api_cinema(request):
             serializer = CinemaSerializer(cinemas, many=True)
 
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = CinemaSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def api_timeline(request):
     if request.method == 'GET':
         timeline = Timeline.objects.all()
@@ -85,9 +124,20 @@ def api_timeline(request):
             serializer = TimelineSerializer(timeline, many=True)
 
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = TimelineSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def api_poster(request):
     if request.method == 'GET':
 
@@ -108,9 +158,20 @@ def api_poster(request):
             serializer = PosterSerializer(poster, many=True)
 
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = PosterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def api_hall(request):
     if request.method == 'GET':
         hall = Hall.objects.all()
@@ -123,9 +184,20 @@ def api_hall(request):
             serializer = HallSerializer(hall)
 
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = HallSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def api_ticket(request):
     if request.method == 'GET':
         ticket = Ticket.objects.all()
@@ -142,6 +214,17 @@ def api_ticket(request):
             serializer = TicketSerializer(ticket, many=True)
 
         return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = TicketSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])

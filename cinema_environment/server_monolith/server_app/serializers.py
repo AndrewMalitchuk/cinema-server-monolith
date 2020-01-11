@@ -8,11 +8,13 @@ from .models import Film, Cinema, Timeline, Poster, Hall, Ticket
 
 
 class FilmSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Film
         # TODO: change fields
         # fields=('title', 'date', 'duration', 'genre')
         fields = '__all__'
+
 
 
 class CinemaSerializer(serializers.ModelSerializer):
