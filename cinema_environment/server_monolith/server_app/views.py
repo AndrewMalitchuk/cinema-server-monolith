@@ -1,17 +1,12 @@
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from rest_framework import status, generics, permissions
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework import status, permissions
+from rest_framework.decorators import api_view
 from rest_framework.generics import CreateAPIView
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
-from .models import Film, Cinema, Timeline, Poster, Hall, Ticket
 from .serializers import *
 
 
-@api_view(['GET', 'POST', 'PUT'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def api_film(request):
     if request.method == 'GET':
         films = Film.objects.all()
@@ -35,7 +30,9 @@ def api_film(request):
             films = Film.objects.get(genre=genre)
             serializer = FilmSerializer(films, many=True)
 
-        return Response(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = FilmSerializer(data=request.data)
         if serializer.is_valid():
@@ -64,9 +61,18 @@ def api_film(request):
                     status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'DELETE':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            film = Film.objects.get(pk=id)
+            film.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'PUT'])
 def api_cinema(request):
     if request.method == 'GET':
         cinemas = Cinema.objects.all()
@@ -86,7 +92,9 @@ def api_cinema(request):
             cinemas = Cinema.objects.filter(city=city)
             serializer = CinemaSerializer(cinemas, many=True)
 
-        return Response(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = CinemaSerializer(data=request.data)
         if serializer.is_valid():
@@ -98,9 +106,26 @@ def api_cinema(request):
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            cinema = Cinema.objects.get(pk=id)
+            serializer = CinemaSerializer(cinema, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'PUT'])
 def api_timeline(request):
     if request.method == 'GET':
         timeline = Timeline.objects.all()
@@ -123,7 +148,9 @@ def api_timeline(request):
             timeline = Timeline.objects.filter(date=date)
             serializer = TimelineSerializer(timeline, many=True)
 
-        return Response(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = TimelineSerializer(data=request.data)
         if serializer.is_valid():
@@ -135,9 +162,24 @@ def api_timeline(request):
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            timeline = Timeline.objects.get(pk=id)
+            serializer = TimelineSerializer(timeline, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_200_OK)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'PUT'])
 def api_poster(request):
     if request.method == 'GET':
 
@@ -157,7 +199,9 @@ def api_poster(request):
             poster = Poster.objects.filter(film_id=film_id)
             serializer = PosterSerializer(poster, many=True)
 
-        return Response(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = PosterSerializer(data=request.data)
         if serializer.is_valid():
@@ -169,21 +213,44 @@ def api_poster(request):
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            poster = Poster.objects.get(pk=id)
+            serializer = PosterSerializer(poster, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'PUT'])
 def api_hall(request):
     if request.method == 'GET':
         hall = Hall.objects.all()
         serializer = HallSerializer(hall, many=True)
 
         cinema_id = request.GET.get('cinema_id', None)
+        id = request.GET.get('id', None)
 
         if cinema_id is not None:
             hall = Hall.objects.get(cinema_id=cinema_id)
             serializer = HallSerializer(hall)
+        elif id is not None:
+            hall = Hall.objects.get(pk=id)
+            serializer = HallSerializer(hall)
 
-        return Response(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = HallSerializer(data=request.data)
         if serializer.is_valid():
@@ -195,9 +262,26 @@ def api_hall(request):
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            hall = Hall.objects.get(pk=id)
+            serializer = HallSerializer(hall, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST', 'PUT'])
 def api_ticket(request):
     if request.method == 'GET':
         ticket = Ticket.objects.all()
@@ -213,7 +297,9 @@ def api_ticket(request):
             ticket = Ticket.objects.filter(user=user_id)
             serializer = TicketSerializer(ticket, many=True)
 
-        return Response(serializer.data)
+        return Response(
+            serializer.data,
+            status=status.HTTP_200_OK)
     elif request.method == 'POST':
         serializer = TicketSerializer(data=request.data)
         if serializer.is_valid():
@@ -225,6 +311,23 @@ def api_ticket(request):
             return Response(
                 serializer.errors,
                 status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            ticket = Ticket.objects.get(pk=id)
+            serializer = TicketSerializer(ticket, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    serializer.data,
+                    status=status.HTTP_200_OK)
+            else:
+                return Response(
+                    serializer.errors,
+                    status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])

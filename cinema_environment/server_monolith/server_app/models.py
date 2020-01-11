@@ -1,8 +1,11 @@
+from datetime import datetime
+
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin, AbstractUser
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
+from hashlib import md5
 
 
 class Film(models.Model):
