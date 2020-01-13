@@ -27,7 +27,7 @@ def api_film(request):
             films = Film.objects.get(pk=id)
             serializer = FilmSerializer(films)
         elif genre is not None:
-            films = Film.objects.get(genre=genre)
+            films = Film.objects.filter(genre=genre)
             serializer = FilmSerializer(films, many=True)
 
         return Response(
