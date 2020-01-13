@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from django.contrib.auth import get_user_model
@@ -16,6 +17,25 @@ class FilmSerializer(serializers.ModelSerializer):
         # TODO: change fields
         # fields=('title', 'date', 'duration', 'genre')
         fields = '__all__'
+
+    # def download_file(self):
+    #     ''' Download file '''
+    #     # Open template
+    #     from django.conf import settings
+    #     template_url = os.path.join(settings.BASE_DIR, 'templates', 'first_page.html')
+    #     template_open = open(template_url, 'r')
+    #     # Read template
+    #     from django import template
+    #     t = template.Template(template_open.read())
+    #     c = template.Context({})
+    #     # Create pdf
+    #     pdf = pdfkit.from_string(t.render(c))
+    #     # Create and return response with created pdf
+    #     response = HttpResponse(pdf)
+    #     response['Content-Type'] = 'application/pdf'
+    #     response['Content-disposition'] = 'attachment ; filename = {}'.format(my_filename)
+    #
+    #     return response
 
 
 class CinemaSerializer(serializers.ModelSerializer):

@@ -1,7 +1,10 @@
-from rest_framework import status, permissions
+from django.http import FileResponse
+from rest_framework import status, permissions, generics
 from rest_framework.decorators import api_view
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
+from django.conf import settings
+from django.conf.urls.static import static
 
 from .serializers import *
 
@@ -400,3 +403,6 @@ class CreateUserView(CreateAPIView):
         permissions.AllowAny  # Or anon users can't register
     ]
     serializer_class = UserSerializer
+
+
+

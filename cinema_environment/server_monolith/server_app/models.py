@@ -60,7 +60,7 @@ class Film(models.Model):
         help_text="Посилання на YouTube",
     )
 
-    pic_url = models.ImageField()
+    pic_url = models.ImageField(upload_to="film/poster/", verbose_name="Постер фільму")
 
     def __str__(self):
         return self.title
@@ -106,7 +106,7 @@ class Cinema(models.Model):
         verbose_name="Координати: довгота"
     )
 
-    pic_url = models.ImageField()
+    pic_url = models.ImageField(upload_to="cinema/pic/",verbose_name="Зображення кінотеатру")
 
     def __str__(self):
         return self.name + " [" + self.city + "]"
