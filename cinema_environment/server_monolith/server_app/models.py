@@ -219,7 +219,9 @@ class Ticket(models.Model):
 
     code = models.CharField(
         verbose_name="Код",
-        max_length=1024
+        max_length=1024,
+        null=True,
+        blank=True
     )
 
     status = models.PositiveIntegerField(

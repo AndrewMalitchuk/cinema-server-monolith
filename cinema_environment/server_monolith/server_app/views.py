@@ -72,7 +72,7 @@ def api_film(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST', 'PUT'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def api_cinema(request):
     if request.method == 'GET':
         cinemas = Cinema.objects.all()
@@ -123,9 +123,18 @@ def api_cinema(request):
                     status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == "DELETE":
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            cinema = Cinema.objects.get(pk=id)
+            cinema.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST', 'PUT'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def api_timeline(request):
     if request.method == 'GET':
         timeline = Timeline.objects.all()
@@ -177,9 +186,18 @@ def api_timeline(request):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            timeline = Timeline.objects.get(pk=id)
+            timeline.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST', 'PUT'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def api_poster(request):
     if request.method == 'GET':
 
@@ -230,9 +248,18 @@ def api_poster(request):
                     status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            poster = Poster.objects.get(pk=id)
+            poster.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST', 'PUT'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def api_hall(request):
     if request.method == 'GET':
         hall = Hall.objects.all()
@@ -279,9 +306,18 @@ def api_hall(request):
                     status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            hall = Hall.objects.get(pk=id)
+            hall.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@api_view(['GET', 'POST', 'PUT'])
+@api_view(['GET', 'POST', 'PUT', 'DELETE'])
 def api_ticket(request):
     if request.method == 'GET':
         ticket = Ticket.objects.all()
@@ -289,6 +325,7 @@ def api_ticket(request):
 
         film_id = request.GET.get('film_id', None)
         user_id = request.GET.get('user_id', None)
+        code = request.GET.get('code', None)
 
         if film_id is not None and user_id is not None:
             ticket = Ticket.objects.filter(film_id=film_id, user=user_id)
@@ -296,6 +333,9 @@ def api_ticket(request):
         elif user_id is not None:
             ticket = Ticket.objects.filter(user=user_id)
             serializer = TicketSerializer(ticket, many=True)
+        elif code is not None:
+            ticket = Ticket.objects.get(code=code)
+            serializer = TicketSerializer(ticket)
 
         return Response(
             serializer.data,
@@ -326,6 +366,15 @@ def api_ticket(request):
                 return Response(
                     serializer.errors,
                     status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        id = request.GET.get('id', None)
+
+        if id is not None:
+            ticket = Ticket.objects.get(pk=id)
+            ticket.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
