@@ -2,6 +2,8 @@ from django.http import FileResponse
 from rest_framework import status, permissions, generics
 from rest_framework.decorators import api_view
 from rest_framework.generics import CreateAPIView
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.conf import settings
 from django.conf.urls.static import static
@@ -10,7 +12,10 @@ from .serializers import *
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def api_film(request):
+    # permission_classes = (IsAuthenticated,)
+
     if request.method == 'GET':
         films = Film.objects.all()
         serializer = FilmSerializer(films, many=True)
