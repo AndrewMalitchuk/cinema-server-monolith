@@ -1,21 +1,19 @@
-from django.http import FileResponse
-from rest_framework import status, permissions, generics
-from rest_framework.decorators import api_view
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from rest_framework import status, permissions
 from rest_framework.generics import CreateAPIView
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from django.conf import settings
-from django.conf.urls.static import static
 
+from .forms import HallForm, CinemaForm
+from cinema_environment.server_monolith.server_app.permission import IsStaffOrAdminWriteOnly
 from .serializers import *
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsStaffOrAdminWriteOnly])
 def api_film(request):
-    # permission_classes = (IsAuthenticated,)
-
     if request.method == 'GET':
         films = Film.objects.all()
         serializer = FilmSerializer(films, many=True)
@@ -81,6 +79,7 @@ def api_film(request):
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsStaffOrAdminWriteOnly])
 def api_cinema(request):
     if request.method == 'GET':
         cinemas = Cinema.objects.all()
@@ -143,6 +142,7 @@ def api_cinema(request):
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsStaffOrAdminWriteOnly])
 def api_timeline(request):
     if request.method == 'GET':
         timeline = Timeline.objects.all()
@@ -206,6 +206,7 @@ def api_timeline(request):
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsStaffOrAdminWriteOnly])
 def api_poster(request):
     if request.method == 'GET':
 
@@ -268,6 +269,7 @@ def api_poster(request):
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsStaffOrAdminWriteOnly])
 def api_hall(request):
     if request.method == 'GET':
         hall = Hall.objects.all()
@@ -326,6 +328,7 @@ def api_hall(request):
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
+@permission_classes([IsStaffOrAdminWriteOnly])
 def api_ticket(request):
     if request.method == 'GET':
         ticket = Ticket.objects.all()
@@ -388,6 +391,7 @@ def api_ticket(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def api_user(request):
     if request.method == 'GET':
         user = request.user
@@ -403,11 +407,35 @@ def api_user(request):
 
 
 class CreateUserView(CreateAPIView):
+    # permission_classes = (IsAuthenticated,)
     model = get_user_model()
     permission_classes = [
         permissions.AllowAny  # Or anon users can't register
     ]
+
     serializer_class = UserSerializer
 
 
+#
+@permission_classes([AllowAny])
+def hall_form(request):
+    if request.method == "POST":
+        form = HallForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=True)
+            instance.save()
+    else:
+        form = HallForm()
+    return render(request, "forms/hall_form.html", {"form": form})
 
+
+@permission_classes([AllowAny])
+def cinema_form(request):
+    if request.method == "POST":
+        form = CinemaForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=True)
+            instance.save()
+    else:
+        form = CinemaForm()
+    return render(request, "forms/cinema_form.html", {"form": form})

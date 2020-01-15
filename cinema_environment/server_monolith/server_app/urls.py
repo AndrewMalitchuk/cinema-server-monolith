@@ -14,5 +14,7 @@ urlpatterns = [
     path('hall/', api_hall),
     path('ticket/', api_ticket),
     path('user/', api_user),
-    path('create/',CreateUserView.as_view())
+    path('create/', CreateUserView.as_view()),
+    path('hall_form/', hall_form),
+    path('cinema_form/', cinema_form),
 ]
