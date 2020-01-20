@@ -34,9 +34,9 @@ class HallAdmin(admin.ModelAdmin):
 
 
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ('cinema_id', 'film_id', 'place', 'status', 'user')
-    list_display_links = ('cinema_id', 'film_id', 'place', 'status', 'user')
-    search_fields = ('cinema_id', 'film_id', 'place', 'status', 'user')
+    list_display = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
+    list_display_links = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
+    search_fields = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
 
 
 admin.site.register(Film, FilmAdmin)

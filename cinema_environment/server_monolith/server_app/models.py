@@ -224,6 +224,11 @@ class Ticket(models.Model):
         blank=True
     )
 
+    date=models.DateTimeField(
+        verbose_name="Дата",
+        auto_now_add=True
+    )
+
     status = models.PositiveIntegerField(
         choices=STATUS,
         default=2,

@@ -17,4 +17,6 @@ urlpatterns = [
     path('create/', CreateUserView.as_view()),
     path('hall_form/', hall_form),
     path('cinema_form/', cinema_form),
+    path('email/', email),
+
 ]

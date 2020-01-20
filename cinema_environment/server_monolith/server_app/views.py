@@ -1,13 +1,19 @@
+import qrcode
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from qrcode.image.pure import PymagingImage
 from rest_framework import status, permissions
 from rest_framework.generics import CreateAPIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.mail import EmailMessage
+from qrcode.image.pure import PymagingImage
 
 from .forms import HallForm, CinemaForm
-from cinema_environment.server_monolith.server_app.permission import IsStaffOrAdminWriteOnly
+from .permission import IsStaffOrAdminWriteOnly
 from .serializers import *
 
 
@@ -439,3 +445,35 @@ def cinema_form(request):
     else:
         form = CinemaForm()
     return render(request, "forms/cinema_form.html", {"form": form})
+
+
+# Email sending test
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def email(request):
+    if request.method == 'GET':
+        email = request.GET.get('email', None)
+        if email is not None:
+
+            # https://pypi.org/project/qrcode/
+            # https://dropmail.me/ru/
+
+
+            subject = 'cinema-app'
+            body = 'Here is your ticket, comrade'
+            from_email = settings.EMAIL_HOST_USER
+            to_email = email
+
+            mail = EmailMessage(subject=subject, body=body, from_email=from_email, to=[to_email])
+
+            qr = qrcode.QRCode()
+            qr.add_data('test text')
+            qr.make()
+            img = qr.make_image(fill_color="#D81B60", back_color="white")
+            img.save('/home/adular/QR/ticket.png')
+
+            mail.attach_file('/home/adular/QR/ticket.png')
+            mail.send(fail_silently=True)
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
