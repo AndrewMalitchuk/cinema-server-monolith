@@ -106,10 +106,10 @@ class Cinema(models.Model):
         verbose_name="Координати: довгота"
     )
 
-    pic_url = models.ImageField(upload_to="cinema/pic/",verbose_name="Зображення кінотеатру")
+    pic_url = models.ImageField(upload_to="cinema/pic/", verbose_name="Зображення кінотеатру")
 
     def __str__(self):
-        return self.name + " [" + self.city + "]"
+        return self.name
 
 
 class Poster(models.Model):
@@ -137,7 +137,7 @@ class Timeline(models.Model):
     class Meta:
         verbose_name = "Розклад"
         verbose_name_plural = "Розклад"
-        ordering = ['-date']
+        ordering = ['-datetime']
 
     cinema_id = models.ForeignKey(
         Cinema,
@@ -151,15 +151,29 @@ class Timeline(models.Model):
         verbose_name="Film ID"
     )
 
-    time = models.TimeField(
-        verbose_name="Час",
-        help_text="Час показу"
+    datetime=models.DateTimeField(
+        verbose_name="Дата та час"
     )
 
-    date = models.DateField(
-        verbose_name="Дата",
-        help_text="Дата показу"
+    # time = models.TimeField(
+    #     verbose_name="Час",
+    #     help_text="Час показу"
+    # )
+    #
+    # date = models.DateField(
+    #     verbose_name="Дата",
+    #     help_text="Дата показу"
+    # )
+
+    price = models.DecimalField(
+        verbose_name="Ціна",
+        max_digits=5,
+        decimal_places=2,
+        default=0
     )
+
+    def __str__(self):
+        return self.film_id.title+" | "+self.cinema_id.name
 
 
 class Hall(models.Model):
@@ -199,17 +213,17 @@ class Ticket(models.Model):
         (3, 'Canceled')
     )
 
-    cinema_id = models.ForeignKey(
-        Cinema,
-        on_delete=models.DO_NOTHING,
-        verbose_name="Cinema"
-    )
-
-    film_id = models.ForeignKey(
-        Film,
-        on_delete=models.DO_NOTHING,
-        verbose_name="Film ID"
-    )
+    # cinema_id = models.ForeignKey(
+    #     Cinema,
+    #     on_delete=models.DO_NOTHING,
+    #     verbose_name="Cinema"
+    # )
+    #
+    # film_id = models.ForeignKey(
+    #     Film,
+    #     on_delete=models.DO_NOTHING,
+    #     verbose_name="Film ID"
+    # )
 
     place = models.CharField(
         verbose_name="Місце",
@@ -224,10 +238,10 @@ class Ticket(models.Model):
         blank=True
     )
 
-    date=models.DateTimeField(
-        verbose_name="Дата",
-        auto_now_add=True
-    )
+    # date = models.DateTimeField(
+    #     verbose_name="Дата",
+    #     auto_now_add=True
+    # )
 
     status = models.PositiveIntegerField(
         choices=STATUS,
@@ -241,5 +255,10 @@ class Ticket(models.Model):
         on_delete=models.CASCADE
     )
 
+    timeline_id=models.ForeignKey(
+        Timeline,
+        on_delete=models.CASCADE,
+        verbose_name="Сеанс"
+    )
 
 

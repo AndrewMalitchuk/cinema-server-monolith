@@ -80,11 +80,14 @@ class TicketSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         place = validated_data.get('place')
         status = validated_data.get('status')
-        cinema_id = validated_data.get('cinema_id')
-        film_id = validated_data.get('film_id')
+        # cinema_id = validated_data.get('cinema_id')
+        # film_id = validated_data.get('film_id')
+        timeline_id=validated_data.get('timeline_id')
         user = validated_data.get('user')
         code = self.get_code()
-        ticket = Ticket.objects.create(place=place, status=status, cinema_id=cinema_id, film_id=film_id, user=user,
+        # ticket = Ticket.objects.create(place=place, status=status, cinema_id=cinema_id, film_id=film_id, user=user,
+        #                                code=code)
+        ticket = Ticket.objects.create(place=place, status=status, timeline_id=timeline_id, user=user,
                                        code=code)
 
         return ticket

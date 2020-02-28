@@ -156,20 +156,27 @@ def api_timeline(request):
 
         cinema_id = request.GET.get('cinema_id', None)
         film_id = request.GET.get('film_id', None)
-        date = request.GET.get('date', None)
+        id = request.GET.get('id', None)
+        datetime = request.GET.get('datetime', None)
 
-        if cinema_id is not None and film_id is not None:
+        if cinema_id is not None and film_id is not None and datetime is None:
             timeline = Timeline.objects.filter(cinema_id=cinema_id, film_id=film_id)
             serializer = TimelineSerializer(timeline, many=True)
-        elif cinema_id is not None:
+        elif cinema_id is not None and film_id is not None and datetime is not None:
+            timeline = Timeline.objects.filter(cinema_id=cinema_id, film_id=film_id, datetime=datetime)
+            serializer = TimelineSerializer(timeline, many=True)
+        elif cinema_id is not None and film_id is  None and datetime is None:
             timeline = Timeline.objects.filter(cinema_id=cinema_id)
             serializer = TimelineSerializer(timeline, many=True)
-        elif film_id is not None:
+        elif cinema_id is  None and film_id is not None and datetime is  None:
             timeline = Timeline.objects.filter(film_id=film_id)
             serializer = TimelineSerializer(timeline, many=True)
-        elif date is not None:
-            timeline = Timeline.objects.filter(date=date)
+        elif cinema_id is None and film_id is None and datetime is not None:
+            timeline = Timeline.objects.filter(datetime=datetime)
             serializer = TimelineSerializer(timeline, many=True)
+        elif id is not None:
+            timeline = Timeline.objects.get(id=id)
+            serializer = TimelineSerializer(timeline)
 
         return Response(
             serializer.data,

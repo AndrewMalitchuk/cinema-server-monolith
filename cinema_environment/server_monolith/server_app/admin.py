@@ -21,10 +21,17 @@ class PosterAdmin(admin.ModelAdmin):
     search_fields = ('cinema_id', 'film_id')
 
 
+# class TimelineAdmin(admin.ModelAdmin):
+#     list_display = ('cinema_id', 'film_id', 'time', 'date')
+#     list_display_links = ('cinema_id', 'film_id', 'time', 'date')
+#     search_fields = ('cinema_id', 'film_id', 'time', 'date')
+
+
 class TimelineAdmin(admin.ModelAdmin):
-    list_display = ('cinema_id', 'film_id', 'time', 'date')
-    list_display_links = ('cinema_id', 'film_id', 'time', 'date')
-    search_fields = ('cinema_id', 'film_id', 'time', 'date')
+    list_display = ('cinema_id', 'film_id', 'datetime','price')
+    list_display_links = ('cinema_id', 'film_id', 'datetime','price')
+    search_fields = ('cinema_id', 'film_id', 'datetime','price')
+
 
 
 class HallAdmin(admin.ModelAdmin):
@@ -33,10 +40,16 @@ class HallAdmin(admin.ModelAdmin):
     search_fields = ('name', 'cinema_id')
 
 
+# class TicketAdmin(admin.ModelAdmin):
+#     list_display = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
+#     list_display_links = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
+#     search_fields = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
+
+
 class TicketAdmin(admin.ModelAdmin):
-    list_display = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
-    list_display_links = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
-    search_fields = ('cinema_id', 'film_id', 'place', 'date', 'status', 'user')
+    list_display = ( 'place', 'status', 'user')
+    list_display_links = ( 'place', 'status', 'user')
+    search_fields = ( 'place', 'status', 'user')
 
 
 admin.site.register(Film, FilmAdmin)
