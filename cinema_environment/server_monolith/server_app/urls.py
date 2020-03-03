@@ -18,5 +18,17 @@ urlpatterns = [
     path('hall_form/', hall_form),
     path('cinema_form/', cinema_form),
     path('email/', email),
+    path("forms/cinema", mypage),
+    path('export/', table_view),
+    path('table/cinema', CinemaTableView.as_view()),
+    path('table/film', FilmTableView.as_view()),
+    path('table/poster/<int:cinema_id>', get_poster_table_by_cinema_id),
+    path('table/ticket/<int:cinema_id>', get_ticket_table_by_cinema_id),
+    path('table/ticket/<int:cinema_id>/<int:film_id>', get_ticket_table_by_cinema_id_and_film_id),
+    path('table/hall/<int:cinema_id>', get_hall_table_by_cinema_id),
+    path('table/timeline/<int:cinema_id>', get_timeline_table_by_cinema_id),
+    # path("forms/cinema", CinemaListView.as_view())
 
 ]
+
+# handler404 = handler404

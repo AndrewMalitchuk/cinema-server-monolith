@@ -1,6 +1,9 @@
 import qrcode
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.views.generic import ListView
+from django_tables2 import SingleTableView, RequestConfig
+from django_tables2.export import ExportMixin, TableExport
 from qrcode.image.pure import PymagingImage
 from rest_framework import status, permissions
 from rest_framework.generics import CreateAPIView
@@ -12,6 +15,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from qrcode.image.pure import PymagingImage
 
+from .tables import CinemaTable, FilmTable, PosterTable, TicketTable, HallTable, TimelineTable
 from .forms import HallForm, CinemaForm
 from .permission import IsStaffOrAdminWriteOnly
 from .serializers import *
@@ -451,7 +455,7 @@ def cinema_form(request):
             instance.save()
     else:
         form = CinemaForm()
-    return render(request, "forms/cinema_form.html", {"form": form})
+    return render(request, "forms/cinema-form-page.html", {"form": form})
 
 
 # Email sending test
@@ -484,3 +488,131 @@ def email(request):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+@permission_classes([AllowAny])
+def mypage(request) :
+    table = CinemaTable(Cinema.objects.all())
+    RequestConfig(request,paginate=False).configure(table)
+    return render(request,'forms/cinema.html',locals())
+# class CinemaListView(SingleTableView):
+#     # model = Cinema
+#     table_class = CinemaTable
+#     queryset = Cinema.objects.all()
+#     template_name = "forms/cinema.html"
+
+class FilmTableView(ExportMixin, SingleTableView):
+    model = Film
+    table_class = FilmTable
+    template_name = 'tables/film_table.html'
+
+
+class CinemaTableView(ExportMixin, SingleTableView):
+    model = Cinema
+    table_class = CinemaTable
+    template_name = 'tables/cinema_table.html'
+
+
+def get_poster_table_by_cinema_id(request, cinema_id):
+    config = RequestConfig(request)
+    content = PosterTable(Poster.objects.filter(cinema_id=cinema_id))
+
+    config.configure(content)
+
+    return render(request, 'tables/poster_table.html', {
+        'table': content,
+    })
+
+
+def get_ticket_table_by_cinema_id(request, cinema_id):
+    config = RequestConfig(request)
+    content = TicketTable(Ticket.objects.filter(cinema_id=cinema_id))
+
+    config.configure(content)
+
+    return render(request, 'tables/ticket_table.html', {
+        'table': content,
+    })
+
+
+def get_ticket_table_by_cinema_id_and_film_id(request, cinema_id, film_id):
+    config = RequestConfig(request)
+    content = TicketTable(Ticket.objects.filter(cinema_id=cinema_id, film_id=film_id))
+
+    config.configure(content)
+
+    return render(request, 'tables/ticket_table.html', {
+        'table': content,
+    })
+
+
+def get_hall_table_by_cinema_id(request, cinema_id):
+    config = RequestConfig(request)
+    content = HallTable(Hall.objects.filter(cinema_id=cinema_id))
+
+    config.configure(content)
+
+    return render(request, 'tables/hall_table.html', {
+        'table': content,
+    })
+
+
+def get_timeline_table_by_cinema_id(request, cinema_id):
+    config = RequestConfig(request)
+    content = TimelineTable(Timeline.objects.filter(cinema_id=cinema_id))
+
+    config.configure(content)
+
+    return render(request, 'tables/timeline_table.html', {
+        'table': content,
+    })
+
+
+def people_listing(request):
+    config = RequestConfig(request)
+    table_test = FilmTable(Film.objects.filter(genre=1))
+
+    config.configure(table_test)
+
+    return render(request, 'forms/film_list.html', {
+        'table': table_test,
+    })
+
+
+# XXX
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def table_view(request):
+    # XXX
+    # TODO: 1. for certain table; 2. only to allowed table;
+    if request.method == 'GET':
+        table = request.GET.get('table', None)
+        format = request.GET.get('format', None)
+
+        if table is None or format is None:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            table = FilmTable(Film.objects.all())
+
+            RequestConfig(request).configure(table)
+
+            export_format = request.GET.get("_export", None)
+            if TableExport.is_valid_format(export_format):
+                exporter = TableExport(export_format, table)
+                return exporter.response("table.{}".format(export_format))
+
+            return render(request, "forms/film_list.html", {
+                "table": table
+            })
+
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+#
+# def delete(request,pk):
+#     cinema=Cinema.objects.get(pk=pk)
+#     if request.method=='POST':
+#         cinema.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
