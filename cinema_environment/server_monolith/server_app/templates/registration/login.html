@@ -90,9 +90,9 @@
 
   <form class="form-signin" method="post">
     {% csrf_token %}
-
-<!--    <img class="mb-4" src="logo.png" alt="" width="128" height="128">-->
+    <a href="/">
     <img class="mb-4" src="{% static 'logo.png' %}" alt="" width="128" height="128">
+    </a>
     <h1 class="h3 mb-3 font-weight-normal">Login</h1>
     <label for="id_username" class="sr-only">Login</label>
     <input type="text" id="id_username" class="form-control" placeholder="Login" name="username" required autofocus>

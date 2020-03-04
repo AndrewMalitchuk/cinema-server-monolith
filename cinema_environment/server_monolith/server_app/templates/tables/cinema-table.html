@@ -1,0 +1,51 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% load render_table from django_tables2 %}
+
+{% block content %}
+
+{% render_table table %}
+
+<script>
+
+    document.title="cinema-table"
+
+    $('.btn-danger').click(function() {
+
+        var temp=$(this).attr("delete-link")
+
+        $.bs.popup.confirm({
+            title: 'Title',
+            info: 'Do you want confirm?'
+        }, function(dialogE) {
+            alert('You are confirmed.');
+            dialogE.modal('hide');
+
+            console.log(temp)
+
+            $.ajax({
+                url: 'http://127.0.0.1:8000/admin/server_app/cinema/'+temp+'/delete/',
+                type: 'POST',
+                success: function(result) {
+                    location.reload();
+                },
+                data:{
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                }
+            });
+
+
+        });
+    });
+    $('.btn-primary').click(function(){
+        var temp=$(this).attr("update-link")
+
+        window.open('http://127.0.0.1:8000/api/v1/form/cinema/'+temp+'/update')
+    });
+</script>
+
+
+
+
+
+{% endblock %}

@@ -446,8 +446,23 @@ def hall_form(request):
     return render(request, "forms/hall_form.html", {"form": form})
 
 
+# TODO: permission
 @permission_classes([AllowAny])
-def cinema_form(request):
+def form_cinema_udpate(request, cinema_id):
+    if request.method == "POST":
+        form = CinemaForm(request.POST, request.FILES)
+        if form.is_valid():
+            instance = form.save(commit=True)
+            instance.save()
+    else:
+        form = Cinema.objects.get(pk=cinema_id)
+    return render(request, "forms/cinema/cinema-update.html", {"form": form})
+
+
+
+# TODO: permission
+@permission_classes([AllowAny])
+def form_cinema_insert(request):
     if request.method == "POST":
         form = CinemaForm(request.POST, request.FILES)
         if form.is_valid():
@@ -455,8 +470,7 @@ def cinema_form(request):
             instance.save()
     else:
         form = CinemaForm()
-    return render(request, "forms/cinema-form-page.html", {"form": form})
-
+    return render(request, "forms/cinema/cinema-insert.html", {"form": form})
 
 # Email sending test
 @api_view(['GET'])
@@ -509,7 +523,7 @@ class FilmTableView(ExportMixin, SingleTableView):
 class CinemaTableView(ExportMixin, SingleTableView):
     model = Cinema
     table_class = CinemaTable
-    template_name = 'tables/cinema_table.html'
+    template_name = 'tables/cinema-table.html'
 
 
 def get_poster_table_by_cinema_id(request, cinema_id):

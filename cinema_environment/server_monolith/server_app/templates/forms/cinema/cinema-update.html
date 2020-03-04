@@ -11,7 +11,7 @@
 				<div class="row">
 					<legend class="col-form-label col-sm-2 pt-0">Name</legend>
 					<div class="form-check form-check-inline">
-						<input type="text" class="form-control" name="name"  maxlength="256" required="" id="id_name">
+						<input type="text" class="form-control" name="name"  maxlength="256" required="" id="id_name" value="{{ form.name }}">
 					</div>
 				</div>
 			</fieldset>
@@ -19,7 +19,7 @@
 				<div class="row">
 					<legend class="col-form-label col-sm-2 pt-0">Address</legend>
 					<div class="form-check form-check-inline">
-						<textarea name="address" cols="40" rows="10" maxlength="256" required="" id="id_address"></textarea>
+						<textarea name="address" cols="40" rows="10" maxlength="256" required="" id="id_address" >{{ form.address }}</textarea>
 					</div>
 				</div>
 			</fieldset>
@@ -27,7 +27,7 @@
 				<div class="row">
 					<legend class="col-form-label col-sm-2 pt-0">City</legend>
 					<div class="form-check form-check-inline">
-						<input type="text" name="city"  maxlength="128" required="" id="id_city" style="display:none" value="1">
+						<input type="text" name="city"  maxlength="128" required="" id="id_city" style="display:none" value="{{ form.city }}">
 						<select class="form-control" id="selectCity">
 							<option>Ivano-Frankivsk</option>
 							<option>Lviv</option>
@@ -42,18 +42,18 @@
 				<div class="row">
 					<legend class="col-form-label col-sm-2 pt-0">Telephone</legend>
 					<div class="form-check form-check-inline">
-						<input type="text" class="form-control" name="telephone" maxlength="20" required="" id="id_telephone">
+						<input type="text" class="form-control" name="telephone" maxlength="20" required="" id="id_telephone" value="{{ form.telephone }}">
 					</div>
 				</div>
 			</fieldset>
 			<div class="form-row">
 				<div class="form-group col-md-6">
 					<label for="id_geo_lat">Lat</label>
-					<input type="number"class="form-control"  name="geo_lat"  step="any" required=""  id="id_geo_lat">
+					<input type="number"class="form-control"  name="geo_lat"  step="any" required=""  id="id_geo_lat" value="{{ form.geo_lat }}">
 				</div>
 				<div class="form-group col-md-6">
 					<label for="id_geo_lon">Lon</label>
-					<input type="number" class="form-control" name="geo_lon" step="any" required=""  id="id_geo_lon">
+					<input type="number" class="form-control" name="geo_lon" step="any" required=""  id="id_geo_lon" value="{{ form.geo_lon }}">
 				</div>
 			</div>
 			<fieldset class="form-group">
@@ -65,130 +65,99 @@
 				<div class="row">
 					<legend class="col-form-label col-sm-2 pt-0">Picture</legend>
 					<div class="form-check form-check-inline">
-						<!-- <input type="file" class="form-control-file" name="pic_url" accept="image/*" required="" id="id_pic_url"> -->
-						<input type="file" class="form-control-file" name="pic_url" accept="image/*"  id="id_pic_url">
+						<input type="file" class="form-control-file" name="pic_url" accept="image/*"  id="id_pic_url" value="{{ form.pic_url }}">
 					</div>
 				</div>
 			</fieldset>
 			<div class="form-group ">
-				<!-- <button  class="btn btn-danger" style="margin-top: 10px " onclick="onClearButtonClick()">Clear</button> -->
-				<!--				<button  class="btn btn-success" style="margin-top: 10px " onclick="onSubmitButtonClick()">Submit</button>-->
-				<!-- <input type="submit" value="Send"  style="margin-top: 10px " > -->
-				<!-- <button class="btn btn-success" onclick="onUpdateClick()">Update</button> -->
-				<input type="submit" value="Submit" id="btnSubmit"/>
+				<input type="submit" value="Update" id="btnSubmit" class="btn btn-success"/>
 			</div>
 		</div>
 	</form>
 </div>
 
 <script type="text/javascript">
-
-
 	$(document).ready(function () {
-
 		$("#btnSubmit").click(function (event) {
 			event.preventDefault();
 			var form = $('#fileUploadForm')[0];
 			var data = new FormData(form);
 			data.append("CustomField", "This is some extra data, testing");
 			$("#btnSubmit").prop("disabled", true);
-
 			$.ajax({
 				type: "POST",
 				enctype: 'multipart/form-data',
-				url: "http://127.0.0.1:8000/admin/server_app/cinema/50/change/",
+				url: "http://127.0.0.1:8000/admin/server_app/cinema/{{form.pk}}/change/",
 				data: data,
 				processData: false,
 				contentType: false,
 				cache: false,
 				timeout: 600000,
 				success: function (data) {
-					$("#result").text(data);
-					console.log("SUCCESS : ", data);
-					$("#btnSubmit").prop("disabled", false);
+					alert("тут-буде-вспливашка-успех")
+					location.reload();
 				},
 				error: function (e) {
-					$("#result").text(e.responseText);
-					console.log("ERROR : ", e);
-					$("#btnSubmit").prop("disabled", false);
+					alert("тут-буде-вспливашка-неуспех")
 				}
 			});
-
 		});
-
 	});
-
-	
-	
-	function onSubmitButtonClick() {
-		
-		
-
-	}
-
-	function onClearButtonClick(){
-		
-
-	}
-
-
-	function onUpdateClick() {
-
-
-		// var temp = 50
-		// $.ajax({
-		// 	url: 'http://127.0.0.1:8000/admin/server_app/ticket/60/change/',
-		// 	type: 'POST',
-		// 	success: function(result) {
-		// 		location.reload();
-		// 	},
-		// 	data:{
-		// 		csrfmiddlewaretoken: '{{ csrf_token }}',
-		// 		place:"l-1-1",
-		// 		code:"000",
-		// 		status:"1",
-		// 		user:"3",
-		// 		timeline_id:"12",
-		// 		_save:"Save"
-
-		// 	}
-		// });
-
-
-		var temp = 50
-		$.ajax({
-			url: 'http://127.0.0.1:8000/admin/server_app/cinema/50/change/',
-			type: 'POST',
-			success: function(result) {
-				// location.reload();
-				alert(result)
-			},
-			data:{
-				csrfmiddlewaretoken: '{{ csrf_token }}',
-				place:"l-1-1",
-				code:"000",
-				status:"1",
-				user:"3",
-				timeline_id:"12",
-				_save:"Save"
-
-			}
-		});
-
-
-
-
-	}
-
-	
+	// function onUpdateClick() {
+	// 	// var temp = 50
+	// 	// $.ajax({
+	// 	// 	url: 'http://127.0.0.1:8000/admin/server_app/ticket/60/change/',
+	// 	// 	type: 'POST',
+	// 	// 	success: function(result) {
+	// 	// 		location.reload();
+	// 	// 	},
+	// 	// 	data:{
+	// 	// 		csrfmiddlewaretoken: '{{ csrf_token }}',
+	// 	// 		place:"l-1-1",
+	// 	// 		code:"000",
+	// 	// 		status:"1",
+	// 	// 		user:"3",
+	// 	// 		timeline_id:"12",
+	// 	// 		_save:"Save"
+	// 	// 	}
+	// 	// });
+	// 	var temp = 50
+	// 	$.ajax({
+	// 		url: 'http://127.0.0.1:8000/admin/server_app/cinema/50/change/',
+	// 		type: 'POST',
+	// 		success: function(result) {
+	// 			// location.reload();
+	// 		},
+	// 		data:{
+	// 			csrfmiddlewaretoken: '{{ csrf_token }}',
+	// 			place:"l-1-1",
+	// 			code:"000",
+	// 			status:"1",
+	// 			user:"3",
+	// 			timeline_id:"12",
+	// 			_save:"Save"
+	// 		}
+	// 	});
+	// }
 
 	$(document).ready
 	(
 		function()
 		{
+			temp={
+				lat:{{ form.geo_lat }},
+				lng:{{ form.geo_lon }}
+			}
+
+			popup
+			.setLatLng(temp)
+			.setContent('{{ form.name }}')
+			.openOn(mymap);
+			$('#id_geo_lat').val({{ form.geo_lon }})
+			$('#id_geo_lon').val({{ form.geo_lat }})
+
 
 			$('#id_telephone' ).simpleMask( { 'mask': '+## ### ### ####'                          , 'nextInput': $('#id_telephone') } );
-
 			$('#frCallback').simpleMask
 			(
 			{
@@ -196,19 +165,13 @@
 				'nextInput'  : true,
 				'onComplete' : function(element)
 				{
-					console.log('onComplete', element);
+
 				}
 			}
 			);
-			
-
 
 			$("#selectCity").change(function(){
-
 				var selected = $(this).children("option:selected").val();
-
-				console.log(selected)
-
 				switch(selected){
 					case 'Ivano-Frankivsk':
 					$("#id_city").val('1')
@@ -231,13 +194,10 @@
 					mymap.setView([46.483959151247554,30.73260068893433],13)
 					break
 				}
-
 			});
 		}
 		);
-
-	var mymap = L.map('mapid').setView([48.9315044382551, 24.697823524475098], 15);
-
+	var mymap = L.map('mapid').setView([ {{ form.geo_lat }}, {{ form.geo_lon }}], 15);
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,
 		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
@@ -245,26 +205,16 @@
 		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 		id: 'mapbox/streets-v11'
 	}).addTo(mymap);
-
-
 	var popup = L.popup();
-
 	function onMapClick(e) {
 		popup
 		.setLatLng(e.latlng)
 		.setContent($('#id_name').val()==''?'Your cinema':$('#id_name').val())
 		.openOn(mymap);
-		console.log(e.latlng.lat)
-		console.log(e.latlng.lng)
 		$('#id_geo_lat').val(e.latlng.lat)
 		$('#id_geo_lon').val(e.latlng.lng)
-
 	}
-
 	mymap.on('click', onMapClick);
-
-
 </script>
-
 
 {% endblock %}
