@@ -1,0 +1,28 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% load render_table from django_tables2 %}
+{% block content %}
+{% render_table table %}
+<script>
+    document.title="poster-table"
+    $('.btn-danger').click(function() {
+        var temp=$(this).attr("delete-link")
+        $.bs.popup.confirm({
+            title: 'Видалення',
+            info: 'Ви дійсно хочете видалити даний запис?'
+        }, function(dialogE) {
+            dialogE.modal('hide');
+            $.ajax({
+                url: 'http://127.0.0.1:8000/admin/server_app/poster/'+temp+'/delete/',
+                type: 'POST',
+                success: function(result) {
+                    location.reload();
+                },
+                data:{
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

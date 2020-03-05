@@ -5,7 +5,6 @@ from .models import *
 
 class CinemaTable(tables.Table):
     T1 = '<button type="button" class="btn" update-link="{{ record.get_absolute_url_update }}">update</button>'
-    # T2 = '<button type="button" class="btn" delete-link="{{ record.get_absolute_url_delete }}">delete</button>'
     T2 = '<form action="/samples/{{record.id}}/" method="post">{% csrf_token %}<input type="hidden" name="_method" value="delete"><button data-toggle="tooltip" title="Please note that deletion cannot be undone" type="submit" class="btn btn-danger btn-xs">delete</button></form>'
     edit = TemplateColumn(T1)
     delete = TemplateColumn(T2)
@@ -20,15 +19,7 @@ class FilmTable(tables.Table):
     class Meta:
         model = Film
         template_name = "django_tables2/bootstrap.html"
-        fields = ('title', 'date', 'duration', 'genre', 'video_url', 'pic_url')
-
-
-# class CinemaTable(tables.Table):
-#
-#     class Meta:
-#         model = Cinema
-#         template_name = "django_tables2/bootstrap.html"
-#         fields = ('name', 'address', 'city', 'telephone', 'pic_url',)
+        fields = ('title', 'date', 'duration', 'genre', 'video_url')
 
 
 class CinemaTable(tables.Table):
@@ -45,6 +36,10 @@ class CinemaTable(tables.Table):
 
 
 class PosterTable(tables.Table):
+    delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
+    TemplateColumn(delete_col)
+    delete = TemplateColumn(delete_col)
+
     class Meta:
         model = Poster
         template_name = "django_tables2/bootstrap.html"

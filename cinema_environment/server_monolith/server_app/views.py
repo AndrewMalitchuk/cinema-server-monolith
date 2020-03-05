@@ -16,7 +16,7 @@ from django.core.mail import EmailMessage
 from qrcode.image.pure import PymagingImage
 
 from .tables import CinemaTable, FilmTable, PosterTable, TicketTable, HallTable, TimelineTable
-from .forms import HallForm, CinemaForm
+from .forms import HallForm, CinemaForm, PosterForm
 from .permission import IsStaffOrAdminWriteOnly
 from .serializers import *
 
@@ -169,10 +169,10 @@ def api_timeline(request):
         elif cinema_id is not None and film_id is not None and datetime is not None:
             timeline = Timeline.objects.filter(cinema_id=cinema_id, film_id=film_id, datetime=datetime)
             serializer = TimelineSerializer(timeline, many=True)
-        elif cinema_id is not None and film_id is  None and datetime is None:
+        elif cinema_id is not None and film_id is None and datetime is None:
             timeline = Timeline.objects.filter(cinema_id=cinema_id)
             serializer = TimelineSerializer(timeline, many=True)
-        elif cinema_id is  None and film_id is not None and datetime is  None:
+        elif cinema_id is None and film_id is not None and datetime is None:
             timeline = Timeline.objects.filter(film_id=film_id)
             serializer = TimelineSerializer(timeline, many=True)
         elif cinema_id is None and film_id is None and datetime is not None:
@@ -459,7 +459,6 @@ def form_cinema_udpate(request, cinema_id):
     return render(request, "forms/cinema/cinema-update.html", {"form": form})
 
 
-
 # TODO: permission
 @permission_classes([AllowAny])
 def form_cinema_insert(request):
@@ -472,6 +471,20 @@ def form_cinema_insert(request):
         form = CinemaForm()
     return render(request, "forms/cinema/cinema-insert.html", {"form": form})
 
+# TODO: permission
+@permission_classes([AllowAny])
+def form_poster_insert(request, cinema_id):
+    if request.method == "POST":
+        form = PosterForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=True)
+            instance.save()
+    else:
+        form = Poster.objects.filter(cinema_id=cinema_id)
+        data=Film.objects.all()
+    return render(request, "forms/poster/poster-insert.html", {"form": form,"films":Film.objects.all()})
+
+
 # Email sending test
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -482,7 +495,6 @@ def email(request):
 
             # https://pypi.org/project/qrcode/
             # https://dropmail.me/ru/
-
 
             subject = 'cinema-app'
             body = 'Here is your ticket, comrade'
@@ -503,11 +515,14 @@ def email(request):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 @permission_classes([AllowAny])
-def mypage(request) :
+def mypage(request):
     table = CinemaTable(Cinema.objects.all())
-    RequestConfig(request,paginate=False).configure(table)
-    return render(request,'forms/cinema.html',locals())
+    RequestConfig(request, paginate=False).configure(table)
+    return render(request, 'forms/cinema.html', locals())
+
+
 # class CinemaListView(SingleTableView):
 #     # model = Cinema
 #     table_class = CinemaTable
@@ -517,13 +532,13 @@ def mypage(request) :
 class FilmTableView(ExportMixin, SingleTableView):
     model = Film
     table_class = FilmTable
-    template_name = 'tables/film_table.html'
+    template_name = 'tables/film-table.html'
 
 
 class CinemaTableView(ExportMixin, SingleTableView):
     model = Cinema
     table_class = CinemaTable
-    template_name = 'tables/cinema-table.html'
+    template_name = 'tables/cinema-table-editable.html'
 
 
 def get_poster_table_by_cinema_id(request, cinema_id):
@@ -532,7 +547,7 @@ def get_poster_table_by_cinema_id(request, cinema_id):
 
     config.configure(content)
 
-    return render(request, 'tables/poster_table.html', {
+    return render(request, 'tables/poster-table-editable.html', {
         'table': content,
     })
 
@@ -621,12 +636,9 @@ def table_view(request):
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
 #
 # def delete(request,pk):
 #     cinema=Cinema.objects.get(pk=pk)
 #     if request.method=='POST':
 #         cinema.delete()
 #         return Response(status=status.HTTP_204_NO_CONTENT)
-
-

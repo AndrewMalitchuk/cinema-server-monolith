@@ -1,0 +1,69 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="jumbotron">
+	<!-- <form method="POST" id="posterInsertForm"> -->
+		<form action="" method="post" id="posterInsertForm">
+			{% csrf_token %}
+			<div class="container">
+				<fieldset class="form-group">
+					<div class="row">
+						<legend class="col-form-label col-sm-2 pt-0">Cinema</legend>
+						<div class="form-check form-check-inline">
+							<input type="text" class="form-control" name="cinema_id"  maxlength="256" required="" id="id_cinema_id" readonly/>
+							<input type="text" id="id_val" style="display: none">
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="form-group">
+					<div class="row">
+						<legend class="col-form-label col-sm-2 pt-0">Film</legend>
+						<div class="form-check form-check-inline">
+							<select class="form-control" id="id_film_id" name="film_id">
+								{% for i in films %}
+								console.log('')
+								<option value='{{ i.id }}'>{{ i.title }}</option>
+								{% endfor %}
+							</select>
+						</div>
+					</div>
+				</fieldset>
+				<div class="form-group ">
+					<input value="Insert" id="btnSubmit" class="btn btn-success" name="_save"/>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+
+			{% for i in form %}
+			$('#id_cinema_id').val("{{ i.cinema_id }}")
+			$('#id_val').val("{{i.cinema_id.id}}")
+
+			{% endfor %}
+		});
+
+		$("#btnSubmit").click(function (event) {
+			$.ajax({
+				url: 'http://127.0.0.1:8000/admin/server_app/poster/add/',
+				type: 'POST',
+				success: function(result) {
+					alert("тут-буде-вспливашка-успех")
+					location.reload();
+				},
+				data:{
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					cinema_id:$("#id_val"). val(),
+					film_id:$("#id_film_id").val(),
+					_save:"Save"
+				}
+			});
+		});
+	</script>
+
+	{% endblock %}

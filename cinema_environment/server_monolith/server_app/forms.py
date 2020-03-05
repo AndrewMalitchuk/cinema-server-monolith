@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Cinema, Hall, Film
+from .models import Cinema, Hall, Film, Poster
 
 
 class HallForm(forms.ModelForm):
@@ -12,6 +12,11 @@ class HallForm(forms.ModelForm):
 class CinemaForm(forms.ModelForm):
     class Meta:
         model = Cinema
+        fields = '__all__'
+
+class PosterForm(forms.ModelForm):
+    class Meta:
+        model = Poster
         fields = '__all__'
 
 class FilmForm(forms.ModelForm):
