@@ -16,7 +16,7 @@ from django.core.mail import EmailMessage
 from qrcode.image.pure import PymagingImage
 
 from .tables import CinemaTable, FilmTable, PosterTable, TicketTable, HallTable, TimelineTable
-from .forms import HallForm, CinemaForm, PosterForm
+from .forms import *
 from .permission import IsStaffOrAdminWriteOnly
 from .serializers import *
 
@@ -484,6 +484,47 @@ def form_poster_insert(request, cinema_id):
         data=Film.objects.all()
     return render(request, "forms/poster/poster-insert.html", {"form": form,"films":Film.objects.all()})
 
+# TODO: permission
+@permission_classes([AllowAny])
+def form_hall_insert(request, cinema_id):
+    if request.method == "POST":
+        form = HallForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=True)
+            instance.save()
+    else:
+        form = Hall.objects.filter(cinema_id=cinema_id)
+    return render(request, "forms/hall/hall-insert.html", {"form": form,"cinemas":Cinema.objects.get(pk=cinema_id)})
+
+# TODO: permission
+@permission_classes([AllowAny])
+def form_hall_update(request, cinema_id,hall_id):
+    if request.method == "POST":
+        form = HallForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=True)
+            instance.save()
+    else:
+        form = Hall.objects.filter(cinema_id=cinema_id)
+    return render(request, "forms/hall/hall-update.html", {"form": form,"halls":Hall.objects.get(pk=hall_id),"cinemas":Cinema.objects.get(pk=cinema_id)})
+
+@permission_classes([AllowAny])
+def cinema_profile(request,cinema_id):
+    form=Cinema.objects.get(pk=cinema_id)
+    return render(request,"pages/cinema-profile.html",{"form":form})
+
+# TODO: permission
+@permission_classes([AllowAny])
+def form_timeline_insert(request, cinema_id):
+    if request.method == "POST":
+        form = TimelineForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=True)
+            instance.save()
+    else:
+        form = Timeline.objects.filter(cinema_id=cinema_id)
+        data=Film.objects.all()
+    return render(request, "forms/timeline/timeline-insert.html", {"form": form,"films":Film.objects.all()})
 
 # Email sending test
 @api_view(['GET'])
@@ -538,7 +579,7 @@ class FilmTableView(ExportMixin, SingleTableView):
 class CinemaTableView(ExportMixin, SingleTableView):
     model = Cinema
     table_class = CinemaTable
-    template_name = 'tables/cinema-table-editable.html'
+    template_name = 'tables/cinema/cinema-table-editable.html'
 
 
 def get_poster_table_by_cinema_id(request, cinema_id):
@@ -547,7 +588,7 @@ def get_poster_table_by_cinema_id(request, cinema_id):
 
     config.configure(content)
 
-    return render(request, 'tables/poster-table-editable.html', {
+    return render(request, 'tables/poster/poster-table-editable.html', {
         'table': content,
     })
 
@@ -580,7 +621,7 @@ def get_hall_table_by_cinema_id(request, cinema_id):
 
     config.configure(content)
 
-    return render(request, 'tables/hall_table.html', {
+    return render(request, 'tables/hall-table.html', {
         'table': content,
     })
 
@@ -591,7 +632,7 @@ def get_timeline_table_by_cinema_id(request, cinema_id):
 
     config.configure(content)
 
-    return render(request, 'tables/timeline_table.html', {
+    return render(request, 'tables/timeline-table-editable.html', {
         'table': content,
     })
 

@@ -54,6 +54,12 @@ class TicketTable(tables.Table):
 
 
 class HallTable(tables.Table):
+    update_col = '<button type="button" class="btn btn-primary" update-link="{{ record.id }}" cinema-id="{{record.cinema_id.id}}">Update</button>'
+    delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
+    TemplateColumn(delete_col, update_col)
+    delete = TemplateColumn(delete_col)
+    update = TemplateColumn(update_col)
+
     class Meta:
         model = Hall
         template_name = "django_tables2/bootstrap.html"
@@ -61,7 +67,11 @@ class HallTable(tables.Table):
 
 
 class TimelineTable(tables.Table):
+    delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
+    TemplateColumn(delete_col)
+    delete = TemplateColumn(delete_col)
+
     class Meta:
         model = Timeline
         template_name = "django_tables2/bootstrap.html"
-        fields = ('film_id', 'time', 'date')
+        fields = ('film_id', 'cinema_id','datetime')

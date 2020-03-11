@@ -1,0 +1,265 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="jumbotron">
+	<div class="container">
+		<fieldset class="form-group">
+			<div class="row">
+				<legend class="col-form-label col-sm-2 pt-0">Name</legend>
+				<div class="form-check form-check-inline">
+					<input type="text" class="form-control" id="id_name" name="name">
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<div class="row">
+				<legend class="col-form-label col-sm-2 pt-0">Cinema</legend>
+				<div class="form-check form-check-inline">
+					<input type="text" class="form-control" name="cinema_id" readonly maxlength="256" required="" id="id_cinema_id"/>
+					<input type="text" id="id_val" style="display: none">
+				</div>
+			</div>
+		</fieldset>
+		<div class="form-row">
+			<div class="form-group col-md-6">
+				<label for="inputRow">Rows</label>
+				<input type="number" class="form-control" id="inputRow">
+			</div>
+			<div class="form-group col-md-6">
+				<label for="inputCol">Cols</label>
+				<input type="number" class="form-control" id="inputCol">
+			</div>
+		</div>
+		<fieldset class="form-group">
+			<div class="row">
+				<legend class="col-form-label col-sm-2 pt-0">Sector</legend>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="left">
+					<label class="form-check-label" for="inlineRadio1">Left</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="center" checked="true">
+					<label class="form-check-label" for="inlineRadio2">Center</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="right" >
+					<label class="form-check-label" for="inlineRadio3">Right</label>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset class="form-group">
+			<div class="row">
+				<legend class="col-form-label col-sm-2 pt-0">Options</legend>
+				<div class="form-check form-check-inline">
+					<input type="checkbox" class="form-check-input" id="displayJsonCheckBox"  onclick="check()">
+					<label class="form-check-label" for="displayJsonCheckBox">Display JSON</label>
+				</div>
+			</div>
+		</fieldset>
+		<div class="form-row" id="jsonArea">
+			<label for="validationTextarea">JSON</label>
+			<textarea id="id_hall_json" name="hall_json" class="form-control"  placeholder="Generated JSON" rows="10"></textarea>
+		</div>
+		<div class="form-group ">
+			<button  class="btn btn-danger" style="margin-top: 10px " onclick="onClearButtonClick()">Clear</button>
+			<button  class="btn btn-primary" style="margin-top: 10px " onclick="onRenderButtonClick()">Render</button>
+			<button  class="btn btn-primary" style="margin-top: 10px " onclick="onGenerateButtonClick()">Generate</button>
+			<input value="Insert" id="btnSubmit" class="btn btn-success" name="_save"/>
+		</div>
+	</div>
+</div>
+<div class="container ">
+	<div class="row">
+		<div id="hall-container"  class="col  ">
+		</div>
+	</div>
+</div>
+<hr>
+
+<script type="text/javascript">
+
+
+	$(document).ready(function () {
+
+			// {% for i in cinema %}
+			// console.log(form)
+			// console.log(i)
+
+			// $('#id_cinema_id').val("{{ i.cinema_id }}")
+			// $('#id_val').val("{{i.cinema_id.id}}")
+
+			// {% endfor %}
+			console.log('{{cinemas}}')
+			console.log('{{cinemas.id}}')
+			$('#id_cinema_id').val("{{ cinemas }}")
+			$('#id_val').val("{{cinemas.id}}")
+
+			$('#id_name').val("{{halls.name}}")
+
+		});
+
+	$("#btnSubmit").click(function (event) {
+			$.ajax({
+				url: 'http://127.0.0.1:8000/admin/server_app/hall/'+{{halls.id}}+'/change/',
+				type: 'POST',
+				success: function(result) {
+					alert("тут-буде-вспливашка-успех")
+					location.reload();
+				},
+				data:{
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+					cinema_id:$("#id_val"). val(),
+					name:$("#id_name").val(),
+					hall_json:"["+$("#id_hall_json").val()+"]",
+					_save:"Save"
+				}
+			});
+		});
+
+	$(document).ready(function(){
+		if(!$('#displayJsonCheckBox').is(":checked")){
+			$('#jsonArea').hide()
+		}
+	})
+
+	function onRenderButtonClick(){
+		$("#hall-container").empty()
+		var cols=$('#inputCol').val()
+		var rows=$('#inputRow').val()
+		render(cols,rows)
+	}
+	function render(cols,rows) {
+		for(var i=0;i<rows;i++){
+			$("#hall-container").append('<div id="hall-row-center-'+i+'" class="btn-toolbar justify-content-center"></div>');
+			$("#hall-row-center-"+i).append('<div id="hall-col-'+i+'" class="btn-group"></div>');
+			for (var j = 0; j<cols;j++) {
+				$("#hall-col-"+i).append('<button id='+(i+1)+"-"+(j+1)+' class="btn btn-success place">'+(i+1)+"-"+(j+1)+'</button>')
+			}
+		}
+		$(".place").click(function(){
+			var id=this.id
+			$("#"+id).toggleClass("btn-success")
+			$("#"+id).toggleClass("btn-primary")
+		})
+		$(".place").contextmenu(function(){
+			var test = prompt("Custom number", '');
+			if(test!=null){
+				if(test.length!=0){
+					var id=this.id
+					$("#"+id).text(test)
+				}
+			}
+		})
+	}
+	function get_custom_places(){
+		arr=$(".btn-group")
+		let res=[]
+		for(var i=0;i<arr.length;i++){
+			temp=arr[i]
+			curent_row=$("#"+temp.id).children()
+			for(var j=0;j<curent_row.length;j++){
+				status=($('#'+curent_row[j].id).text().localeCompare(curent_row[j].id))
+				if (status!=0) {
+					old_value=curent_row[j].id
+					new_value=$('#'+curent_row[j].id).text()
+					let temp={
+						old_row:Number(old_value.split('-')[0]),
+						old_col:Number(old_value.split('-')[1]),
+						new_row:Number(new_value.split('-')[0]),
+						new_col:Number(new_value.split('-')[1])
+					}
+					res.push(temp)
+				}
+			}
+		}
+		// return JSON.stringify(res)
+		return res;
+	}
+	function get_disabled_places(){
+		arr=$(".btn-group")
+		let res=[]
+		for(var i=0;i<arr.length;i++){
+			temp=arr[i]
+			curent_row=$("#"+temp.id).children()
+			for(var j=0;j<curent_row.length;j++){
+				status=(($('#'+curent_row[j].id).attr('class')).includes('btn-success'))
+				if (status.localeCompare(false)==0) {
+					value=curent_row[j].id
+					let temp={
+						row:Number(value.split('-')[0]),
+						col:Number(value.split('-')[1]),
+					}
+					res.push(temp)
+				}
+			}
+		}
+		// return JSON.stringify(res)
+		return res;
+	}
+	function submit(){
+		disabled=get_disabled_places()
+		custom=get_custom_places()
+		console.log("disabled")
+		console.log(disabled)
+		console.log("custom")
+		console.log(custom)
+	}
+	function getJsonOutput(){
+		var cols=$('#inputCol').val()
+		var rows=$('#inputRow').val()
+		var sector=$('input[name=inlineRadioOptions]:checked', ).val()
+		var disabled=get_disabled_places()
+		var custom=get_custom_places()
+		let json_res={
+			sector:sector,
+			row:Number(rows),
+			col:Number(cols),
+			disabled:disabled,
+			custom:custom
+		}
+		return JSON.stringify(json_res,undefined, 4)
+
+	}
+	function onGenerateButtonClick(){
+		temp=getJsonOutput()
+
+		prev_content=$('#id_hall_json').val()
+
+		if (prev_content.localeCompare("")==0) {
+			$('#id_hall_json').val("[\n")
+		}else{
+			prev_content+=',\n'
+		}
+
+
+		$('#id_hall_json').val(prev_content+""+temp)
+	}
+
+	function onSubmitButtonClick() {
+
+		res="["+$('#id_hall_json').val()+"]"
+		console.log(res)
+
+	}
+
+	function onClearButtonClick(){
+		$('#id_hall_json').val("")
+		$('#inputCol').val("")
+		$('#inputRow').val("")
+
+	}
+
+	function check(){
+
+		if(!$('#displayJsonCheckBox').is(":checked")){
+			$('#jsonArea').hide()
+		}else{
+			$('#jsonArea').toggle()
+		}
+	}
+
+</script>
+
+{% endblock %}
