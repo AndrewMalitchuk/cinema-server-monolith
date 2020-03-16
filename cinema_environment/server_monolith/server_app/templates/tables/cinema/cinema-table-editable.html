@@ -28,5 +28,10 @@
         var temp=$(this).attr("update-link")
         window.open('http://127.0.0.1:8000/api/v1/form/cinema/'+temp+'/update')
     });
+    $('.btn-info').click(function(){
+        var temp=$(this).attr("about-link")
+        location.href = "http://127.0.0.1:8000/api/v1/cinema/"+temp
+        
+    });
 </script>
 {% endblock %}

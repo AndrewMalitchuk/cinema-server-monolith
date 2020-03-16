@@ -15,7 +15,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from qrcode.image.pure import PymagingImage
 
-from .tables import CinemaTable, FilmTable, PosterTable, TicketTable, HallTable, TimelineTable
+from .tables import *
 from .forms import *
 from .permission import IsStaffOrAdminWriteOnly
 from .serializers import *
@@ -446,85 +446,23 @@ def hall_form(request):
     return render(request, "forms/hall_form.html", {"form": form})
 
 
-# TODO: permission
-@permission_classes([AllowAny])
-def form_cinema_udpate(request, cinema_id):
-    if request.method == "POST":
-        form = CinemaForm(request.POST, request.FILES)
-        if form.is_valid():
-            instance = form.save(commit=True)
-            instance.save()
-    else:
-        form = Cinema.objects.get(pk=cinema_id)
-    return render(request, "forms/cinema/cinema-update.html", {"form": form})
 
 
-# TODO: permission
-@permission_classes([AllowAny])
-def form_cinema_insert(request):
-    if request.method == "POST":
-        form = CinemaForm(request.POST, request.FILES)
-        if form.is_valid():
-            instance = form.save(commit=True)
-            instance.save()
-    else:
-        form = CinemaForm()
-    return render(request, "forms/cinema/cinema-insert.html", {"form": form})
-
-# TODO: permission
-@permission_classes([AllowAny])
-def form_poster_insert(request, cinema_id):
-    if request.method == "POST":
-        form = PosterForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=True)
-            instance.save()
-    else:
-        form = Poster.objects.filter(cinema_id=cinema_id)
-        data=Film.objects.all()
-    return render(request, "forms/poster/poster-insert.html", {"form": form,"films":Film.objects.all()})
-
-# TODO: permission
-@permission_classes([AllowAny])
-def form_hall_insert(request, cinema_id):
-    if request.method == "POST":
-        form = HallForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=True)
-            instance.save()
-    else:
-        form = Hall.objects.filter(cinema_id=cinema_id)
-    return render(request, "forms/hall/hall-insert.html", {"form": form,"cinemas":Cinema.objects.get(pk=cinema_id)})
-
-# TODO: permission
-@permission_classes([AllowAny])
-def form_hall_update(request, cinema_id,hall_id):
-    if request.method == "POST":
-        form = HallForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=True)
-            instance.save()
-    else:
-        form = Hall.objects.filter(cinema_id=cinema_id)
-    return render(request, "forms/hall/hall-update.html", {"form": form,"halls":Hall.objects.get(pk=hall_id),"cinemas":Cinema.objects.get(pk=cinema_id)})
 
 @permission_classes([AllowAny])
-def cinema_profile(request,cinema_id):
-    form=Cinema.objects.get(pk=cinema_id)
-    return render(request,"pages/cinema-profile.html",{"form":form})
+def cinema_profile(request, cinema_id):
+    form = Cinema.objects.get(pk=cinema_id)
+    return render(request, "pages/cinema-profile.html", {"form": form})
 
-# TODO: permission
+
 @permission_classes([AllowAny])
-def form_timeline_insert(request, cinema_id):
-    if request.method == "POST":
-        form = TimelineForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=True)
-            instance.save()
-    else:
-        form = Timeline.objects.filter(cinema_id=cinema_id)
-        data=Film.objects.all()
-    return render(request, "forms/timeline/timeline-insert.html", {"form": form,"films":Film.objects.all()})
+def about_film(request, film_id):
+    form = Film.objects.get(pk=film_id)
+    return render(request, "pages/about-film.html", {"form": form})
+
+
+
+
 
 # Email sending test
 @api_view(['GET'])
@@ -557,41 +495,166 @@ def email(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@permission_classes([AllowAny])
-def mypage(request):
-    table = CinemaTable(Cinema.objects.all())
-    RequestConfig(request, paginate=False).configure(table)
-    return render(request, 'forms/cinema.html', locals())
-
-
-# class CinemaListView(SingleTableView):
-#     # model = Cinema
-#     table_class = CinemaTable
-#     queryset = Cinema.objects.all()
-#     template_name = "forms/cinema.html"
-
 class FilmTableView(ExportMixin, SingleTableView):
     model = Film
     table_class = FilmTable
     template_name = 'tables/film-table.html'
 
 
-class CinemaTableView(ExportMixin, SingleTableView):
-    model = Cinema
-    table_class = CinemaTable
-    template_name = 'tables/cinema/cinema-table-editable.html'
-
-
-def get_poster_table_by_cinema_id(request, cinema_id):
+# Cinema Web
+def cinema_table_all(request):
     config = RequestConfig(request)
-    content = PosterTable(Poster.objects.filter(cinema_id=cinema_id))
 
-    config.configure(content)
+    print(request.user.is_staff)
 
-    return render(request, 'tables/poster/poster-table-editable.html', {
-        'table': content,
-    })
+    if request.user.is_staff == True:
+        content = CinemaTableEditable(Cinema.objects.all())
 
+        config.configure(content)
+        return render(request, 'tables/cinema/cinema-table-editable.html', {
+            'table': content,
+        })
+    else:
+        content = CinemaTableUneditable(Cinema.objects.all())
+
+        config.configure(content)
+        return render(request, 'tables/cinema/cinema-table-uneditable.html', {
+            'table': content,
+        })
+
+
+@permission_classes([AllowAny])
+def form_cinema_udpate(request, cinema_id):
+    if request.user.is_staff == True:
+        if request.method == "POST":
+            form = CinemaForm(request.POST, request.FILES)
+            if form.is_valid():
+                instance = form.save(commit=True)
+                instance.save()
+        else:
+            form = Cinema.objects.get(pk=cinema_id)
+        return render(request, "forms/cinema/cinema-update.html", {"form": form})
+    else:
+        return render(request, "404.html", {})
+
+
+@permission_classes([AllowAny])
+def form_cinema_insert(request):
+    if request.user.is_staff == True:
+        if request.method == "POST":
+            form = CinemaForm(request.POST, request.FILES)
+            if form.is_valid():
+                instance = form.save(commit=True)
+                instance.save()
+        else:
+            form = CinemaForm()
+        return render(request, "forms/cinema/cinema-insert.html", {"form": form})
+    else:
+        return render(request, "404.html", {})
+
+
+# Poster Web
+def get_poster_table_by_cinema_id(request, cinema_id):
+    if request.user.is_staff == True:
+        config = RequestConfig(request)
+        content = PosterTable(Poster.objects.filter(cinema_id=cinema_id))
+
+        config.configure(content)
+
+        return render(request, 'tables/poster/poster-table-editable.html', {
+            'table': content,
+        })
+    else:
+        return render(request, "404.html", {})
+
+
+@permission_classes([AllowAny])
+def form_poster_insert(request, cinema_id):
+    if request.user.is_staff == True:
+        if request.method == "POST":
+            form = PosterForm(request.POST)
+            if form.is_valid():
+                instance = form.save(commit=True)
+                instance.save()
+        else:
+            form = Poster.objects.filter(cinema_id=cinema_id)
+            data = Film.objects.all()
+        return render(request, "forms/poster/poster-insert.html", {"form": form, "films": Film.objects.all()})
+    else:
+        return render(request, "404.html", {})
+
+# Timeline Web
+def get_timeline_table_by_cinema_id(request, cinema_id):
+    if request.user.is_staff == True:
+        config = RequestConfig(request)
+        content = TimelineTable(Timeline.objects.filter(cinema_id=cinema_id))
+
+        config.configure(content)
+
+        return render(request, 'tables/timeline-table-editable.html', {
+            'table': content,
+        })
+    else:
+        return render(request, "404.html", {})
+
+# TODO: permission
+@permission_classes([AllowAny])
+def form_timeline_insert(request, cinema_id):
+    if request.user.is_staff == True:
+        if request.method == "POST":
+            form = TimelineForm(request.POST)
+            if form.is_valid():
+                instance = form.save(commit=True)
+                instance.save()
+        else:
+            form = Timeline.objects.filter(cinema_id=cinema_id)
+            data = Film.objects.all()
+        return render(request, "forms/timeline/timeline-insert.html", {"form": form, "films": Film.objects.all()})
+    else:
+        return render(request, "404.html", {})
+
+# Hall Web
+def get_hall_table_by_cinema_id(request, cinema_id):
+    if request.user.is_staff == True:
+        config = RequestConfig(request)
+        content = HallTable(Hall.objects.filter(cinema_id=cinema_id))
+
+        config.configure(content)
+
+        return render(request, 'tables/hall-table.html', {
+            'table': content,
+        })
+    else:
+        return render(request, "404.html", {})
+
+@permission_classes([AllowAny])
+def form_hall_insert(request, cinema_id):
+    if request.user.is_staff == True:
+        if request.method == "POST":
+            form = HallForm(request.POST)
+            if form.is_valid():
+                instance = form.save(commit=True)
+                instance.save()
+        else:
+            form = Hall.objects.filter(cinema_id=cinema_id)
+        return render(request, "forms/hall/hall-insert.html", {"form": form, "cinemas": Cinema.objects.get(pk=cinema_id)})
+    else:
+        return render(request, "404.html", {})
+
+@permission_classes([AllowAny])
+def form_hall_update(request, cinema_id, hall_id):
+    if request.user.is_staff == True:
+        if request.method == "POST":
+            form = HallForm(request.POST)
+            if form.is_valid():
+                instance = form.save(commit=True)
+                instance.save()
+        else:
+            form = Hall.objects.filter(cinema_id=cinema_id)
+        return render(request, "forms/hall/hall-update.html",
+                      {"form": form, "halls": Hall.objects.get(pk=hall_id), "cinemas": Cinema.objects.get(pk=cinema_id)})
+    else:
+        return render(request, "404.html", {})
 
 def get_ticket_table_by_cinema_id(request, cinema_id):
     config = RequestConfig(request)
@@ -615,37 +678,13 @@ def get_ticket_table_by_cinema_id_and_film_id(request, cinema_id, film_id):
     })
 
 
-def get_hall_table_by_cinema_id(request, cinema_id):
-    config = RequestConfig(request)
-    content = HallTable(Hall.objects.filter(cinema_id=cinema_id))
-
-    config.configure(content)
-
-    return render(request, 'tables/hall-table.html', {
-        'table': content,
-    })
 
 
-def get_timeline_table_by_cinema_id(request, cinema_id):
-    config = RequestConfig(request)
-    content = TimelineTable(Timeline.objects.filter(cinema_id=cinema_id))
-
-    config.configure(content)
-
-    return render(request, 'tables/timeline-table-editable.html', {
-        'table': content,
-    })
 
 
-def people_listing(request):
-    config = RequestConfig(request)
-    table_test = FilmTable(Film.objects.filter(genre=1))
 
-    config.configure(table_test)
 
-    return render(request, 'forms/film_list.html', {
-        'table': table_test,
-    })
+
 
 
 # XXX
@@ -677,9 +716,4 @@ def table_view(request):
     else:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
-#
-# def delete(request,pk):
-#     cinema=Cinema.objects.get(pk=pk)
-#     if request.method=='POST':
-#         cinema.delete()
-#         return Response(status=status.HTTP_204_NO_CONTENT)
+
