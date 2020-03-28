@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Film, Cinema, Poster, Timeline, Hall, Ticket
+from .models import Film, Cinema, Poster, Timeline, Hall, Ticket,Staff
 
 
 class FilmAdmin(admin.ModelAdmin):
@@ -52,9 +52,16 @@ class TicketAdmin(admin.ModelAdmin):
     search_fields = ( 'place', 'status', 'user')
 
 
+class StaffAdmin(admin.ModelAdmin):
+    list_display = ('cinema_id','user_id')
+    list_display_links = ('cinema_id','user_id')
+    search_fields = ('cinema_id','user_id')
+
+
 admin.site.register(Film, FilmAdmin)
 admin.site.register(Cinema, CinemaAdmin)
 admin.site.register(Poster, PosterAdmin)
 admin.site.register(Timeline, TimelineAdmin)
 admin.site.register(Hall, HallAdmin)
 admin.site.register(Ticket, TicketAdmin)
+admin.site.register(Staff, StaffAdmin)

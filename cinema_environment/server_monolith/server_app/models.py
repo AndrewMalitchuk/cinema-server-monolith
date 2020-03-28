@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, AbstractUser
+from django.contrib.auth.models import PermissionsMixin, AbstractUser, User
 from django.db import models
 from django.conf import settings
 from django.utils import timezone
@@ -130,6 +130,30 @@ class Poster(models.Model):
         verbose_name="Film ID"
     )
 
+class Hall(models.Model):
+    app_label = "server_app.apps.ServerAppConfig"
+
+    class Meta:
+        verbose_name = "Зал"
+        verbose_name_plural = "Зали"
+        ordering = ['-name']
+
+    name = models.CharField(
+        verbose_name="Назва залу",
+        max_length=128,
+        help_text="Найменування залу"
+    )
+
+    cinema_id = models.ForeignKey(
+        Cinema,
+        on_delete=models.DO_NOTHING,
+        verbose_name="Cinema ID"
+    )
+
+    # TODO: change to JSONField
+    hall_json = models.TextField(verbose_name="JSON")
+
+
 
 class Timeline(models.Model):
     app_label = "server_app.apps.ServerAppConfig"
@@ -174,30 +198,6 @@ class Timeline(models.Model):
 
     def __str__(self):
         return self.film_id.title+" | "+self.cinema_id.name
-
-
-class Hall(models.Model):
-    app_label = "server_app.apps.ServerAppConfig"
-
-    class Meta:
-        verbose_name = "Зал"
-        verbose_name_plural = "Зали"
-        ordering = ['-name']
-
-    name = models.CharField(
-        verbose_name="Назва залу",
-        max_length=128,
-        help_text="Найменування залу"
-    )
-
-    cinema_id = models.ForeignKey(
-        Cinema,
-        on_delete=models.DO_NOTHING,
-        verbose_name="Cinema ID"
-    )
-
-    # TODO: change to JSONField
-    hall_json = models.TextField(verbose_name="JSON")
 
 
 class Ticket(models.Model):
@@ -261,4 +261,21 @@ class Ticket(models.Model):
         verbose_name="Сеанс"
     )
 
+class Staff(models.Model):
+    app_label = "server_app.apps.ServerAppConfig"
 
+    class Meta:
+        verbose_name_plural = "Персонал"
+        verbose_name = "Персонал"
+
+    user_id=models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        verbose_name="User ID"
+    )
+
+    cinema_id=models.ForeignKey(
+        Cinema,
+        on_delete=models.DO_NOTHING,
+        verbose_name="Cinema ID"
+    )

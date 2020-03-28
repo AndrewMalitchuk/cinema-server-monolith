@@ -8,7 +8,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueValidator
 from hashlib import md5
 
-from .models import Film, Cinema, Timeline, Poster, Hall, Ticket
+from .models import Film, Cinema, Timeline, Poster, Hall, Ticket,Staff
 
 
 class FilmSerializer(serializers.ModelSerializer):
@@ -95,6 +95,10 @@ class TicketSerializer(serializers.ModelSerializer):
 
 UserModel = get_user_model()
 
+class StaffSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Staff
+        fields = '__all__'
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

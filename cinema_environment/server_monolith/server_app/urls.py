@@ -15,6 +15,7 @@ urlpatterns = [
     path('ticket/', api_ticket),
     path('user/', api_user),
     path('create/', CreateUserView.as_view()),
+    path('staff/',get_staff_job),
 
     # Film Web
     path('film/all', FilmTableView.as_view()),

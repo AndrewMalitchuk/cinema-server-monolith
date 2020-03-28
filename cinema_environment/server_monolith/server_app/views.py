@@ -406,6 +406,22 @@ def api_ticket(request):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@permission_classes([IsStaffOrAdminWriteOnly])
+def get_staff_job(request):
+    if request.method == 'GET':
+        user_id=request.GET.get('user_id',None)
+        if user_id is not None:
+            staff=Staff.objects.get(user_id=user_id)
+            cinema=Cinema.objects.get(pk=staff.cinema_id.id)
+            serializer=CinemaSerializer(cinema,many=False)
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
