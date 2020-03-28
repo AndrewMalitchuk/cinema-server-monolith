@@ -150,6 +150,9 @@ class Hall(models.Model):
         verbose_name="Cinema ID"
     )
 
+    def __str__(self):
+        return self.name
+
     # TODO: change to JSONField
     hall_json = models.TextField(verbose_name="JSON")
 
@@ -173,6 +176,12 @@ class Timeline(models.Model):
         Film,
         on_delete=models.DO_NOTHING,
         verbose_name="Film ID"
+    )
+
+    hall_id = models.ForeignKey(
+        Hall,
+        on_delete=models.DO_NOTHING,
+        verbose_name="Hall ID"
     )
 
     datetime=models.DateTimeField(
