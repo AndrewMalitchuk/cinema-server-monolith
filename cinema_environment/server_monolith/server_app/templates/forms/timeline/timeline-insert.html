@@ -23,7 +23,6 @@
 						<div class="form-check form-check-inline">
 							<select class="form-control" id="id_film_id" name="film_id">
 								{% for i in films %}
-								console.log('')
 								<option value='{{ i.id }}'>{{ i.title }}</option>
 								{% endfor %}
 							</select>
@@ -79,7 +78,7 @@
 
 		$("#btnSubmit").click(function (event) {
 			$.ajax({
-				url: 'http://127.0.0.1:8000/admin/server_app/timeline/add/',
+				url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/timeline/add/',
 				type: 'POST',
 				success: function(result) {
 					alert("тут-буде-вспливашка-успех")

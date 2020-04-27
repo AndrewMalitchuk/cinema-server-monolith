@@ -96,7 +96,7 @@
 			$.ajax({
 				type: "POST",
 				enctype: 'multipart/form-data',
-				url: "http://127.0.0.1:8000/admin/server_app/cinema/50/change/",
+				url: "http://{{request.META.HTTP_HOST}}/admin/server_app/cinema/50/change/",
 				data: data,
 				processData: false,
 				contentType: false,
@@ -137,7 +137,7 @@
 
 		// var temp = 50
 		// $.ajax({
-		// 	url: 'http://127.0.0.1:8000/admin/server_app/ticket/60/change/',
+		// 	url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/ticket/60/change/',
 		// 	type: 'POST',
 		// 	success: function(result) {
 		// 		location.reload();
@@ -157,7 +157,7 @@
 
 		var temp = 50
 		$.ajax({
-			url: 'http://127.0.0.1:8000/admin/server_app/cinema/50/change/',
+			url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/cinema/50/change/',
 			type: 'POST',
 			success: function(result) {
 				// location.reload();

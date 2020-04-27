@@ -1,0 +1,34 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+<main role="main">
+
+
+      	<div class="container marketing">
+
+
+      		<hr class="featurette-divider">
+
+      		<div class="row featurette">
+      			<div class="col-md-7">
+      				<h2 class="featurette-heading">cinema-app<br>
+      					<span class="text-muted">А system that simulates the operation of a movie ticket booking system.<br> Consists of a mobile application for user, controller and staff.</span>
+      				</h2>
+      				<p class="lead"><a href="https://github.com/AndrewMalitchuk/cinema-supervisor">cinema-client</p>
+      				<p class="lead"><a href="https://github.com/AndrewMalitchuk/cinema-client">cinema-supervisor</p>
+      				<p class="lead"><a href="https://github.com/AndrewMalitchuk/cinema-server-monolith">cinema-server-monolith</a></p>
+      			</div>
+      			<div class="col-md-5">
+      				<img class="featurette-image img-fluid mx-auto" src="http://{{request.META.HTTP_HOST}}/static/logo.png" alt="http://{{request.META.HTTP_HOST}}/static/logo.png">
+      			</div>
+      		</div>
+
+
+
+      	</div>
+
+
+      </main>
+
+{% endblock %}

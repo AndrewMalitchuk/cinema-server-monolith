@@ -14,7 +14,7 @@
         }, function(dialogE) {
             dialogE.modal('hide');
             $.ajax({
-                url: 'http://127.0.0.1:8000/admin/server_app/timeline/'+temp+'/delete/',
+                url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/timeline/'+temp+'/delete/',
                 type: 'POST',
                 success: function(result) {
                     location.reload();

@@ -83,14 +83,6 @@
 
 	$(document).ready(function () {
 
-			// {% for i in cinema %}
-			// console.log(form)
-			// console.log(i)
-
-			// $('#id_cinema_id').val("{{ i.cinema_id }}")
-			// $('#id_val').val("{{i.cinema_id.id}}")
-
-			// {% endfor %}
 			console.log('{{cinemas}}')
 			console.log('{{cinemas.id}}')
 			$('#id_cinema_id').val("{{ cinemas }}")
@@ -100,7 +92,7 @@
 
 	$("#btnSubmit").click(function (event) {
 			$.ajax({
-				url: 'http://127.0.0.1:8000/admin/server_app/hall/add/',
+				url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/hall/add/',
 				type: 'POST',
 				success: function(result) {
 					alert("тут-буде-вспливашка-успех")
@@ -172,7 +164,6 @@
 				}
 			}
 		}
-		// return JSON.stringify(res)
 		return res;
 	}
 	function get_disabled_places(){
@@ -193,9 +184,30 @@
 				}
 			}
 		}
-		// return JSON.stringify(res)
 		return res;
 	}
+	
+	function get_free_places(){
+		arr=$(".btn-group")
+		let res=[]
+		for(var i=0;i<arr.length;i++){
+			temp=arr[i]
+			curent_row=$("#"+temp.id).children()
+			for(var j=0;j<curent_row.length;j++){
+				status=(($('#'+curent_row[j].id).attr('class')).includes('btn-success'))
+				if (status.localeCompare(true)==0) {
+					value=curent_row[j].id
+					let temp={
+						row:Number(value.split('-')[0]),
+						col:Number(value.split('-')[1]),
+					}
+					res.push(temp)
+				}
+			}
+		}
+		return res;
+	}
+	
 	function submit(){
 		disabled=get_disabled_places()
 		custom=get_custom_places()
@@ -210,14 +222,19 @@
 		var sector=$('input[name=inlineRadioOptions]:checked', ).val()
 		var disabled=get_disabled_places()
 		var custom=get_custom_places()
+		var free=get_free_places()
+		console.log(free)
 		let json_res={
 			sector:sector,
 			row:Number(rows),
 			col:Number(cols),
 			disabled:disabled,
-			custom:custom
+			custom:custom,
+			booked:[],
+			bought:[],
+			free:free
 		}
-		return JSON.stringify(json_res,undefined, 4)
+		return JSON.stringify(json_res,undefined, 4);
 
 	}
 	function onGenerateButtonClick(){

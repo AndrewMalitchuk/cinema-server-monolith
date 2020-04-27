@@ -29,7 +29,7 @@
       				<p class="lead">{{form.telephone}}</p>
       			</div>
       			<div class="col-md-5">
-      				<img class="featurette-image img-fluid mx-auto" src="http://127.0.0.1:8000/media/{{form.pic_url}}" alt="{{form.pic_url}}">
+      				<img class="featurette-image img-fluid mx-auto" src="http://{{request.META.HTTP_HOST}}/media/{{form.pic_url}}" alt="{{form.pic_url}}">
       			</div>
       		</div>
 
@@ -57,7 +57,7 @@
       			$.ajax({
       				type: "POST",
       				enctype: 'multipart/form-data',
-      				url: "http://127.0.0.1:8000/admin/server_app/cinema/{{form.pk}}/change/",
+      				url: "http://{{request.META.HTTP_HOST}}/admin/server_app/cinema/{{form.pk}}/change/",
       				data: data,
       				processData: false,
       				contentType: false,
@@ -76,7 +76,7 @@
 	// function onUpdateClick() {
 	// 	// var temp = 50
 	// 	// $.ajax({
-	// 	// 	url: 'http://127.0.0.1:8000/admin/server_app/ticket/60/change/',
+	// 	// 	url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/ticket/60/change/',
 	// 	// 	type: 'POST',
 	// 	// 	success: function(result) {
 	// 	// 		location.reload();

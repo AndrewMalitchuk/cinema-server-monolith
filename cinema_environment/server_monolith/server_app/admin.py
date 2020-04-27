@@ -28,9 +28,9 @@ class PosterAdmin(admin.ModelAdmin):
 
 
 class TimelineAdmin(admin.ModelAdmin):
-    list_display = ('cinema_id', 'film_id', 'hall_id','datetime','price')
-    list_display_links = ('cinema_id', 'film_id', 'hall_id','datetime','price')
-    search_fields = ('cinema_id', 'film_id', 'hall_id','datetime','price')
+    list_display = ('cinema_id', 'film_id', 'hall_id','date','time','price')
+    list_display_links = ('cinema_id', 'film_id', 'hall_id','date','time','price')
+    search_fields = ('cinema_id', 'film_id', 'hall_id','date','time','price')
 
 
 

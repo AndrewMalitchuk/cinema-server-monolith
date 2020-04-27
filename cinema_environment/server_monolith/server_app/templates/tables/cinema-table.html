@@ -13,7 +13,7 @@
         }, function(dialogE) {
             dialogE.modal('hide');
             $.ajax({
-                url: 'http://127.0.0.1:8000/admin/server_app/cinema/'+temp+'/delete/',
+                url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/cinema/'+temp+'/delete/',
                 type: 'POST',
                 success: function(result) {
                     location.reload();
@@ -26,12 +26,12 @@
     });
     $('.kek').click(function(){
         // var temp=$(this).attr("about-link")
-        // location.href = "http://127.0.0.1:8000/api/v1/cinema/"+temp
+        // location.href = "http://{{request.META.HTTP_HOST}}/api/v1/cinema/"+temp
         console.log("click")
     });
      $('.btn-primary').click(function(){
         var temp=$(this).attr("update-link")
-        window.open('http://127.0.0.1:8000/api/v1/form/cinema/'+temp+'/update')
+        window.open('http://{{request.META.HTTP_HOST}}/api/v1/form/cinema/'+temp+'/update')
     });
 
 

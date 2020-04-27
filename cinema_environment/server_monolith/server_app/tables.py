@@ -2,6 +2,8 @@ from django_tables2 import tables, TemplateColumn
 
 from .models import *
 
+from .filters import *
+
 
 # class CinemaTable(tables.Table):
 #     T1 = '<button type="button" class="btn" update-link="{{ record.get_absolute_url_update }}">update</button>'
@@ -22,10 +24,14 @@ class FilmTable(tables.Table):
     TemplateColumn(about_col)
     about = TemplateColumn(about_col)
 
+
+
     class Meta:
         model = Film
         template_name = "django_tables2/bootstrap.html"
         fields = ('title', 'date', 'duration', 'genre')
+
+
 
 
 class CinemaTableEditable(tables.Table):
@@ -95,4 +101,4 @@ class TimelineTable(tables.Table):
     class Meta:
         model = Timeline
         template_name = "django_tables2/bootstrap.html"
-        fields = ('film_id', 'cinema_id', 'datetime')
+        fields = ('film_id', 'cinema_id', 'date','time')

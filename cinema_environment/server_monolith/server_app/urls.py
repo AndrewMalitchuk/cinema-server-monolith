@@ -43,10 +43,8 @@ urlpatterns = [
     path('email/', email),
     path('export/', table_view),
 
-    # remove
-    path('table/ticket/<int:cinema_id>', get_ticket_table_by_cinema_id),
-    path('table/ticket/<int:cinema_id>/<int:film_id>', get_ticket_table_by_cinema_id_and_film_id),
+    path('about_dev/',about_dev),
+    path('about_project/',about_project),
+
 
 ]
-
-# handler404 = handler404

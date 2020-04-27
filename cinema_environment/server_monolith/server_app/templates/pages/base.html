@@ -169,33 +169,14 @@
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
 				<li class="nav-item">
-					<a class="nav-link" href="http://127.0.0.1:8000/api/v1/film/all">фільми</a>
+					<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/film/all">фільми</a>
 				</li>
 				<li class="nav-item">
-					<a class="nav-link" href="http://127.0.0.1:8000/api/v1/cinema/all">кінотеатри</a>
+					<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/cinema/all">кінотеатри</a>
 				</li>
 				{% if user.is_staff == True %}
-
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						розклад
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="#">космос</a>
-						<a class="dropdown-item" href="#">люм'єр</a>
-						<a class="dropdown-item" href="#">кінобум</a>
-					</div>
-				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						контент
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="#">кінотеатр</a>
-						<a class="dropdown-item" href="#">постери</a>
-						<a class="dropdown-item" href="#">розклад</a>
-						<a class="dropdown-item" href="#">зали</a>
-					</div>
+				<li class="nav-item">
+					<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/form/hall/{{staff.cinema_id.id}}/insert">зал</a>
 				</li>
 				{% endif %}
 
@@ -205,12 +186,14 @@
 		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
 			{% if user.is_authenticated == True %}
 			<ul class="navbar-nav ml-auto">
-				<a class="btn btn-success my-2 my-sm-0" type="submit" href="http://127.0.0.1:8000/accounts/logout/">Logout</a>
+				<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/cinema/{{staff.cinema_id.id}}">{{staff.cinema_id}}</a>
+				<ul class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/cinema/{{staff.cinema_id.id}}">{{user.username}}</ul>
+				<a class="btn btn-success my-2 my-sm-0" type="submit" href="http://{{request.META.HTTP_HOST}}/accounts/logout/">Logout</a>
 			</ul>
 			{% endif %}
 			{% if user.is_authenticated == False %}
 			<ul class="navbar-nav ml-auto">
-				<a class="btn btn-success my-2 my-sm-0" type="submit" href="http://127.0.0.1:8000/accounts/login/">Login</a>
+				<a class="btn btn-success my-2 my-sm-0" type="submit" href="http://{{request.META.HTTP_HOST}}/accounts/login/">Login</a>
 			</ul>
 			{% endif %}
 
@@ -235,14 +218,12 @@
 				<ul class="list-unstyled text-small">
 					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk/cinema-client">mobile-client</a></li>
 					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk/cinema-supervisor">mobile-conductor</a></li>
-					<li><a class="text-muted" href="#">forms</a></li>
-					<li><a class="text-muted" href="#">rest-api</a></li>
 				</ul>
 			</div>
 			<div class="col-6 col-md">
 				<h5>resources</h5>
 				<ul class="list-unstyled text-small">
-					<li><a class="text-muted" href="#">rest-api-documentations</a></li>
+					<li><a class="text-muted" href="/redoc/">rest-api-documentations</a></li>
 					<li><a class="text-muted" href="#">java-documentation</a></li>
 					<li><a class="text-muted" href="#">python-documentation</a></li>
 				</ul>
@@ -259,8 +240,8 @@
 			<div class="col-6 col-md">
 				<h5>about</h5>
 				<ul class="list-unstyled text-small">
-					<li><a class="text-muted" href="#">project</a></li>
-					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk">developer</a></li>
+					<li><a class="text-muted" href="http://{{request.META.HTTP_HOST}}/api/v1/about_project/">project</a></li>
+					<li><a class="text-muted" href="http://{{request.META.HTTP_HOST}}/api/v1/about_dev/">developer</a></li>
 				</ul>
 			</div>
 		</div>

@@ -161,22 +161,27 @@ def api_timeline(request):
         cinema_id = request.GET.get('cinema_id', None)
         film_id = request.GET.get('film_id', None)
         id = request.GET.get('id', None)
-        datetime = request.GET.get('datetime', None)
+        date = request.GET.get('date', None)
 
-        if cinema_id is not None and film_id is not None and datetime is None:
+        print(date)
+
+        if cinema_id is not None and film_id is not None and date is None:
             timeline = Timeline.objects.filter(cinema_id=cinema_id, film_id=film_id)
             serializer = TimelineSerializer(timeline, many=True)
-        elif cinema_id is not None and film_id is not None and datetime is not None:
-            timeline = Timeline.objects.filter(cinema_id=cinema_id, film_id=film_id, datetime=datetime)
+        elif cinema_id is not None and film_id is None and date is not None:
+            timeline = Timeline.objects.filter(cinema_id=cinema_id, date=date)
             serializer = TimelineSerializer(timeline, many=True)
-        elif cinema_id is not None and film_id is None and datetime is None:
+        elif cinema_id is not None and film_id is not None and date is not None:
+            timeline = Timeline.objects.filter(cinema_id=cinema_id, film_id=film_id, date=date)
+            serializer = TimelineSerializer(timeline, many=True)
+        elif cinema_id is not None and film_id is None and date is None:
             timeline = Timeline.objects.filter(cinema_id=cinema_id)
             serializer = TimelineSerializer(timeline, many=True)
-        elif cinema_id is None and film_id is not None and datetime is None:
+        elif cinema_id is None and film_id is not None and date is None:
             timeline = Timeline.objects.filter(film_id=film_id)
             serializer = TimelineSerializer(timeline, many=True)
-        elif cinema_id is None and film_id is None and datetime is not None:
-            timeline = Timeline.objects.filter(datetime=datetime)
+        elif cinema_id is None and film_id is None and date is not None:
+            timeline = Timeline.objects.filter(date=date)
             serializer = TimelineSerializer(timeline, many=True)
         elif id is not None:
             timeline = Timeline.objects.get(id=id)
@@ -285,8 +290,10 @@ def api_poster(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+# @permission_classes([IsStaffOrAdminWriteOnly])
+
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
-@permission_classes([IsStaffOrAdminWriteOnly])
+@permission_classes([AllowAny])
 def api_hall(request):
     if request.method == 'GET':
         hall = Hall.objects.all()
@@ -345,7 +352,7 @@ def api_hall(request):
 
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
-@permission_classes([IsStaffOrAdminWriteOnly])
+@permission_classes([IsAuthenticated])
 def api_ticket(request):
     if request.method == 'GET':
         ticket = Ticket.objects.all()
@@ -372,6 +379,7 @@ def api_ticket(request):
         serializer = TicketSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
+
             return Response(
                 serializer.data,
                 status=status.HTTP_201_CREATED)
@@ -406,15 +414,16 @@ def api_ticket(request):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 @permission_classes([IsStaffOrAdminWriteOnly])
 def get_staff_job(request):
     if request.method == 'GET':
-        user_id=request.GET.get('user_id',None)
+        user_id = request.GET.get('user_id', None)
         if user_id is not None:
-            staff=Staff.objects.get(user_id=user_id)
-            cinema=Cinema.objects.get(pk=staff.cinema_id.id)
-            serializer=CinemaSerializer(cinema,many=False)
+            staff = Staff.objects.get(user_id=user_id)
+            cinema = Cinema.objects.get(pk=staff.cinema_id.id)
+            serializer = CinemaSerializer(cinema, many=False)
             return Response(
                 serializer.data,
                 status=status.HTTP_200_OK
@@ -462,22 +471,27 @@ def hall_form(request):
     return render(request, "forms/hall_form.html", {"form": form})
 
 
-
-
-
 @permission_classes([AllowAny])
 def cinema_profile(request, cinema_id):
     form = Cinema.objects.get(pk=cinema_id)
-    return render(request, "pages/cinema-profile.html", {"form": form})
+    return render(request, "pages/cinema-profile.html",
+                  {"form": form, "staff": Staff.objects.get(user_id=request.user.pk)})
 
 
 @permission_classes([AllowAny])
 def about_film(request, film_id):
     form = Film.objects.get(pk=film_id)
-    return render(request, "pages/about-film.html", {"form": form})
+    return render(request, "pages/about-film.html", {"form": form, "staff": Staff.objects.get(user_id=request.user.pk)})
 
 
-
+@permission_classes([AllowAny])
+def about_dev(request):
+    return render(request, 'pages/about-dev.html') \
+ \
+ \
+@permission_classes([AllowAny])
+def about_project(request):
+    return render(request, 'pages/about-project.html')
 
 
 # Email sending test
@@ -516,12 +530,19 @@ class FilmTableView(ExportMixin, SingleTableView):
     table_class = FilmTable
     template_name = 'tables/film-table.html'
 
+    filterset_class = FilmFilter
+
+    def get(self, request, *args, **kwargs):
+        return render(request, "tables/film-table.html",
+                      {'table': FilmTable(Film.objects.all()), 'staff': Staff.objects.get(user_id=request.user.pk)})
+
 
 # Cinema Web
 def cinema_table_all(request):
     config = RequestConfig(request)
 
     print(request.user.is_staff)
+    print(Staff.objects.get(user_id=request.user.pk).cinema_id.id)
 
     if request.user.is_staff == True:
         content = CinemaTableEditable(Cinema.objects.all())
@@ -529,6 +550,8 @@ def cinema_table_all(request):
         config.configure(content)
         return render(request, 'tables/cinema/cinema-table-editable.html', {
             'table': content,
+            'cinema_id': Staff.objects.get(user_id=request.user.pk).cinema_id.id,
+            "staff": Staff.objects.get(user_id=request.user.pk)
         })
     else:
         content = CinemaTableUneditable(Cinema.objects.all())
@@ -542,14 +565,18 @@ def cinema_table_all(request):
 @permission_classes([AllowAny])
 def form_cinema_udpate(request, cinema_id):
     if request.user.is_staff == True:
-        if request.method == "POST":
-            form = CinemaForm(request.POST, request.FILES)
-            if form.is_valid():
-                instance = form.save(commit=True)
-                instance.save()
+        if Staff.objects.get(user_id=request.user.pk).cinema_id.id == cinema_id:
+            if request.method == "POST":
+                form = CinemaForm(request.POST, request.FILES)
+                if form.is_valid():
+                    instance = form.save(commit=True)
+                    instance.save()
+            else:
+                form = Cinema.objects.get(pk=cinema_id)
+            return render(request, "forms/cinema/cinema-update.html",
+                          {"form": form, "staff": Staff.objects.get(user_id=request.user.pk)})
         else:
-            form = Cinema.objects.get(pk=cinema_id)
-        return render(request, "forms/cinema/cinema-update.html", {"form": form})
+            return render(request, "404.html", {})
     else:
         return render(request, "404.html", {})
 
@@ -564,7 +591,8 @@ def form_cinema_insert(request):
                 instance.save()
         else:
             form = CinemaForm()
-        return render(request, "forms/cinema/cinema-insert.html", {"form": form})
+        return render(request, "forms/cinema/cinema-insert.html",
+                      {"form": form, "staff": Staff.objects.get(user_id=request.user.pk)})
     else:
         return render(request, "404.html", {})
 
@@ -599,6 +627,7 @@ def form_poster_insert(request, cinema_id):
     else:
         return render(request, "404.html", {})
 
+
 # Timeline Web
 def get_timeline_table_by_cinema_id(request, cinema_id):
     if request.user.is_staff == True:
@@ -612,6 +641,7 @@ def get_timeline_table_by_cinema_id(request, cinema_id):
         })
     else:
         return render(request, "404.html", {})
+
 
 # TODO: permission
 @permission_classes([AllowAny])
@@ -629,6 +659,7 @@ def form_timeline_insert(request, cinema_id):
     else:
         return render(request, "404.html", {})
 
+
 # Hall Web
 def get_hall_table_by_cinema_id(request, cinema_id):
     if request.user.is_staff == True:
@@ -643,6 +674,7 @@ def get_hall_table_by_cinema_id(request, cinema_id):
     else:
         return render(request, "404.html", {})
 
+
 @permission_classes([AllowAny])
 def form_hall_insert(request, cinema_id):
     if request.user.is_staff == True:
@@ -653,9 +685,11 @@ def form_hall_insert(request, cinema_id):
                 instance.save()
         else:
             form = Hall.objects.filter(cinema_id=cinema_id)
-        return render(request, "forms/hall/hall-insert.html", {"form": form, "cinemas": Cinema.objects.get(pk=cinema_id)})
+        return render(request, "forms/hall/hall-insert.html",
+                      {"form": form, "cinemas": Cinema.objects.get(pk=cinema_id),"staff":Staff.objects.get(user_id=request.user.pk)})
     else:
         return render(request, "404.html", {})
+
 
 @permission_classes([AllowAny])
 def form_hall_update(request, cinema_id, hall_id):
@@ -668,9 +702,11 @@ def form_hall_update(request, cinema_id, hall_id):
         else:
             form = Hall.objects.filter(cinema_id=cinema_id)
         return render(request, "forms/hall/hall-update.html",
-                      {"form": form, "halls": Hall.objects.get(pk=hall_id), "cinemas": Cinema.objects.get(pk=cinema_id)})
+                      {"form": form, "halls": Hall.objects.get(pk=hall_id),
+                       "cinemas": Cinema.objects.get(pk=cinema_id)})
     else:
         return render(request, "404.html", {})
+
 
 def get_ticket_table_by_cinema_id(request, cinema_id):
     config = RequestConfig(request)
@@ -692,15 +728,6 @@ def get_ticket_table_by_cinema_id_and_film_id(request, cinema_id, film_id):
     return render(request, 'tables/ticket_table.html', {
         'table': content,
     })
-
-
-
-
-
-
-
-
-
 
 
 # XXX
@@ -733,3 +760,22 @@ def table_view(request):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
+def send_email(subject, body, to_email):
+    # https://pypi.org/project/qrcode/
+    # https://dropmail.me/ru/
+
+    subject = 'cinema-app'
+    body = 'Here is your ticket, comrade'
+    from_email = settings.EMAIL_HOST_USER
+    to_email = email
+
+    mail = EmailMessage(subject=subject, body=body, from_email=from_email, to=[to_email])
+
+    qr = qrcode.QRCode()
+    qr.add_data('test text')
+    qr.make()
+    img = qr.make_image(fill_color="#D81B60", back_color="white")
+    img.save('/home/adular/QR/ticket.png')
+
+    mail.attach_file('/home/adular/QR/ticket.png')
+    mail.send(fail_silently=True)

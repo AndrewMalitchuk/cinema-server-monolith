@@ -156,7 +156,7 @@ class Hall(models.Model):
     # TODO: change to JSONField
     hall_json = models.TextField(verbose_name="JSON")
 
-
+import datetime
 
 class Timeline(models.Model):
     app_label = "server_app.apps.ServerAppConfig"
@@ -164,7 +164,7 @@ class Timeline(models.Model):
     class Meta:
         verbose_name = "Розклад"
         verbose_name_plural = "Розклад"
-        ordering = ['-datetime']
+        # ordering = ['-datetime']
 
     cinema_id = models.ForeignKey(
         Cinema,
@@ -184,19 +184,20 @@ class Timeline(models.Model):
         verbose_name="Hall ID"
     )
 
-    datetime=models.DateTimeField(
-        verbose_name="Дата та час"
-    )
+    # datetime=models.DateTimeField(
+    #     verbose_name="Дата та час"
+    # )
 
-    # time = models.TimeField(
-    #     verbose_name="Час",
-    #     help_text="Час показу"
-    # )
-    #
-    # date = models.DateField(
-    #     verbose_name="Дата",
-    #     help_text="Дата показу"
-    # )
+    time = models.TimeField(
+        verbose_name="Час",
+        help_text="Час показу",
+        default=datetime.time(00, 00))
+
+    date = models.DateField(
+        verbose_name="Дата",
+        help_text="Дата показу",
+        default=datetime.date.today
+    )
 
     price = models.DecimalField(
         verbose_name="Ціна",

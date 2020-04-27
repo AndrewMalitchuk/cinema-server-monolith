@@ -21,9 +21,12 @@ from django.conf.urls.static import static
 from django.urls import path
 from django.views.generic import TemplateView
 from django.views.static import serve
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view
+from rest_framework import permissions
 from rest_framework_simplejwt import views as jwt_views
 
-from .views import *
+from .views import index_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,11 +35,14 @@ urlpatterns = [
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(), name='token_refresh'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('logout/', TemplateView.as_view(template_name='pages/logout-page.html'), name='logout-page'),
-    # path('', TemplateView.as_view(template_name='pages/index-unregistered-page.html'),
-    #      name='home'),
+
     path('', index_page),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+
+    path('redoc/', TemplateView.as_view(
+        template_name='pages/redoc.html'
+    ), name='redoc'),
 
 ]
 # urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

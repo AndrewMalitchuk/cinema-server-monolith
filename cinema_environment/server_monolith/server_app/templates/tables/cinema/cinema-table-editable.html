@@ -13,7 +13,7 @@
         }, function(dialogE) {
             dialogE.modal('hide');
             $.ajax({
-                url: 'http://127.0.0.1:8000/admin/server_app/cinema/'+temp+'/delete/',
+                url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/cinema/'+temp+'/delete/',
                 type: 'POST',
                 success: function(result) {
                     location.reload();
@@ -26,11 +26,22 @@
     });
     $('.btn-primary').click(function(){
         var temp=$(this).attr("update-link")
-        window.open('http://127.0.0.1:8000/api/v1/form/cinema/'+temp+'/update')
+        console.log(temp)
+        console.log({{cinema_id}})
+        if(temp == {{cinema_id}}){
+            window.open('http://{{request.META.HTTP_HOST}}/api/v1/form/cinema/'+temp+'/update')
+        }else{
+            $.bs.popup.toast({
+                title: 'Помилка',
+                info: 'Ви не є персоналом данного кінотеатру'
+            }, function(dialogE) {
+                dialokOK.modal('hide');
+            });
+        }
     });
     $('.btn-info').click(function(){
         var temp=$(this).attr("about-link")
-        location.href = "http://127.0.0.1:8000/api/v1/cinema/"+temp
+        location.href = "http://{{request.META.HTTP_HOST}}/api/v1/cinema/"+temp
         
     });
 </script>

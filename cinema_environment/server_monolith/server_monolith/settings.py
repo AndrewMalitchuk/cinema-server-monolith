@@ -25,7 +25,7 @@ SECRET_KEY = 't#4wckwdqv6e=^un4_@#!!0yuh(e^=g*e_5@qbl1$fv00gh!d9'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.0.105:8000', 'localhost', '127.0.0.1','192.168.0.105'
+    '192.168.0.105:8000', 'localhost', '127.0.0.1', '192.168.0.105'
 ]
 
 # Application definition
@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'server_app.apps.ServerAppConfig',
     'bootstrapform',
-    'django_tables2'
+    'django_tables2',
+    'django_filters',
+    'bootstrap3',
 ]
 
 MIDDLEWARE = [
@@ -115,7 +117,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
 STATIC_URL = '/static/'
@@ -123,10 +124,9 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media_root")
 
-
 #
 LOGOUT_REDIRECT_URL = 'logout-page'
-# LOGIN_REDIRECT_URL = 'home'
+LOGIN_REDIRECT_URL = '/'
 
 #
 REST_FRAMEWORK = {
