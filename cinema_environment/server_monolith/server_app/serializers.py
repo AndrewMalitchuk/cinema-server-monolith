@@ -1,113 +1,130 @@
-import os
 from datetime import datetime
-
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import User
-from rest_framework import serializers
-from rest_framework.serializers import ModelSerializer
-from rest_framework.validators import UniqueValidator
 from hashlib import md5
 
-from .models import Film, Cinema, Timeline, Poster, Hall, Ticket,Staff
+from django.contrib.auth import get_user_model
+from rest_framework import serializers
+
+from .models import Film, Cinema, Timeline, Poster, Hall, Ticket, Staff
 
 
 class FilmSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Film entity
+    """
+
     class Meta:
         model = Film
-        # TODO: change fields
-        # fields=('title', 'date', 'duration', 'genre')
         fields = '__all__'
-
-    # def download_file(self):
-    #     ''' Download file '''
-    #     # Open template
-    #     from django.conf import settings
-    #     template_url = os.path.join(settings.BASE_DIR, 'templates', 'first_page.html')
-    #     template_open = open(template_url, 'r')
-    #     # Read template
-    #     from django import template
-    #     t = template.Template(template_open.read())
-    #     c = template.Context({})
-    #     # Create pdf
-    #     pdf = pdfkit.from_string(t.render(c))
-    #     # Create and return response with created pdf
-    #     response = HttpResponse(pdf)
-    #     response['Content-Type'] = 'application/pdf'
-    #     response['Content-disposition'] = 'attachment ; filename = {}'.format(my_filename)
-    #
-    #     return response
 
 
 class CinemaSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Cinema entity
+    """
+
     class Meta:
         model = Cinema
-        # TODO: change fields
         fields = '__all__'
 
 
 class TimelineSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Timeline entity
+    """
+
     class Meta:
         model = Timeline
-        # TODO: change fields
         fields = '__all__'
 
 
 class PosterSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Poster entity
+    """
+
     class Meta:
         model = Poster
         fields = '__all__'
 
 
 class HallSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Hall entity
+    """
+
     class Meta:
         model = Hall
-        # TODO: change fields
         fields = '__all__'
 
 
 class TicketSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Film entity
+    """
 
     def get_code(self):
+        """
+        Generate ticket's QR code
+
+        :return: unique ticket code
+        """
         microsecond = datetime.now().microsecond
         return md5(str(microsecond).encode()).hexdigest()
 
-    class Meta:
-        model = Ticket
-        # TODO: change fields
-        # fields = ('id', 'place', 'status', 'cinema_id', 'film_id', 'user', 'code')
-        fields = '__all__'
-
     def create(self, validated_data):
+        """
+        Create new Ticket entity using pre-generated unique QR-code
+
+        :param validated_data:
+        :return: created Ticket entity
+        """
+
         place = validated_data.get('place')
         status = validated_data.get('status')
-        # cinema_id = validated_data.get('cinema_id')
-        # film_id = validated_data.get('film_id')
-        timeline_id=validated_data.get('timeline_id')
+        timeline_id = validated_data.get('timeline_id')
         user = validated_data.get('user')
         code = self.get_code()
-        # ticket = Ticket.objects.create(place=place, status=status, cinema_id=cinema_id, film_id=film_id, user=user,
-        #                                code=code)
         ticket = Ticket.objects.create(place=place, status=status, timeline_id=timeline_id, user=user,
                                        code=code)
-
         return ticket
+
+    class Meta:
+        model = Ticket
+        fields = '__all__'
 
 
 UserModel = get_user_model()
 
+
 class StaffSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Film entity
+    """
+
     class Meta:
         model = Staff
         fields = '__all__'
 
+
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Film entity
+    """
+
     password = serializers.CharField(write_only=True)
 
     # Тут в ...objects.create(..)  можеш додати ті поля які треба передати
     # і додай їх в Мету
-    # і прошу тебе, Андрей, зоть деколи дивись що ти робиш
+    # і прошу тебе, Андрей, хоть деколи дивись що ти робиш
     # username обезательно бо воно юнік (хз крч)
     def create(self, validated_data):
+        """
+        Create new User from mobile-client; pay attention on is_staff field - it is False
+
+        :param validated_data:
+        :return: created User
+        """
+
         user = UserModel.objects.create(
             email=validated_data['email'],
             username=validated_data['username'],
@@ -115,7 +132,6 @@ class UserSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-
         return user
 
     class Meta:

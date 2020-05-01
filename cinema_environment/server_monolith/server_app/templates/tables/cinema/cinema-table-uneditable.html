@@ -5,5 +5,9 @@
 {% render_table table %}
 <script>
     document.title="cinema-table"
+    $('.btn-info').click(function(){
+        var temp=$(this).attr("about-link")
+        location.href = "http://{{request.META.HTTP_HOST}}/api/v1/cinema/"+temp
+    });
 </script>
 {% endblock %}

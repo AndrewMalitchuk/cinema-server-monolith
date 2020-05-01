@@ -2,29 +2,18 @@ from django_tables2 import tables, TemplateColumn
 
 from .models import *
 
-from .filters import *
-
-
-# class CinemaTable(tables.Table):
-#     T1 = '<button type="button" class="btn" update-link="{{ record.get_absolute_url_update }}">update</button>'
-#     T2 = '<form action="/samples/{{record.id}}/" method="post">{% csrf_token %}<input type="hidden" name="_method" value="delete"><button data-toggle="tooltip" title="Please note that deletion cannot be undone" type="submit" class="btn btn-danger btn-xs">delete</button></form>'
-#     T3 = '<button type="button" class="btn btn-info" about-link="{{ record.id }}">About</button>'
-#     edit = TemplateColumn(T1)
-#     delete = TemplateColumn(T2)
-#     about = TemplateColumn(T3)
-#
-#     class Meta:
-#         model = Cinema
-#         template_name = "django_tables2/bootstrap.html"
-#         fields = ("name", "address", "telephone")
-
 
 class FilmTable(tables.Table):
+    """
+    Table for Film entities; used for generation bootstrap-table
+
+    Attributes:
+        about_col: extra column for opening "About Film" page
+    """
+
     about_col = '<button type="button" class="btn btn-info" about-link="{{ record.id }}">About</button>'
     TemplateColumn(about_col)
     about = TemplateColumn(about_col)
-
-
 
     class Meta:
         model = Film
@@ -32,14 +21,20 @@ class FilmTable(tables.Table):
         fields = ('title', 'date', 'duration', 'genre')
 
 
-
-
 class CinemaTableEditable(tables.Table):
+    """
+    Table for Cinema entities (editable); used for generation bootstrap-table
+
+    Attributes:
+        update_col: extra column for updating entity
+        delete_col: extra column for deleting entity
+        about_col: extra column for opening "About Cinema" page
+    """
+
     update_col = '<button type="button" class="btn btn-primary" update-link="{{ record.id }}">Update</button>'
     delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
     about_col = '<button type="button" class="btn btn-info" about-link="{{ record.id }}">детальніше</button>'
     TemplateColumn(delete_col, about_col, update_col)
-    # TemplateColumn(about_col)
     about = TemplateColumn(about_col)
     delete = TemplateColumn(delete_col)
     update = TemplateColumn(update_col)
@@ -51,9 +46,15 @@ class CinemaTableEditable(tables.Table):
 
 
 class CinemaTableUneditable(tables.Table):
+    """
+    Table for Cinema entities (uneditable); used for generation bootstrap-table
+
+    Attributes:
+        about_col: extra column for opening "About Cinema" page
+    """
+
     about_col = '<button type="button" class="btn btn-info" about-link="{{ record.id }}">детальніше</button>'
     TemplateColumn(about_col)
-    # TemplateColumn(about_col)
     about = TemplateColumn(about_col)
 
     class Meta:
@@ -63,6 +64,13 @@ class CinemaTableUneditable(tables.Table):
 
 
 class PosterTable(tables.Table):
+    """
+    Table for Poster entities; used for generation bootstrap-table
+
+    Attributes:
+        delete_col: extra column for deleting entity
+    """
+
     delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
     TemplateColumn(delete_col)
     delete = TemplateColumn(delete_col)
@@ -74,6 +82,10 @@ class PosterTable(tables.Table):
 
 
 class TicketTable(tables.Table):
+    """
+    Table for Ticket entities; used for generation bootstrap-table
+    """
+
     class Meta:
         model = Ticket
         template_name = "django_tables2/bootstrap.html"
@@ -81,6 +93,14 @@ class TicketTable(tables.Table):
 
 
 class HallTable(tables.Table):
+    """
+    Table for Hall entities; used for generation bootstrap-table
+
+    Attributes:
+        update_col: extra column for updating entity
+        delete_col: extra column for deleting entity
+    """
+
     update_col = '<button type="button" class="btn btn-primary" update-link="{{ record.id }}" cinema-id="{{record.cinema_id.id}}">Update</button>'
     delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
     TemplateColumn(delete_col, update_col)
@@ -94,6 +114,13 @@ class HallTable(tables.Table):
 
 
 class TimelineTable(tables.Table):
+    """
+    Table for Timeline entities; used for generation bootstrap-table
+
+    Attributes:
+        delete_col: extra column for deleting entity
+    """
+
     delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
     TemplateColumn(delete_col)
     delete = TemplateColumn(delete_col)
@@ -101,4 +128,4 @@ class TimelineTable(tables.Table):
     class Meta:
         model = Timeline
         template_name = "django_tables2/bootstrap.html"
-        fields = ('film_id', 'cinema_id', 'date','time')
+        fields = ('film_id', 'cinema_id', 'date', 'time')

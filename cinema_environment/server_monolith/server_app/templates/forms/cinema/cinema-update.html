@@ -94,11 +94,22 @@
 				cache: false,
 				timeout: 600000,
 				success: function (data) {
-					alert("тут-буде-вспливашка-успех")
-					location.reload();
+					$.bs.popup.toast({
+						title: 'Успіх',
+						info: 'Ви щойно успішно змінили запис'
+					}, function(dialogE) {
+						dialokOK.modal('hide');
+						location.reload();
+					});
 				},
 				error: function (e) {
-					alert("тут-буде-вспливашка-неуспех")
+					$.bs.popup.toast({
+						title: 'Помилка',
+						info: 'Операція неуспішна. Щось пішло не так'
+					}, function(dialogE) {
+						dialokOK.modal('hide');
+						location.reload();
+					});
 				}
 			});
 		});

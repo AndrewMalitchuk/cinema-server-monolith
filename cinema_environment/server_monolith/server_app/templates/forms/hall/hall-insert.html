@@ -95,8 +95,12 @@
 				url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/hall/add/',
 				type: 'POST',
 				success: function(result) {
-					alert("тут-буде-вспливашка-успех")
-					location.reload();
+					$.bs.popup.toast({
+						title: 'Успіх',
+						info: 'Ви щойно успішно додали новий зал'
+					}, function(dialogE) {
+						dialokOK.modal('hide');
+					});
 				},
 				data:{
 					csrfmiddlewaretoken: '{{ csrf_token }}',

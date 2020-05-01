@@ -1,38 +1,37 @@
-import qrcode
-from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import ListView
 from django_tables2 import SingleTableView, RequestConfig
-from django_tables2.export import ExportMixin, TableExport
-from qrcode.image.pure import PymagingImage
+from django_tables2.export import ExportMixin
 from rest_framework import status, permissions
-from rest_framework.generics import CreateAPIView
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from django.core.mail import send_mail
-from django.conf import settings
-from django.core.mail import EmailMessage
-from qrcode.image.pure import PymagingImage
 
-from .tables import *
 from .forms import *
 from .permission import IsStaffOrAdminWriteOnly
 from .serializers import *
+from .tables import *
 
+
+# REST API
 
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsStaffOrAdminWriteOnly])
 def api_film(request):
+    """
+    REST endpoint for Film entity
+
+    :param request:
+    :return: Film entity
+    """
+
     if request.method == 'GET':
         films = Film.objects.all()
         serializer = FilmSerializer(films, many=True)
-
         title = request.GET.get('title', None)
         date = request.GET.get('date', None)
         id = request.GET.get('id', None)
         genre = request.GET.get('genre', None)
-
         if title is not None:
             films = Film.objects.get(title=title)
             serializer = FilmSerializer(films)
@@ -45,7 +44,6 @@ def api_film(request):
         elif genre is not None:
             films = Film.objects.filter(genre=genre)
             serializer = FilmSerializer(films, many=True)
-
         return Response(
             serializer.data,
             status=status.HTTP_200_OK)
@@ -62,7 +60,6 @@ def api_film(request):
                 status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT':
         id = request.GET.get('id', None)
-
         if id is not None:
             film = Film.objects.get(pk=id)
             serializer = FilmSerializer(film, data=request.data)
@@ -79,7 +76,6 @@ def api_film(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     if request.method == 'DELETE':
         id = request.GET.get('id', None)
-
         if id is not None:
             film = Film.objects.get(pk=id)
             film.delete()
@@ -91,14 +87,19 @@ def api_film(request):
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsStaffOrAdminWriteOnly])
 def api_cinema(request):
+    """
+    REST endpoint for Cinema entity
+
+    :param request:
+    :return: Cinema entity
+    """
+
     if request.method == 'GET':
         cinemas = Cinema.objects.all()
         serializer = CinemaSerializer(cinemas, many=True)
-
         id = request.GET.get('id', None)
         name = request.GET.get('name', None)
         city = request.GET.get('city', None)
-
         if id is not None:
             cinemas = Cinema.objects.get(pk=id)
             serializer = CinemaSerializer(cinemas)
@@ -108,7 +109,6 @@ def api_cinema(request):
         elif city is not None:
             cinemas = Cinema.objects.filter(city=city)
             serializer = CinemaSerializer(cinemas, many=True)
-
         return Response(
             serializer.data,
             status=status.HTTP_200_OK)
@@ -125,7 +125,6 @@ def api_cinema(request):
                 status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT':
         id = request.GET.get('id', None)
-
         if id is not None:
             cinema = Cinema.objects.get(pk=id)
             serializer = CinemaSerializer(cinema, data=request.data)
@@ -142,7 +141,6 @@ def api_cinema(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     elif request.method == "DELETE":
         id = request.GET.get('id', None)
-
         if id is not None:
             cinema = Cinema.objects.get(pk=id)
             cinema.delete()
@@ -154,17 +152,20 @@ def api_cinema(request):
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsStaffOrAdminWriteOnly])
 def api_timeline(request):
+    """
+    REST endpoint for Timeline entity
+
+    :param request:
+    :return: Cinema entity
+    """
+
     if request.method == 'GET':
         timeline = Timeline.objects.all()
         serializer = TimelineSerializer(timeline, many=True)
-
         cinema_id = request.GET.get('cinema_id', None)
         film_id = request.GET.get('film_id', None)
         id = request.GET.get('id', None)
         date = request.GET.get('date', None)
-
-        print(date)
-
         if cinema_id is not None and film_id is not None and date is None:
             timeline = Timeline.objects.filter(cinema_id=cinema_id, film_id=film_id)
             serializer = TimelineSerializer(timeline, many=True)
@@ -186,7 +187,6 @@ def api_timeline(request):
         elif id is not None:
             timeline = Timeline.objects.get(id=id)
             serializer = TimelineSerializer(timeline)
-
         return Response(
             serializer.data,
             status=status.HTTP_200_OK)
@@ -203,7 +203,6 @@ def api_timeline(request):
                 status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT':
         id = request.GET.get('id', None)
-
         if id is not None:
             timeline = Timeline.objects.get(pk=id)
             serializer = TimelineSerializer(timeline, data=request.data)
@@ -218,7 +217,6 @@ def api_timeline(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         id = request.GET.get('id', None)
-
         if id is not None:
             timeline = Timeline.objects.get(pk=id)
             timeline.delete()
@@ -230,14 +228,18 @@ def api_timeline(request):
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsStaffOrAdminWriteOnly])
 def api_poster(request):
-    if request.method == 'GET':
+    """
+    REST endpoint for Poster entity
 
+    :param request:
+    :return: Poster entity
+    """
+
+    if request.method == 'GET':
         poster = Poster.objects.all()
         serializer = PosterSerializer(poster, many=True)
-
         cinema_id = request.GET.get('cinema_id', None)
         film_id = request.GET.get('film_id', None)
-
         if cinema_id is not None and film_id is not None:
             poster = Poster.objects.filter(cinema_id=cinema_id, film_id=film_id)
             serializer = PosterSerializer(poster, many=True)
@@ -247,7 +249,6 @@ def api_poster(request):
         elif film_id is not None:
             poster = Poster.objects.filter(film_id=film_id)
             serializer = PosterSerializer(poster, many=True)
-
         return Response(
             serializer.data,
             status=status.HTTP_200_OK)
@@ -264,7 +265,6 @@ def api_poster(request):
                 status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT':
         id = request.GET.get('id', None)
-
         if id is not None:
             poster = Poster.objects.get(pk=id)
             serializer = PosterSerializer(poster, data=request.data)
@@ -281,7 +281,6 @@ def api_poster(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         id = request.GET.get('id', None)
-
         if id is not None:
             poster = Poster.objects.get(pk=id)
             poster.delete()
@@ -290,25 +289,27 @@ def api_poster(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-# @permission_classes([IsStaffOrAdminWriteOnly])
-
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([AllowAny])
 def api_hall(request):
+    """
+    REST endpoint for Hall entity
+
+    :param request:
+    :return: Hall entity
+    """
+
     if request.method == 'GET':
         hall = Hall.objects.all()
         serializer = HallSerializer(hall, many=True)
-
         cinema_id = request.GET.get('cinema_id', None)
         id = request.GET.get('id', None)
-
         if cinema_id is not None:
             hall = Hall.objects.get(cinema_id=cinema_id)
             serializer = HallSerializer(hall)
         elif id is not None:
             hall = Hall.objects.get(pk=id)
             serializer = HallSerializer(hall)
-
         return Response(
             serializer.data,
             status=status.HTTP_200_OK)
@@ -325,7 +326,6 @@ def api_hall(request):
                 status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT':
         id = request.GET.get('id', None)
-
         if id is not None:
             hall = Hall.objects.get(pk=id)
             serializer = HallSerializer(hall, data=request.data)
@@ -342,7 +342,6 @@ def api_hall(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         id = request.GET.get('id', None)
-
         if id is not None:
             hall = Hall.objects.get(pk=id)
             hall.delete()
@@ -354,14 +353,19 @@ def api_hall(request):
 @api_view(['GET', 'POST', 'PUT', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def api_ticket(request):
+    """
+    REST endpoint for Ticket entity
+
+    :param request:
+    :return: Ticket entity
+    """
+
     if request.method == 'GET':
         ticket = Ticket.objects.all()
         serializer = TicketSerializer(ticket, many=True)
-
         film_id = request.GET.get('film_id', None)
         user_id = request.GET.get('user_id', None)
         code = request.GET.get('code', None)
-
         if film_id is not None and user_id is not None:
             ticket = Ticket.objects.filter(film_id=film_id, user=user_id)
             serializer = TicketSerializer(ticket, many=True)
@@ -371,7 +375,6 @@ def api_ticket(request):
         elif code is not None:
             ticket = Ticket.objects.get(code=code)
             serializer = TicketSerializer(ticket)
-
         return Response(
             serializer.data,
             status=status.HTTP_200_OK)
@@ -379,7 +382,6 @@ def api_ticket(request):
         serializer = TicketSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-
             return Response(
                 serializer.data,
                 status=status.HTTP_201_CREATED)
@@ -389,7 +391,6 @@ def api_ticket(request):
                 status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT':
         id = request.GET.get('id', None)
-
         if id is not None:
             ticket = Ticket.objects.get(pk=id)
             serializer = TicketSerializer(ticket, data=request.data)
@@ -406,7 +407,6 @@ def api_ticket(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'DELETE':
         id = request.GET.get('id', None)
-
         if id is not None:
             ticket = Ticket.objects.get(pk=id)
             ticket.delete()
@@ -418,6 +418,13 @@ def api_ticket(request):
 @api_view(['GET'])
 @permission_classes([IsStaffOrAdminWriteOnly])
 def get_staff_job(request):
+    """
+    REST endpoint for Staff entity; used for getting Staff' job
+
+    :param request:
+    :return: Staff entity
+    """
+
     if request.method == 'GET':
         user_id = request.GET.get('user_id', None)
         if user_id is not None:
@@ -435,6 +442,13 @@ def get_staff_job(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def api_user(request):
+    """
+    REST endpoint for User entity
+
+    :param request:
+    :return: User entity
+    """
+
     if request.method == 'GET':
         user = request.user
         return Response({
@@ -449,104 +463,140 @@ def api_user(request):
 
 
 class CreateUserView(CreateAPIView):
-    # permission_classes = (IsAuthenticated,)
+    """
+    REST endpoint for creating new user
+    """
+
     model = get_user_model()
     permission_classes = [
-        permissions.AllowAny  # Or anon users can't register
+        permissions.AllowAny
     ]
-
     serializer_class = UserSerializer
 
 
+# Web
+
+# @permission_classes([AllowAny])
+# def hall_form(request):
+#     """
 #
-@permission_classes([AllowAny])
-def hall_form(request):
-    if request.method == "POST":
-        form = HallForm(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=True)
-            instance.save()
-    else:
-        form = HallForm()
-    return render(request, "forms/hall_form.html", {"form": form})
+#     :param request:
+#     :return:
+#     """
+#     if request.method == "POST":
+#         form = HallForm(request.POST)
+#         if form.is_valid():
+#             instance = form.save(commit=True)
+#             instance.save()
+#     else:
+#         form = HallForm()
+#     return render(request, "forms/hall_form.html", {"form": form})
 
 
 @permission_classes([AllowAny])
 def cinema_profile(request, cinema_id):
+    """
+    Get Cinema's profile
+
+    :param request:
+    :param cinema_id: current cinema's ID
+    :return: chosen Cinema
+    """
+
     form = Cinema.objects.get(pk=cinema_id)
-    return render(request, "pages/cinema-profile.html",
-                  {"form": form, "staff": Staff.objects.get(user_id=request.user.pk)})
+    if request.user.pk is not None:
+        return render(request, "pages/cinema-profile.html",
+                      {"form": form, "staff": Staff.objects.get(user_id=request.user.pk)})
+    else:
+        return render(request, "pages/cinema-profile.html",
+                      {"form": form})
 
 
 @permission_classes([AllowAny])
 def about_film(request, film_id):
+    """
+    Get Film's info
+
+    :param request:
+    :param film_id: current Film's ID
+    :return: chosen Film
+    """
+
     form = Film.objects.get(pk=film_id)
-    return render(request, "pages/about-film.html", {"form": form, "staff": Staff.objects.get(user_id=request.user.pk)})
+    if request.user.pk is not None:
+        return render(request, "pages/about-film.html",
+                      {"form": form, "staff": Staff.objects.get(user_id=request.user.pk)})
+    else:
+        return render(request, "pages/about-film.html", {"form": form})
 
 
 @permission_classes([AllowAny])
 def about_dev(request):
-    return render(request, 'pages/about-dev.html') \
- \
- \
+    """
+    Get about dev page
+
+    :param request:
+    :return: about dev page
+    """
+    if request.user.pk is not None:
+        return render(request, "pages/about-dev.html",
+                      {"staff": Staff.objects.get(user_id=request.user.pk)})
+    else:
+        return render(request, 'pages/about-dev.html')
+
+
 @permission_classes([AllowAny])
 def about_project(request):
-    return render(request, 'pages/about-project.html')
+    """
+    Get about project page
 
+    :param request:
+    :return: about project page
+    """
 
-# Email sending test
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def email(request):
-    if request.method == 'GET':
-        email = request.GET.get('email', None)
-        if email is not None:
-
-            # https://pypi.org/project/qrcode/
-            # https://dropmail.me/ru/
-
-            subject = 'cinema-app'
-            body = 'Here is your ticket, comrade'
-            from_email = settings.EMAIL_HOST_USER
-            to_email = email
-
-            mail = EmailMessage(subject=subject, body=body, from_email=from_email, to=[to_email])
-
-            qr = qrcode.QRCode()
-            qr.add_data('test text')
-            qr.make()
-            img = qr.make_image(fill_color="#D81B60", back_color="white")
-            img.save('/home/adular/QR/ticket.png')
-
-            mail.attach_file('/home/adular/QR/ticket.png')
-            mail.send(fail_silently=True)
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+    if request.user.pk is not None:
+        return render(request, "pages/about-project.html",
+                      {"staff": Staff.objects.get(user_id=request.user.pk)})
+    else:
+        return render(request, 'pages/about-project.html')
 
 
 class FilmTableView(ExportMixin, SingleTableView):
+    """
+    Get all Films entities as a table
+    """
+
     model = Film
     table_class = FilmTable
     template_name = 'tables/film-table.html'
 
-    filterset_class = FilmFilter
-
     def get(self, request, *args, **kwargs):
-        return render(request, "tables/film-table.html",
-                      {'table': FilmTable(Film.objects.all()), 'staff': Staff.objects.get(user_id=request.user.pk)})
+        """
+        Returns Film's table
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return: Film's table
+        """
+        if request.user.pk is not None:
+            return render(request, "tables/film-table.html",
+                          {'table': FilmTable(Film.objects.all()), 'staff': Staff.objects.get(user_id=request.user.pk)})
+        else:
+            return render(request, "tables/film-table.html", {'table': FilmTable(Film.objects.all())})
 
 
-# Cinema Web
 def cinema_table_all(request):
+    """
+    Returns all Cinema entities as a table
+
+    :param request:
+    :return: Cinema's table
+    """
+
     config = RequestConfig(request)
-
-    print(request.user.is_staff)
-    print(Staff.objects.get(user_id=request.user.pk).cinema_id.id)
-
-    if request.user.is_staff == True:
+    if request.user.is_staff is True:
         content = CinemaTableEditable(Cinema.objects.all())
-
         config.configure(content)
         return render(request, 'tables/cinema/cinema-table-editable.html', {
             'table': content,
@@ -555,7 +605,6 @@ def cinema_table_all(request):
         })
     else:
         content = CinemaTableUneditable(Cinema.objects.all())
-
         config.configure(content)
         return render(request, 'tables/cinema/cinema-table-uneditable.html', {
             'table': content,
@@ -563,8 +612,16 @@ def cinema_table_all(request):
 
 
 @permission_classes([AllowAny])
-def form_cinema_udpate(request, cinema_id):
-    if request.user.is_staff == True:
+def form_cinema_update(request, cinema_id):
+    """
+    Returns Cinema's update form
+
+    :param request:
+    :param cinema_id: Cinema's ID for updating
+    :return: web-page for updating
+    """
+
+    if request.user.is_staff is True:
         if Staff.objects.get(user_id=request.user.pk).cinema_id.id == cinema_id:
             if request.method == "POST":
                 form = CinemaForm(request.POST, request.FILES)
@@ -583,7 +640,14 @@ def form_cinema_udpate(request, cinema_id):
 
 @permission_classes([AllowAny])
 def form_cinema_insert(request):
-    if request.user.is_staff == True:
+    """
+    Returns Cinema's insert form
+
+    :param request:
+    :return: web-page for creating new entity
+    """
+
+    if request.user.is_staff is True:
         if request.method == "POST":
             form = CinemaForm(request.POST, request.FILES)
             if form.is_valid():
@@ -597,14 +661,19 @@ def form_cinema_insert(request):
         return render(request, "404.html", {})
 
 
-# Poster Web
 def get_poster_table_by_cinema_id(request, cinema_id):
-    if request.user.is_staff == True:
+    """
+    Returns all Poster entities with certain Cinema's ID value
+
+    :param request:
+    :param cinema_id: linked Cinema's ID
+    :return: table with all Posters
+    """
+
+    if request.user.is_staff is True:
         config = RequestConfig(request)
         content = PosterTable(Poster.objects.filter(cinema_id=cinema_id))
-
         config.configure(content)
-
         return render(request, 'tables/poster/poster-table-editable.html', {
             'table': content,
         })
@@ -614,7 +683,15 @@ def get_poster_table_by_cinema_id(request, cinema_id):
 
 @permission_classes([AllowAny])
 def form_poster_insert(request, cinema_id):
-    if request.user.is_staff == True:
+    """
+    Returns Poster's insert form
+
+    :param request:
+    :param cinema_id: linked Cinema's ID
+    :return: web-page for creating new entity
+    """
+
+    if request.user.is_staff is True:
         if request.method == "POST":
             form = PosterForm(request.POST)
             if form.is_valid():
@@ -622,31 +699,42 @@ def form_poster_insert(request, cinema_id):
                 instance.save()
         else:
             form = Poster.objects.filter(cinema_id=cinema_id)
-            data = Film.objects.all()
         return render(request, "forms/poster/poster-insert.html", {"form": form, "films": Film.objects.all()})
     else:
         return render(request, "404.html", {})
 
 
-# Timeline Web
 def get_timeline_table_by_cinema_id(request, cinema_id):
-    if request.user.is_staff == True:
+    """
+    Returns all Timeline entities as a table with certain Cinema's ID value
+
+    :param request:
+    :param cinema_id: linked Cinema's ID
+    :return: table with all Timeline
+    """
+
+    if request.user.is_staff is True:
         config = RequestConfig(request)
         content = TimelineTable(Timeline.objects.filter(cinema_id=cinema_id))
-
         config.configure(content)
-
-        return render(request, 'tables/timeline-table-editable.html', {
+        return render(request, 'tables/timeline/timeline-table-editable.html', {
             'table': content,
         })
     else:
         return render(request, "404.html", {})
 
 
-# TODO: permission
 @permission_classes([AllowAny])
 def form_timeline_insert(request, cinema_id):
-    if request.user.is_staff == True:
+    """
+    Returns Timeline's insert form
+
+    :param request:
+    :param cinema_id: linked Cinema's ID
+    :return: web-page for creating new entity
+    """
+
+    if request.user.is_staff is True:
         if request.method == "POST":
             form = TimelineForm(request.POST)
             if form.is_valid():
@@ -654,20 +742,24 @@ def form_timeline_insert(request, cinema_id):
                 instance.save()
         else:
             form = Timeline.objects.filter(cinema_id=cinema_id)
-            data = Film.objects.all()
         return render(request, "forms/timeline/timeline-insert.html", {"form": form, "films": Film.objects.all()})
     else:
         return render(request, "404.html", {})
 
 
-# Hall Web
 def get_hall_table_by_cinema_id(request, cinema_id):
-    if request.user.is_staff == True:
+    """
+    Returns all Hall entities as a table with certain Cinema's ID value
+
+    :param request:
+    :param cinema_id: linked Cinema's ID
+    :return: table with all Hall
+    """
+
+    if request.user.is_staff is True:
         config = RequestConfig(request)
         content = HallTable(Hall.objects.filter(cinema_id=cinema_id))
-
         config.configure(content)
-
         return render(request, 'tables/hall-table.html', {
             'table': content,
         })
@@ -677,7 +769,15 @@ def get_hall_table_by_cinema_id(request, cinema_id):
 
 @permission_classes([AllowAny])
 def form_hall_insert(request, cinema_id):
-    if request.user.is_staff == True:
+    """
+    Returns Hall's insert form
+
+    :param request:
+    :param cinema_id: linked Hall's ID
+    :return: web-page for creating new entity
+    """
+
+    if request.user.is_staff is True:
         if request.method == "POST":
             form = HallForm(request.POST)
             if form.is_valid():
@@ -686,14 +786,24 @@ def form_hall_insert(request, cinema_id):
         else:
             form = Hall.objects.filter(cinema_id=cinema_id)
         return render(request, "forms/hall/hall-insert.html",
-                      {"form": form, "cinemas": Cinema.objects.get(pk=cinema_id),"staff":Staff.objects.get(user_id=request.user.pk)})
+                      {"form": form, "cinemas": Cinema.objects.get(pk=cinema_id),
+                       "staff": Staff.objects.get(user_id=request.user.pk)})
     else:
         return render(request, "404.html", {})
 
 
 @permission_classes([AllowAny])
 def form_hall_update(request, cinema_id, hall_id):
-    if request.user.is_staff == True:
+    """
+    Returns Hall's update form
+
+    :param request:
+    :param cinema_id: linked Cinema's ID
+    :param hall_id: Hall's ID for updating
+    :return: web-page for updating
+    """
+
+    if request.user.is_staff is True:
         if request.method == "POST":
             form = HallForm(request.POST)
             if form.is_valid():
@@ -706,76 +816,3 @@ def form_hall_update(request, cinema_id, hall_id):
                        "cinemas": Cinema.objects.get(pk=cinema_id)})
     else:
         return render(request, "404.html", {})
-
-
-def get_ticket_table_by_cinema_id(request, cinema_id):
-    config = RequestConfig(request)
-    content = TicketTable(Ticket.objects.filter(cinema_id=cinema_id))
-
-    config.configure(content)
-
-    return render(request, 'tables/ticket_table.html', {
-        'table': content,
-    })
-
-
-def get_ticket_table_by_cinema_id_and_film_id(request, cinema_id, film_id):
-    config = RequestConfig(request)
-    content = TicketTable(Ticket.objects.filter(cinema_id=cinema_id, film_id=film_id))
-
-    config.configure(content)
-
-    return render(request, 'tables/ticket_table.html', {
-        'table': content,
-    })
-
-
-# XXX
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def table_view(request):
-    # XXX
-    # TODO: 1. for certain table; 2. only to allowed table;
-    if request.method == 'GET':
-        table = request.GET.get('table', None)
-        format = request.GET.get('format', None)
-
-        if table is None or format is None:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        else:
-            table = FilmTable(Film.objects.all())
-
-            RequestConfig(request).configure(table)
-
-            export_format = request.GET.get("_export", None)
-            if TableExport.is_valid_format(export_format):
-                exporter = TableExport(export_format, table)
-                return exporter.response("table.{}".format(export_format))
-
-            return render(request, "forms/film_list.html", {
-                "table": table
-            })
-
-    else:
-        return Response(status=status.HTTP_400_BAD_REQUEST)
-
-
-def send_email(subject, body, to_email):
-    # https://pypi.org/project/qrcode/
-    # https://dropmail.me/ru/
-
-    subject = 'cinema-app'
-    body = 'Here is your ticket, comrade'
-    from_email = settings.EMAIL_HOST_USER
-    to_email = email
-
-    mail = EmailMessage(subject=subject, body=body, from_email=from_email, to=[to_email])
-
-    qr = qrcode.QRCode()
-    qr.add_data('test text')
-    qr.make()
-    img = qr.make_image(fill_color="#D81B60", back_color="white")
-    img.save('/home/adular/QR/ticket.png')
-
-    mail.attach_file('/home/adular/QR/ticket.png')
-    mail.send(fail_silently=True)

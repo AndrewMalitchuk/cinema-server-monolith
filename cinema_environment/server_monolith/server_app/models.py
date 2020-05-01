@@ -1,14 +1,24 @@
-from datetime import datetime
-
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, AbstractUser, User
-from django.db import models
 from django.conf import settings
-from django.utils import timezone
-from hashlib import md5
+from django.contrib.auth.models import User
+from django.db import models
+import datetime
 
 
 class Film(models.Model):
+    """
+    A class that represents Film entity
+
+    Attributes:
+        GENRE (enum): An enumeration for available genres
+        title (str): A film's title
+        description (str): A film's description
+        date: A film's date
+        duration: A film's duration
+        genre: A film's genre
+        video_url: A film's trailer URL (youtube)
+        pic_url: A film's poster URL
+    """
+
     app_label = "server_app.apps.ServerAppConfig"
 
     class Meta:
@@ -67,6 +77,19 @@ class Film(models.Model):
 
 
 class Cinema(models.Model):
+    """
+    A class that represents Cinema entity
+
+    Attributes:
+        name: A cinema's name
+        address: A cinema's address in current city
+        city: City's name
+        telephone: A cinema's telephone
+        geo_lat: Latitude for location on the map
+        geo_lon: Longitude for location on the map
+        pic_url: A cinema's picture/logo URL
+    """
+
     app_label = "server_app.apps.ServerAppConfig"
 
     class Meta:
@@ -91,7 +114,6 @@ class Cinema(models.Model):
         max_length=128,
     )
 
-    # TODO: regexp
     telephone = models.CharField(
         verbose_name="Телефон",
         max_length=20,
@@ -113,6 +135,14 @@ class Cinema(models.Model):
 
 
 class Poster(models.Model):
+    """
+    A class that represents Poster entity
+
+    Attributes:
+        cinema_id: Cinema's ID for linking
+        film_id: Film's ID for linking
+    """
+
     app_label = "server_app.apps.ServerAppConfig"
 
     class Meta:
@@ -130,7 +160,17 @@ class Poster(models.Model):
         verbose_name="Film ID"
     )
 
+
 class Hall(models.Model):
+    """
+    A class that represents Hall entity
+
+    Attributes:
+        name: A hall's name
+        cinema_id: Cinema's ID for linking
+        hall_json: JSON-entity for hall rendering
+    """
+
     app_label = "server_app.apps.ServerAppConfig"
 
     class Meta:
@@ -150,21 +190,30 @@ class Hall(models.Model):
         verbose_name="Cinema ID"
     )
 
+    hall_json = models.TextField(verbose_name="JSON")
+
     def __str__(self):
         return self.name
 
-    # TODO: change to JSONField
-    hall_json = models.TextField(verbose_name="JSON")
-
-import datetime
 
 class Timeline(models.Model):
+    """
+    A class that represents Timeline entity
+
+    Attributes:
+        cinema_id: Cinema's ID for linking
+        film_id: Film's ID for linking
+        hall_id: Hall's ID for linking
+        time: A session's time
+        date: A session's date
+        price: A price for current price
+    """
+
     app_label = "server_app.apps.ServerAppConfig"
 
     class Meta:
         verbose_name = "Розклад"
         verbose_name_plural = "Розклад"
-        # ordering = ['-datetime']
 
     cinema_id = models.ForeignKey(
         Cinema,
@@ -183,10 +232,6 @@ class Timeline(models.Model):
         on_delete=models.DO_NOTHING,
         verbose_name="Hall ID"
     )
-
-    # datetime=models.DateTimeField(
-    #     verbose_name="Дата та час"
-    # )
 
     time = models.TimeField(
         verbose_name="Час",
@@ -207,10 +252,21 @@ class Timeline(models.Model):
     )
 
     def __str__(self):
-        return self.film_id.title+" | "+self.cinema_id.name
+        return self.film_id.title + " | " + self.cinema_id.name
 
 
 class Ticket(models.Model):
+    """
+    A class that represents Ticket entity
+
+    Attributes:
+        STATUS: A enumeration that contains Ticket's status
+        place: Place in hall for current session
+        status: Ticket's status
+        user: A User's ID
+        timeline_id: Timeline's ID for linking
+    """
+
     app_label = "server_app.apps.ServerAppConfig"
 
     class Meta:
@@ -222,18 +278,6 @@ class Ticket(models.Model):
         (2, 'Active'),
         (3, 'Canceled')
     )
-
-    # cinema_id = models.ForeignKey(
-    #     Cinema,
-    #     on_delete=models.DO_NOTHING,
-    #     verbose_name="Cinema"
-    # )
-    #
-    # film_id = models.ForeignKey(
-    #     Film,
-    #     on_delete=models.DO_NOTHING,
-    #     verbose_name="Film ID"
-    # )
 
     place = models.CharField(
         verbose_name="Місце",
@@ -248,11 +292,6 @@ class Ticket(models.Model):
         blank=True
     )
 
-    # date = models.DateTimeField(
-    #     verbose_name="Дата",
-    #     auto_now_add=True
-    # )
-
     status = models.PositiveIntegerField(
         choices=STATUS,
         default=2,
@@ -265,26 +304,35 @@ class Ticket(models.Model):
         on_delete=models.CASCADE
     )
 
-    timeline_id=models.ForeignKey(
+    timeline_id = models.ForeignKey(
         Timeline,
         on_delete=models.CASCADE,
         verbose_name="Сеанс"
     )
 
+
 class Staff(models.Model):
+    """
+    A class that represents Staff entity.
+
+    Attributes:
+        user_id: User's ID for linking
+        cinema_id: Cinema's ID for linking
+    """
+
     app_label = "server_app.apps.ServerAppConfig"
 
     class Meta:
         verbose_name_plural = "Персонал"
         verbose_name = "Персонал"
 
-    user_id=models.ForeignKey(
+    user_id = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
         verbose_name="User ID"
     )
 
-    cinema_id=models.ForeignKey(
+    cinema_id = models.ForeignKey(
         Cinema,
         on_delete=models.DO_NOTHING,
         verbose_name="Cinema ID"
