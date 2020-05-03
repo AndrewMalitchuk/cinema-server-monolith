@@ -126,7 +126,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media_root")
 
 #
 LOGOUT_REDIRECT_URL = 'logout-page'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/profile/'
 
 #
 REST_FRAMEWORK = {

@@ -104,8 +104,8 @@ def api_cinema(request):
             cinemas = Cinema.objects.get(pk=id)
             serializer = CinemaSerializer(cinemas)
         elif name is not None:
-            cinemas = Cinema.objects.filter(name=name)
-            serializer = CinemaSerializer(cinemas, many=True)
+            cinemas = Cinema.objects.get(name=name)
+            serializer = CinemaSerializer(cinemas, many=False)
         elif city is not None:
             cinemas = Cinema.objects.filter(city=city)
             serializer = CinemaSerializer(cinemas, many=True)

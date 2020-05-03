@@ -2,34 +2,11 @@
 {% load static %}
 <html>
 <head>
-
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="description" content="">
 	<meta name="author" content="">
-
-	<!-- favicon -->
-	<link rel="apple-touch-icon" sizes="57x57" href="favicon/apple-icon-57x57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="favicon/apple-icon-60x60.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="favicon/apple-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="76x76" href="favicon/apple-icon-76x76.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="favicon/apple-icon-114x114.png">
-	<link rel="apple-touch-icon" sizes="120x120" href="favicon/apple-icon-120x120.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="favicon/apple-icon-144x144.png">
-	<link rel="apple-touch-icon" sizes="152x152" href="favicon/apple-icon-152x152.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-icon-180x180.png">
-	<link rel="icon" type="image/png" sizes="192x192"  href="favicon/android-icon-192x192.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="favicon/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-	<link rel="manifest" href="favicon/manifest.json">
-	<meta name="msapplication-TileColor" content="#ffffff">
-	<meta name="msapplication-TileImage" content="favicon/ms-icon-144x144.png">
-	<meta name="theme-color" content="#ffffff">
-
-	<!-- title -->
 	<title>cinema-app</title>
-
 	<!-- libs -->
 	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -42,13 +19,11 @@
 	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
 	<script type="text/javascript" src="{% static 'js/form-mask-validation.js' %}"></script>
 	<script src="{% static 'js/bootstrap-popup.js' %}"></script>
-
 	<style type="text/css">
 		// index
 		.container {
 			max-width: 960px;
 		}
-
 		.site-header {
 			background-color: rgba(0, 0, 0, .85);
 			-webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -62,8 +37,6 @@
 			color: #fff;
 			text-decoration: none;
 		}
-
-
 		.product-device {
 			position: absolute;
 			right: 10%;
@@ -75,7 +48,6 @@
 			-webkit-transform: rotate(30deg);
 			transform: rotate(30deg);
 		}
-
 		.product-device::before {
 			position: absolute;
 			top: 10%;
@@ -86,7 +58,6 @@
 			background-color: rgba(255, 255, 255, .1);
 			border-radius: 5px;
 		}
-
 		.product-device-2 {
 			top: -25%;
 			right: auto;
@@ -94,13 +65,9 @@
 			left: 5%;
 			background-color: #e5e5e5;
 		}
-
-
 		.border-top { border-top: 1px solid #e5e5e5; }
 		.border-bottom { border-bottom: 1px solid #e5e5e5; }
-
 		.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
-
 		.flex-equal > * {
 			-ms-flex: 1;
 			-webkit-box-flex: 1;
@@ -113,13 +80,10 @@
 				flex: 1;
 			}
 		}
-
 		.overflow-hidden { overflow: hidden; }
-
 		#about{
 			background: #D81B60;
 		}
-
 		#about-film{
 			background: #2196F3;
 		}
@@ -132,9 +96,7 @@
 		#about-notification{
 			background: #FFC107;
 		}
-
 		// form-cinema-update-insert
-
 		.btn-toolbar{
 			margin: 10px;
 		}
@@ -144,23 +106,16 @@
 		body,html {
 			height: 100%;
 		}
-
-
 		.btn-toolbar{
 			margin: 10px;
 		}
 		.place{
 			width: 60px;
 		}
-
-
 	</style>
-
 </head>
 <body>
-
 	<!-- NAVBAR-TEMPLATE -->
-
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 		<a class="navbar-brand" href="/">
 			<img src="{% static 'logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
@@ -179,15 +134,13 @@
 					<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/form/hall/{{staff.cinema_id.id}}/insert">зал</a>
 				</li>
 				{% endif %}
-
 			</ul>
-
 		</div>
 		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
 			{% if user.is_authenticated == True %}
 			<ul class="navbar-nav ml-auto">
 				<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/cinema/{{staff.cinema_id.id}}">{{staff.cinema_id}}</a>
-				<ul class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/cinema/{{staff.cinema_id.id}}">{{user.username}}</ul>
+				<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/profile">{{user.username}}</a>
 				<a class="btn btn-success my-2 my-sm-0" type="submit" href="http://{{request.META.HTTP_HOST}}/accounts/logout/">Logout</a>
 			</ul>
 			{% endif %}
@@ -196,17 +149,12 @@
 				<a class="btn btn-success my-2 my-sm-0" type="submit" href="http://{{request.META.HTTP_HOST}}/accounts/login/">Login</a>
 			</ul>
 			{% endif %}
-
 		</div>
 	</nav>
-
 	<!-- NAVBAR-TEMPLATE -->
-
 	{% block content %}
 	{% endblock %}
-
 	<!-- FOOTER-TEMPLATE -->
-
 	<footer class="container py-5">
 		<div class="row">
 			<div class="col-12 col-md">
@@ -246,8 +194,6 @@
 			</div>
 		</div>
 	</footer>
-
 	<!-- FOOTER-TEMPLATE -->
-
 </body>
 </html>

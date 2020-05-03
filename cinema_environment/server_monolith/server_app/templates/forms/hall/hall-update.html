@@ -1,8 +1,6 @@
 {% extends 'pages/base.html' %}
 {% load static %}
-
 {% block content %}
-
 <div class="jumbotron">
 	<div class="container">
 		<fieldset class="form-group">
@@ -77,45 +75,34 @@
 	</div>
 </div>
 <hr>
-
 <script type="text/javascript">
-
-
 	$(document).ready(function () {
-
-			console.log('{{cinemas}}')
-			console.log('{{cinemas.id}}')
-			$('#id_cinema_id').val("{{ cinemas }}")
-			$('#id_val').val("{{cinemas.id}}")
-
-			$('#id_name').val("{{halls.name}}")
-
-		});
-
+		$('#id_cinema_id').val("{{ cinemas }}")
+		$('#id_val').val("{{cinemas.id}}")
+		$('#id_name').val("{{halls.name}}")
+	});
 	$("#btnSubmit").click(function (event) {
-			$.ajax({
-				url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/hall/'+{{halls.id}}+'/change/',
-				type: 'POST',
-				success: function(result) {
-					alert("тут-буде-вспливашка-успех")
-					location.reload();
-				},
-				data:{
-					csrfmiddlewaretoken: '{{ csrf_token }}',
-					cinema_id:$("#id_val"). val(),
-					name:$("#id_name").val(),
-					hall_json:"["+$("#id_hall_json").val()+"]",
-					_save:"Save"
-				}
-			});
+		$.ajax({
+			url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/hall/'+{{halls.id}}+'/change/',
+			type: 'POST',
+			success: function(result) {
+				alert("тут-буде-вспливашка-успех")
+				location.reload();
+			},
+			data:{
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				cinema_id:$("#id_val"). val(),
+				name:$("#id_name").val(),
+				hall_json:"["+$("#id_hall_json").val()+"]",
+				_save:"Save"
+			}
 		});
-
+	});
 	$(document).ready(function(){
 		if(!$('#displayJsonCheckBox').is(":checked")){
 			$('#jsonArea').hide()
 		}
 	})
-
 	function onRenderButtonClick(){
 		$("#hall-container").empty()
 		var cols=$('#inputCol').val()
@@ -166,7 +153,6 @@
 				}
 			}
 		}
-		// return JSON.stringify(res)
 		return res;
 	}
 	function get_disabled_places(){
@@ -187,16 +173,11 @@
 				}
 			}
 		}
-		// return JSON.stringify(res)
 		return res;
 	}
 	function submit(){
 		disabled=get_disabled_places()
 		custom=get_custom_places()
-		console.log("disabled")
-		console.log(disabled)
-		console.log("custom")
-		console.log(custom)
 	}
 	function getJsonOutput(){
 		var cols=$('#inputCol').val()
@@ -212,46 +193,31 @@
 			custom:custom
 		}
 		return JSON.stringify(json_res,undefined, 4)
-
 	}
 	function onGenerateButtonClick(){
 		temp=getJsonOutput()
-
 		prev_content=$('#id_hall_json').val()
-
 		if (prev_content.localeCompare("")==0) {
 			$('#id_hall_json').val("[\n")
 		}else{
 			prev_content+=',\n'
 		}
-
-
 		$('#id_hall_json').val(prev_content+""+temp)
 	}
-
 	function onSubmitButtonClick() {
-
 		res="["+$('#id_hall_json').val()+"]"
-		console.log(res)
-
 	}
-
 	function onClearButtonClick(){
 		$('#id_hall_json').val("")
 		$('#inputCol').val("")
 		$('#inputRow').val("")
-
 	}
-
 	function check(){
-
 		if(!$('#displayJsonCheckBox').is(":checked")){
 			$('#jsonArea').hide()
 		}else{
 			$('#jsonArea').toggle()
 		}
 	}
-
 </script>
-
 {% endblock %}

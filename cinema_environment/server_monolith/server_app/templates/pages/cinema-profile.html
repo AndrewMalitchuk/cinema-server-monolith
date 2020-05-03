@@ -1,115 +1,30 @@
 {% extends 'pages/base.html' %}
 {% load static %}
-
 {% block content %}
-
 <main role="main">
-	<!--    https://getbootstrap.com/docs/4.0/examples/carousel/-->
-
-      <!-- Marketing messaging and featurettes
-      	================================================== -->
-      	<!-- Wrap the rest of the page in another container to center all the content. -->
-
-      	<div class="container marketing">
-
-      		<!-- Three columns of text below the carousel -->
-      		
-
-
-      		<!-- START THE FEATURETTES -->
-
-      		<hr class="featurette-divider">
-
-      		<div class="row featurette">
-      			<div class="col-md-7">
-      				<h2 class="featurette-heading">{{form.name}}<br>
-      					<span class="text-muted">{{form.city}}</span>
-      				</h2>
-      				<p class="lead">{{form.address}}</p>
-      				<p class="lead">{{form.telephone}}</p>
-      			</div>
-      			<div class="col-md-5">
-      				<img class="featurette-image img-fluid mx-auto" src="http://{{request.META.HTTP_HOST}}/media/{{form.pic_url}}" alt="{{form.pic_url}}">
-      			</div>
-      		</div>
-
-      		<hr class="featurette-divider">
-
-      		<div class="row justify-content-center">
-      			<div id="mapid" style="width: 1100px; height: 400px;"></div>
-      		</div>
-
-      		<hr class="featurette-divider">
-
-
-      	</div><!-- /.container -->
-
-
-      </main>
-      <script type="text/javascript">
-      	$(document).ready(function () {
-      		$("#btnSubmit").click(function (event) {
-      			event.preventDefault();
-      			var form = $('#fileUploadForm')[0];
-      			var data = new FormData(form);
-      			data.append("CustomField", "This is some extra data, testing");
-      			$("#btnSubmit").prop("disabled", true);
-      			$.ajax({
-      				type: "POST",
-      				enctype: 'multipart/form-data',
-      				url: "http://{{request.META.HTTP_HOST}}/admin/server_app/cinema/{{form.pk}}/change/",
-      				data: data,
-      				processData: false,
-      				contentType: false,
-      				cache: false,
-      				timeout: 600000,
-      				success: function (data) {
-      					alert("тут-буде-вспливашка-успех")
-      					location.reload();
-      				},
-      				error: function (e) {
-      					alert("тут-буде-вспливашка-неуспех")
-      				}
-      			});
-      		});
-      	});
-	// function onUpdateClick() {
-	// 	// var temp = 50
-	// 	// $.ajax({
-	// 	// 	url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/ticket/60/change/',
-	// 	// 	type: 'POST',
-	// 	// 	success: function(result) {
-	// 	// 		location.reload();
-	// 	// 	},
-	// 	// 	data:{
-	// 	// 		csrfmiddlewaretoken: '{{ csrf_token }}',
-	// 	// 		place:"l-1-1",
-	// 	// 		code:"000",
-	// 	// 		status:"1",
-	// 	// 		user:"3",
-	// 	// 		timeline_id:"12",
-	// 	// 		_save:"Save"
-	// 	// 	}
-	// 	// });
-	// 	var temp = 50
-	// 	$.ajax({
-	// 		url: 'http://127.0.0.1:8000/admin/server_app/cinema/50/change/',
-	// 		type: 'POST',
-	// 		success: function(result) {
-	// 			// location.reload();
-	// 		},
-	// 		data:{
-	// 			csrfmiddlewaretoken: '{{ csrf_token }}',
-	// 			place:"l-1-1",
-	// 			code:"000",
-	// 			status:"1",
-	// 			user:"3",
-	// 			timeline_id:"12",
-	// 			_save:"Save"
-	// 		}
-	// 	});
-	// }
-
+    <div class="container marketing">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">{{form.name}}<br>
+                    <span class="text-muted">{{form.city}}</span>
+                </h2>
+                <p class="lead">{{form.address}}</p>
+                <p class="lead">{{form.telephone}}</p>
+            </div>
+            <div class="col-md-5">
+                <img class="featurette-image img-fluid mx-auto"
+                     src="http://{{request.META.HTTP_HOST}}/media/{{form.pic_url}}" alt="{{form.pic_url}}">
+            </div>
+        </div>
+        <hr class="featurette-divider">
+        <div class="row justify-content-center">
+            <div id="mapid" style="width: 1100px; height: 400px;"></div>
+        </div>
+        <hr class="featurette-divider">
+    </div>
+</main>
+<script type="text/javascript">
 	$(document).ready
 	(
 		function()
@@ -118,17 +33,12 @@
 				lat:{{ form.geo_lat }},
 				lng:{{ form.geo_lon }}
 			}
-
 			popup
-			.setLatLng(temp)
-			.setContent('{{ form.name }}')
-			.openOn(mymap);
+				.setLatLng(temp)
+				.setContent('{{ form.name }}')
+				.openOn(mymap);
 			$('#id_geo_lat').val({{ form.geo_lon }})
 			$('#id_geo_lon').val({{ form.geo_lat }})
-
-
-
-			
 		}
 		);
 	var mymap = L.map('mapid').setView([ {{ form.geo_lat }}, {{ form.geo_lon }}], 20);
@@ -141,6 +51,4 @@
 	}).addTo(mymap);
 	var popup = L.popup();
 </script>
-
-
 {% endblock %}

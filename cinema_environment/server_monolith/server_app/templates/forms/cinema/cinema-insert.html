@@ -1,8 +1,6 @@
 {% extends 'pages/base.html' %}
 {% load static %}
-
 {% block content %}
-
 <div class="jumbotron">
 	<form method="POST" enctype="multipart/form-data" id="filmInsertForm">
 		{% csrf_token %}
@@ -75,7 +73,6 @@
 		</div>
 	</form>
 </div>
-
 <script type="text/javascript">
 	$(document).ready(function () {
 		$("#btnSubmit").click(function (event) {
@@ -102,8 +99,6 @@
 			});
 		});
 	});
-
-
 	$(document).ready
 	(
 		function()
@@ -120,7 +115,6 @@
 				}
 			}
 			);
-
 			$("#selectCity").change(function(){
 				var selected = $(this).children("option:selected").val();
 				switch(selected){
@@ -158,15 +152,13 @@
 	}).addTo(mymap);
 	var popup = L.popup();
 	function onMapClick(e) {
-		console.log(e.latlng)
 		popup
-		.setLatLng(e.latlng)
-		.setContent($('#id_name').val()==''?'Your cinema':$('#id_name').val())
-		.openOn(mymap);
+			.setLatLng(e.latlng)
+			.setContent($('#id_name').val()==''?'Your cinema':$('#id_name').val())
+			.openOn(mymap);
 		$('#id_geo_lat').val(e.latlng.lat)
 		$('#id_geo_lon').val(e.latlng.lng)
 	}
 	mymap.on('click', onMapClick);
 </script>
-
 {% endblock %}

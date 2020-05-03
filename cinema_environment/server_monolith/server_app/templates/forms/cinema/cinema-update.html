@@ -1,8 +1,6 @@
 {% extends 'pages/base.html' %}
 {% load static %}
-
 {% block content %}
-
 <div class="jumbotron">
 	<form method="POST" enctype="multipart/form-data" id="fileUploadForm">
 		{% csrf_token %}
@@ -75,7 +73,6 @@
 		</div>
 	</form>
 </div>
-
 <script type="text/javascript">
 	$(document).ready(function () {
 		$("#btnSubmit").click(function (event) {
@@ -114,8 +111,6 @@
 			});
 		});
 	});
-
-
 	$(document).ready
 	(
 		function()
@@ -124,15 +119,12 @@
 				lat:{{ form.geo_lat }},
 				lng:{{ form.geo_lon }}
 			}
-
 			popup
-			.setLatLng(temp)
-			.setContent('{{ form.name }}')
-			.openOn(mymap);
+				.setLatLng(temp)
+				.setContent('{{ form.name }}')
+				.openOn(mymap);
 			$('#id_geo_lat').val({{ form.geo_lon }})
 			$('#id_geo_lon').val({{ form.geo_lat }})
-
-
 			$('#id_telephone' ).simpleMask( { 'mask': '+## ### ### ####'                          , 'nextInput': $('#id_telephone') } );
 			$('#frCallback').simpleMask
 			(
@@ -145,7 +137,6 @@
 				}
 			}
 			);
-
 			$("#selectCity").change(function(){
 				var selected = $(this).children("option:selected").val();
 				switch(selected){
@@ -184,13 +175,12 @@
 	var popup = L.popup();
 	function onMapClick(e) {
 		popup
-		.setLatLng(e.latlng)
-		.setContent($('#id_name').val()==''?'Your cinema':$('#id_name').val())
-		.openOn(mymap);
+			.setLatLng(e.latlng)
+			.setContent($('#id_name').val()==''?'Your cinema':$('#id_name').val())
+			.openOn(mymap);
 		$('#id_geo_lat').val(e.latlng.lat)
 		$('#id_geo_lon').val(e.latlng.lng)
 	}
 	mymap.on('click', onMapClick);
 </script>
-
 {% endblock %}

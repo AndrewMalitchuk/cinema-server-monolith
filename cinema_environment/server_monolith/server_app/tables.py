@@ -31,12 +31,14 @@ class CinemaTableEditable(tables.Table):
         about_col: extra column for opening "About Cinema" page
     """
 
+    # For this time, update and about is enough
     update_col = '<button type="button" class="btn btn-primary" update-link="{{ record.id }}">Update</button>'
-    delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
+    # delete_col = '<button type="button" class="btn btn-danger" delete-link="{{ record.id }}">Delete</button>'
     about_col = '<button type="button" class="btn btn-info" about-link="{{ record.id }}">детальніше</button>'
-    TemplateColumn(delete_col, about_col, update_col)
+    # TemplateColumn(delete_col, about_col, update_col)
+    TemplateColumn(about_col, update_col)
     about = TemplateColumn(about_col)
-    delete = TemplateColumn(delete_col)
+    # delete = TemplateColumn(delete_col)
     update = TemplateColumn(update_col)
 
     class Meta:

@@ -1,100 +1,93 @@
 {% extends 'pages/base.html' %}
 {% load static %}
-
 {% block content %}
-
 <div class="jumbotron">
-	<!-- <form method="POST" id="posterInsertForm"> -->
-		<form action="" method="post" id="posterInsertForm">
-			{% csrf_token %}
-			<div class="container">
-				<fieldset class="form-group">
-					<div class="row">
-						<legend class="col-form-label col-sm-2 pt-0">Cinema</legend>
-						<div class="form-check form-check-inline">
-							<input type="text" class="form-control" name="cinema_id"  maxlength="256" required="" id="id_cinema_id" readonly/>
-							<input type="text" id="id_val" style="display: none">
-						</div>
-					</div>
-				</fieldset>
-				<fieldset class="form-group">
-					<div class="row">
-						<legend class="col-form-label col-sm-2 pt-0">Film</legend>
-						<div class="form-check form-check-inline">
-							<select class="form-control" id="id_film_id" name="film_id">
-								{% for i in films %}
-								<option value='{{ i.id }}'>{{ i.title }}</option>
-								{% endfor %}
-							</select>
-						</div>
-					</div>
-				</fieldset>
-				<fieldset class="form-group">
-					<div class="row">
-						<legend class="col-form-label col-sm-2 pt-0">Date</legend>
-						<div class="form-check form-check-inline">
-							<input type="date" class="form-control" name="datetime_0" maxlength="20" required="" id="id_datetime_0">
-						</div>
-					</div>
-				</fieldset>
-				<fieldset class="form-group">
-					<div class="row">
-						<legend class="col-form-label col-sm-2 pt-0">Time</legend>
-						<div class="form-check form-check-inline">
-							<input type="time" class="form-control" name="datetime_1" maxlength="20" required="" id="id_datetime_1">
-						</div>
-					</div>
-				</fieldset>
-				<fieldset class="form-group">
-					<div class="row">
-						<legend class="col-form-label col-sm-2 pt-0">Price</legend>
-						<div class="form-check form-check-inline ">
-							<input type="number" class="form-control" name="price" maxlength="20" required="" id="id_price">
-							<div class="input-group-append">
-								<span class="input-group-text" id="basic-addon1">uah</span>
-							</div>
-						</div>
-					</div>
-				</fieldset>
-				<div class="form-group ">
-					<input value="Insert" id="btnSubmit" class="btn btn-success" name="_save"/>
-				</div>
-			</div>
-		</form>
-	</div>
-
-	<script type="text/javascript">
-
-		document.title="timeline-insert"
-
-		$(document).ready(function () {
-
-			{% for i in form %}
-			$('#id_cinema_id').val("{{ i.cinema_id }}")
-			$('#id_val').val("{{i.cinema_id.id}}")
-
-			{% endfor %}
+    <form action="" method="post" id="posterInsertForm">
+        {% csrf_token %}
+        <div class="container">
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-2 pt-0">Cinema</legend>
+                    <div class="form-check form-check-inline">
+                        <input type="text" class="form-control" name="cinema_id" maxlength="256" required=""
+                               id="id_cinema_id" readonly/>
+                        <input type="text" id="id_val" style="display: none">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-2 pt-0">Film</legend>
+                    <div class="form-check form-check-inline">
+                        <select class="form-control" id="id_film_id" name="film_id">
+                            {% for i in films %}
+                            <option value='{{ i.id }}'>{{ i.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-2 pt-0">Date</legend>
+                    <div class="form-check form-check-inline">
+                        <input type="date" class="form-control" name="datetime_0" maxlength="20" required=""
+                               id="id_datetime_0">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-2 pt-0">Time</legend>
+                    <div class="form-check form-check-inline">
+                        <input type="time" class="form-control" name="datetime_1" maxlength="20" required=""
+                               id="id_datetime_1">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="form-group">
+                <div class="row">
+                    <legend class="col-form-label col-sm-2 pt-0">Price</legend>
+                    <div class="form-check form-check-inline ">
+                        <input type="number" class="form-control" name="price" maxlength="20" required="" id="id_price">
+                        <div class="input-group-append">
+                            <span class="input-group-text" id="basic-addon1">uah</span>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="form-group ">
+                <input value="Insert" id="btnSubmit" class="btn btn-success" name="_save"/>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+	document.title="timeline-insert"
+	$(document).ready(function () {
+		{% for i in form %}
+		$('#id_cinema_id').val("{{ i.cinema_id }}")
+		$('#id_val').val("{{i.cinema_id.id}}")
+		{% endfor %}
+	});
+	$("#btnSubmit").click(function (event) {
+		$.ajax({
+			url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/timeline/add/',
+			type: 'POST',
+			success: function(result) {
+				alert("тут-буде-вспливашка-успех")
+				location.reload();
+			},
+			data:{
+				csrfmiddlewaretoken: '{{ csrf_token }}',
+				cinema_id:$("#id_val"). val(),
+				film_id:$("#id_film_id").val(),
+				datetime_0:$("#id_datetime_0").val(),
+				datetime_1:$("#id_datetime_1").val(),
+				price:$("#id_price").val(),
+				_save:"Save"
+			}
 		});
-
-		$("#btnSubmit").click(function (event) {
-			$.ajax({
-				url: 'http://{{request.META.HTTP_HOST}}/admin/server_app/timeline/add/',
-				type: 'POST',
-				success: function(result) {
-					alert("тут-буде-вспливашка-успех")
-					location.reload();
-				},
-				data:{
-					csrfmiddlewaretoken: '{{ csrf_token }}',
-					cinema_id:$("#id_val"). val(),
-					film_id:$("#id_film_id").val(),
-					datetime_0:$("#id_datetime_0").val(),
-					datetime_1:$("#id_datetime_1").val(),
-					price:$("#id_price").val(),
-					_save:"Save"
-				}
-			});
-		});
-	</script>
-
-	{% endblock %}
+	});
+</script>
+{% endblock %}

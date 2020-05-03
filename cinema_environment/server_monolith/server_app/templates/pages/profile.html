@@ -1,0 +1,25 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+    <div class="container marketing">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">{{user.first_name}} {{user.last_name}}<br>
+                    <span class="text-muted">{{cinema.name}}</span>
+                </h2>
+                <p class="lead">{{user.email}}</p>
+                <p class="lead"><b>Персонал:</b> {{user.is_staff}}</p>
+            </div>
+            <div class="col-md-5">
+                <img class="featurette-image img-fluid mx-auto"
+                     src="http://{{request.META.HTTP_HOST}}/media/{{cinema.pic_url}}" alt="{{cinema.pic_url}}">
+            </div>
+        </div>
+        <hr class="featurette-divider">
+    </div>
+</main>
+<script type="text/javascript">
+</script>
+{% endblock %}
