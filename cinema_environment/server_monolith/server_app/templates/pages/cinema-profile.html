@@ -7,7 +7,7 @@
         <div class="row featurette">
             <div class="col-md-7">
                 <h2 class="featurette-heading">{{form.name}}<br>
-                    <span class="text-muted">{{form.city}}</span>
+                    <span class="text-muted" id="form-city"></span>
                 </h2>
                 <p class="lead">{{form.address}}</p>
                 <p class="lead">{{form.telephone}}</p>
@@ -39,8 +39,26 @@
 				.openOn(mymap);
 			$('#id_geo_lat').val({{ form.geo_lon }})
 			$('#id_geo_lon').val({{ form.geo_lat }})
+			switch({{form.city}}){
+			    case 1:
+			        $('#form-city').text('Ivano-Frankivsk');
+			        break;
+			    case 2:
+			        $('#form-city').text('Lviv');
+			        break;
+			    case 3:
+			        $('#form-city').text('Kiyv');
+			        break;
+			    case 4:
+			        $('#form-city').text('Kharkiv');
+			        break;
+			    case 5:
+			        $('#form-city').text('Odessa');
+			        break;
+			}
+
 		}
-		);
+	);
 	var mymap = L.map('mapid').setView([ {{ form.geo_lat }}, {{ form.geo_lon }}], 20);
 	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
 		maxZoom: 18,

@@ -44,7 +44,7 @@ class CinemaTableEditable(tables.Table):
     class Meta:
         model = Cinema
         template_name = "django_tables2/bootstrap.html"
-        fields = ('name', 'address', 'city', 'telephone')
+        fields = ('name', 'address', 'telephone')
 
 
 class CinemaTableUneditable(tables.Table):
@@ -62,7 +62,7 @@ class CinemaTableUneditable(tables.Table):
     class Meta:
         model = Cinema
         template_name = "django_tables2/bootstrap.html"
-        fields = ('name', 'address', 'city', 'telephone')
+        fields = ('name', 'address', 'telephone')
 
 
 class PosterTable(tables.Table):
