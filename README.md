@@ -15,7 +15,7 @@ The main part of this project is REST API, which was created using Django REST F
 
 You can see simple demo below or [download video](https://github.com/AndrewMalitchuk/cinema-server-monolith/blob/documentation/README/1.mp4). 
 
-![alt text](https://github.com/AndrewMalitchuk/cinema-server-monolith/blob/documentation/README/1.png)
+![](https://github.com/AndrewMalitchuk/cinema-server-monolith/blob/documentation/README/1.gif)
 
 ## Features/Used technologies
 
