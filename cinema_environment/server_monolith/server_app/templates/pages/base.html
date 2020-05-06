@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>cinema-app</title>
+	<!-- libs -->
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css" integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ==" crossorigin=""/>
+	<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js" integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew==" crossorigin=""></script>
+	<script type="text/javascript" src="{% static 'js/form-mask-validation.js' %}"></script>
+	<script src="{% static 'js/bootstrap-popup.js' %}"></script>
+	<style type="text/css">
+		// index
+		.container {
+			max-width: 960px;
+		}
+		.site-header {
+			background-color: rgba(0, 0, 0, .85);
+			-webkit-backdrop-filter: saturate(180%) blur(20px);
+			backdrop-filter: saturate(180%) blur(20px);
+		}
+		.site-header a {
+			color: #999;
+			transition: ease-in-out color .15s;
+		}
+		.site-header a:hover {
+			color: #fff;
+			text-decoration: none;
+		}
+		.product-device {
+			position: absolute;
+			right: 10%;
+			bottom: -30%;
+			width: 300px;
+			height: 540px;
+			background-color: #333;
+			border-radius: 21px;
+			-webkit-transform: rotate(30deg);
+			transform: rotate(30deg);
+		}
+		.product-device::before {
+			position: absolute;
+			top: 10%;
+			right: 10px;
+			bottom: 10%;
+			left: 10px;
+			content: "";
+			background-color: rgba(255, 255, 255, .1);
+			border-radius: 5px;
+		}
+		.product-device-2 {
+			top: -25%;
+			right: auto;
+			bottom: 0;
+			left: 5%;
+			background-color: #e5e5e5;
+		}
+		.border-top { border-top: 1px solid #e5e5e5; }
+		.border-bottom { border-bottom: 1px solid #e5e5e5; }
+		.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+		.flex-equal > * {
+			-ms-flex: 1;
+			-webkit-box-flex: 1;
+			flex: 1;
+		}
+		@media (min-width: 768px) {
+			.flex-md-equal > * {
+				-ms-flex: 1;
+				-webkit-box-flex: 1;
+				flex: 1;
+			}
+		}
+		.overflow-hidden { overflow: hidden; }
+		#about{
+			background: #D81B60;
+		}
+		#about-film{
+			background: #2196F3;
+		}
+		#about-cinema{
+			background: #4CAF50;
+		}
+		#about-ticket{
+			background: #FFEB3B;
+		}
+		#about-notification{
+			background: #FFC107;
+		}
+		// form-cinema-update-insert
+		.btn-toolbar{
+			margin: 10px;
+		}
+		.place{
+			width: 60px;
+		}
+		body,html {
+			height: 100%;
+		}
+		.btn-toolbar{
+			margin: 10px;
+		}
+		.place{
+			width: 60px;
+		}
+	</style>
+</head>
+<body>
+	<!-- NAVBAR-TEMPLATE -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="/">
+			<img src="{% static 'logo.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+			cinema-app
+		</a>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/film/all">фільми</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/cinema/all">кінотеатри</a>
+				</li>
+				{% if user.is_staff == True %}
+				<li class="nav-item">
+					<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/form/hall/{{staff.cinema_id.id}}/insert">зал</a>
+				</li>
+				{% endif %}
+			</ul>
+		</div>
+		<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+			{% if user.is_authenticated == True %}
+			<ul class="navbar-nav ml-auto">
+				<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/api/v1/cinema/{{staff.cinema_id.id}}">{{staff.cinema_id}}</a>
+				<a class="nav-link" href="http://{{request.META.HTTP_HOST}}/profile">{{user.username}}</a>
+				<a class="btn btn-success my-2 my-sm-0" type="submit" href="http://{{request.META.HTTP_HOST}}/accounts/logout/">Logout</a>
+			</ul>
+			{% endif %}
+			{% if user.is_authenticated == False %}
+			<ul class="navbar-nav ml-auto">
+				<a class="btn btn-success my-2 my-sm-0" type="submit" href="http://{{request.META.HTTP_HOST}}/accounts/login/">Login</a>
+			</ul>
+			{% endif %}
+		</div>
+	</nav>
+	<!-- NAVBAR-TEMPLATE -->
+	{% block content %}
+	{% endblock %}
+	<!-- FOOTER-TEMPLATE -->
+	<footer class="container py-5">
+		<div class="row">
+			<div class="col-12 col-md">
+				<img src="{% static 'logo.png' %}" width="64px" height="64px">
+				<small class="d-block mb-3 text-muted">cinema-app<br>2020</small>
+			</div>
+			<div class="col-6 col-md">
+				<h5>features</h5>
+				<ul class="list-unstyled text-small">
+					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk/cinema-client">mobile-client</a></li>
+					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk/cinema-supervisor">mobile-conductor</a></li>
+				</ul>
+			</div>
+			<div class="col-6 col-md">
+				<h5>resources</h5>
+				<ul class="list-unstyled text-small">
+					<li><a class="text-muted" href="/redoc/">rest-api-documentations</a></li>
+					<li><a class="text-muted" href="#">java-documentation</a></li>
+					<li><a class="text-muted" href="#">python-documentation</a></li>
+				</ul>
+			</div>
+			<div class="col-6 col-md">
+				<h5>source-code</h5>
+				<ul class="list-unstyled text-small">
+					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk/cinema-server-monolith">cinema-server-monolith</a></li>
+					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk/cinema-client">cinema-client</a></li>
+					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk/cinema-supervisor">cinema-supervisor</a></li>
+					<li><a class="text-muted" href="https://github.com/AndrewMalitchuk/cinema-website">cinema-website</a></li>
+				</ul>
+			</div>
+			<div class="col-6 col-md">
+				<h5>about</h5>
+				<ul class="list-unstyled text-small">
+					<li><a class="text-muted" href="http://{{request.META.HTTP_HOST}}/api/v1/about_project/">project</a></li>
+					<li><a class="text-muted" href="http://{{request.META.HTTP_HOST}}/api/v1/about_dev/">developer</a></li>
+				</ul>
+			</div>
+		</div>
+	</footer>
+	<!-- FOOTER-TEMPLATE -->
+</body>
+</html>

@@ -1,0 +1,9 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% block content %}
+  <main role="main" class="container">
+      <h1 class="mt-5">Logout</h1>
+      <p class="lead">See you, space cowboy</p>
+    <p><a href="http://{{request.META.HTTP_HOST}}/accounts/login/">Login</a></p>
+  </main>
+{% endblock %}

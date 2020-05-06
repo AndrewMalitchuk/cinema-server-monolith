@@ -1,0 +1,164 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% block content %}
+<div class="jumbotron">
+	<form method="POST" enctype="multipart/form-data" id="filmInsertForm">
+		{% csrf_token %}
+		<div class="container">
+			<fieldset class="form-group">
+				<div class="row">
+					<legend class="col-form-label col-sm-2 pt-0">Name</legend>
+					<div class="form-check form-check-inline">
+						<input type="text" class="form-control" name="name"  maxlength="256" required="" id="id_name">
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<div class="row">
+					<legend class="col-form-label col-sm-2 pt-0">Address</legend>
+					<div class="form-check form-check-inline">
+						<textarea name="address" cols="40" rows="10" maxlength="256" required="" id="id_address"></textarea>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<div class="row">
+					<legend class="col-form-label col-sm-2 pt-0">City</legend>
+					<div class="form-check form-check-inline">
+						<input type="text" name="city"  maxlength="128" required="" id="id_city" style="display:none" value="1">
+						<select class="form-control" id="selectCity">
+							<option>Ivano-Frankivsk</option>
+							<option>Lviv</option>
+							<option>Kiyv</option>
+							<option>Kharkiv</option>
+							<option>Odessa</option>
+						</select>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<div class="row">
+					<legend class="col-form-label col-sm-2 pt-0">Telephone</legend>
+					<div class="form-check form-check-inline">
+						<input type="text" class="form-control" name="telephone" maxlength="20" required="" id="id_telephone">
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-row">
+				<div class="form-group col-md-6">
+					<label for="id_geo_lat">Lat</label>
+					<input type="number"class="form-control"  name="geo_lat"  step="any" required=""  id="id_geo_lat">
+				</div>
+				<div class="form-group col-md-6">
+					<label for="id_geo_lon">Lon</label>
+					<input type="number" class="form-control" name="geo_lon" step="any" required=""  id="id_geo_lon">
+				</div>
+			</div>
+			<fieldset class="form-group">
+				<div class="row justify-content-center">
+					<div id="mapid" style="width: 1100px; height: 400px;"></div>
+				</div>
+			</fieldset>
+			<fieldset class="form-group">
+				<div class="row">
+					<legend class="col-form-label col-sm-2 pt-0">Picture</legend>
+					<div class="form-check form-check-inline">
+						<input type="file" class="form-control-file" name="pic_url" accept="image/*"  id="id_pic_url">
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-group ">
+				<input type="submit" value="Insert" id="btnSubmit" class="btn btn-success"/>
+			</div>
+		</div>
+	</form>
+</div>
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#btnSubmit").click(function (event) {
+			event.preventDefault();
+			var form = $('#filmInsertForm')[0];
+			var data = new FormData(form);
+			$("#btnSubmit").prop("disabled", true);
+			$.ajax({
+				type: "POST",
+				enctype: 'multipart/form-data',
+				url: "http://{{request.META.HTTP_HOST}}/admin/server_app/cinema/add/",
+				data: data,
+				processData: false,
+				contentType: false,
+				cache: false,
+				timeout: 600000,
+				success: function (data) {
+					alert("тут-буде-вспливашка-успех")
+					location.reload();
+				},
+				error: function (e) {
+					alert("тут-буде-вспливашка-неуспех")
+				}
+			});
+		});
+	});
+	$(document).ready
+	(
+		function()
+		{
+			$('#id_telephone' ).simpleMask( { 'mask': '+## ### ### ####'                          , 'nextInput': $('#id_telephone') } );
+			$('#frCallback').simpleMask
+			(
+			{
+				'mask'       : '#####',
+				'nextInput'  : true,
+				'onComplete' : function(element)
+				{
+
+				}
+			}
+			);
+			$("#selectCity").change(function(){
+				var selected = $(this).children("option:selected").val();
+				switch(selected){
+					case 'Ivano-Frankivsk':
+					$("#id_city").val('1')
+					mymap.setView([48.92251336314805,24.71046209335327],13)
+					break
+					case 'Lviv':
+					$("#id_city").val('2')
+					mymap.setView([49.84188493635143,24.03167009353638],13)
+					break
+					case 'Kiyv':
+					$("#id_city").val('3')
+					mymap.setView([50.44953213509495,30.52538394927979],13)
+					break
+					case 'Kharkiv':
+					$("#id_city").val('4')
+					mymap.setView([49.989256184848294,36.23102188110352],13)
+					break
+					case 'Odessa':
+					$("#id_city").val('5')
+					mymap.setView([46.483959151247554,30.73260068893433],13)
+					break
+				}
+			});
+		}
+		);
+	var mymap = L.map('mapid').setView([48.9315044382551, 24.697823524475098], 15);
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/streets-v11'
+	}).addTo(mymap);
+	var popup = L.popup();
+	function onMapClick(e) {
+		popup
+			.setLatLng(e.latlng)
+			.setContent($('#id_name').val()==''?'Your cinema':$('#id_name').val())
+			.openOn(mymap);
+		$('#id_geo_lat').val(e.latlng.lat)
+		$('#id_geo_lon').val(e.latlng.lng)
+	}
+	mymap.on('click', onMapClick);
+</script>
+{% endblock %}

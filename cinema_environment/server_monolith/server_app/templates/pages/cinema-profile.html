@@ -1,0 +1,72 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+    <div class="container marketing">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">{{form.name}}<br>
+                    <span class="text-muted" id="form-city"></span>
+                </h2>
+                <p class="lead">{{form.address}}</p>
+                <p class="lead">{{form.telephone}}</p>
+            </div>
+            <div class="col-md-5">
+                <img class="featurette-image img-fluid mx-auto"
+                     src="http://{{request.META.HTTP_HOST}}/media/{{form.pic_url}}" alt="{{form.pic_url}}">
+            </div>
+        </div>
+        <hr class="featurette-divider">
+        <div class="row justify-content-center">
+            <div id="mapid" style="width: 1100px; height: 400px;"></div>
+        </div>
+        <hr class="featurette-divider">
+    </div>
+</main>
+<script type="text/javascript">
+	$(document).ready
+	(
+		function()
+		{
+			temp={
+				lat:{{ form.geo_lat }},
+				lng:{{ form.geo_lon }}
+			}
+			popup
+				.setLatLng(temp)
+				.setContent('{{ form.name }}')
+				.openOn(mymap);
+			$('#id_geo_lat').val({{ form.geo_lon }})
+			$('#id_geo_lon').val({{ form.geo_lat }})
+			switch({{form.city}}){
+			    case 1:
+			        $('#form-city').text('Ivano-Frankivsk');
+			        break;
+			    case 2:
+			        $('#form-city').text('Lviv');
+			        break;
+			    case 3:
+			        $('#form-city').text('Kiyv');
+			        break;
+			    case 4:
+			        $('#form-city').text('Kharkiv');
+			        break;
+			    case 5:
+			        $('#form-city').text('Odessa');
+			        break;
+			}
+
+		}
+	);
+	var mymap = L.map('mapid').setView([ {{ form.geo_lat }}, {{ form.geo_lon }}], 20);
+	L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+		maxZoom: 18,
+		attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+		'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+		'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+		id: 'mapbox/streets-v11'
+	}).addTo(mymap);
+	var popup = L.popup();
+</script>
+{% endblock %}

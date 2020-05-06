@@ -1,0 +1,63 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+{% block content %}
+<main role="main">
+    <div class="container marketing">
+        <hr class="featurette-divider">
+        <div class="row featurette">
+            <div class="col-md-7">
+                <h2 class="featurette-heading">{{form.title}}<br>
+                    <span class="text-muted">{{form.date}}</span>
+                </h2>
+                <p class="lead"><b>{{form.duration}} хв.</b></p>
+                <div id="genre-type">
+                    <script type="text/javascript">
+      						var type='';
+      						switch({{form.genre}}){
+      							case 1:
+      								type='Комедія'
+      							break;
+      							case 2:
+      								type='Екшн'
+      							break;
+      							case 3:
+      								type='Історичний'
+      							break;
+      							case 4:
+      								type='Наукова фантастика'
+      							break;
+      							case 5:
+      								type='Жахи'
+      							break;
+      						}
+      						$("#genre-type").html('<p class="lead"><b>'+type+'</b></p>')
+
+                    </script>
+                </div>
+                <p class="lead">{{form.description}}</p>
+            </div>
+            <div class="col-md-5">
+                <img class="featurette-image img-fluid mx-auto"
+                     src="http://{{request.META.HTTP_HOST}}/media/{{form.pic_url}}" alt="{{form.pic_url}}">
+            </div>
+        </div>
+        <hr class="featurette-divider">
+        <div class="row justify-content-center" id="youtube-embed">
+            <script>
+      				function getId(url) {
+      					const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+      					const match = url.match(regExp);
+      					return (match && match[2].length === 11)
+      					? match[2]
+      					: null;
+      				}
+      				const videoId = getId('{{form.video_url}}');
+      				const iframeMarkup = '<iframe width="1354" height="501" src="//www.youtube.com/embed/' 
+      				+ videoId + '" frameborder="0" allowfullscreen></iframe>';
+      				$("#youtube-embed").html(iframeMarkup)
+            </script>
+        </div>
+        <hr class="featurette-divider">
+    </div>
+</main>
+{% endblock %}
