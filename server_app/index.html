@@ -1,0 +1,1841 @@
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <link rel="canonical" href="http://127.0.0.1:8000/mkdocs/server_app/">
+      
+      
+        <meta name="author" content="Andrew Malitchuk">
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1, mkdocs-material-5.1.5">
+    
+    
+      
+        <title>server_app - cinema-server-monolith</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.df84b5fe.min.css">
+      
+      
+    
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#server_app" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="http://127.0.0.1:8000/mkdocs" title="cinema-server-monolith" class="md-header-nav__button md-logo" aria-label="cinema-server-monolith">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            cinema-server-monolith
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              server_app
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/AndrewMalitchuk/cinema-server-monolith/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+        
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="http://127.0.0.1:8000/mkdocs" title="cinema-server-monolith" class="md-nav__button md-logo" aria-label="cinema-server-monolith">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    cinema-server-monolith
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/AndrewMalitchuk/cinema-server-monolith/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../server_monolith/" title="server_monolith" class="md-nav__link">
+      server_monolith
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        server_app
+        <span class="md-nav__icon md-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"/></svg>
+        </span>
+      </label>
+    
+    <a href="./" title="server_app" class="md-nav__link md-nav__link--active">
+      server_app
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#adminpy" class="md-nav__link">
+    admin.py
+  </a>
+  
+    <nav class="md-nav" aria-label="admin.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filmadmin-adminmodeladmin" class="md-nav__link">
+    FilmAdmin (admin.ModelAdmin)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinemaadmin-adminmodeladmin" class="md-nav__link">
+    CinemaAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#posteradmin-adminmodeladmin" class="md-nav__link">
+    PosterAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timelineadmin-adminmodeladmin" class="md-nav__link">
+    TimelineAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#halladmin-adminmodeladmin" class="md-nav__link">
+    HallAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticketadmin-adminmodeladmin" class="md-nav__link">
+    TicketAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staffadmin-adminmodeladmin" class="md-nav__link">
+    StaffAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formspy" class="md-nav__link">
+    forms.py
+  </a>
+  
+    <nav class="md-nav" aria-label="forms.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hallform-formsmodelform" class="md-nav__link">
+    HallForm (forms.ModelForm):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinemaform-formsmodelform" class="md-nav__link">
+    CinemaForm (forms.ModelForm):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#posterform-formsmodelform" class="md-nav__link">
+    PosterForm (forms.ModelForm):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timelineform-formsmodelform" class="md-nav__link">
+    TimelineForm (forms.ModelForm):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modelspy" class="md-nav__link">
+    models.py
+  </a>
+  
+    <nav class="md-nav" aria-label="models.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#film-modelsmodel" class="md-nav__link">
+    Film (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinema-modelsmodel" class="md-nav__link">
+    Cinema (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poster-modelsmodel" class="md-nav__link">
+    Poster (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hall-modelsmodel" class="md-nav__link">
+    Hall (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeline-modelsmodel" class="md-nav__link">
+    Timeline (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticket-modelsmodel" class="md-nav__link">
+    Ticket (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staff-modelsmodel" class="md-nav__link">
+    Staff (models.Model):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permissionpy" class="md-nav__link">
+    permission.py
+  </a>
+  
+    <nav class="md-nav" aria-label="permission.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#isstafforadminwriteonly-permissionsbasepermission" class="md-nav__link">
+    IsStaffOrAdminWriteOnly (permissions.BasePermission):
+  </a>
+  
+    <nav class="md-nav" aria-label="IsStaffOrAdminWriteOnly (permissions.BasePermission):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#has_permissionself-request-view" class="md-nav__link">
+    has_permission(self, request, view):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serializerspy" class="md-nav__link">
+    serializers.py
+  </a>
+  
+    <nav class="md-nav" aria-label="serializers.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filmserializer-serializersmodelserializer" class="md-nav__link">
+    FilmSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinemaserializer-serializersmodelserializer" class="md-nav__link">
+    CinemaSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timelineserializer-serializersmodelserializer" class="md-nav__link">
+    TimelineSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#posterserializer-serializersmodelserializer" class="md-nav__link">
+    PosterSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hallserializer-serializersmodelserializer" class="md-nav__link">
+    HallSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticketserializer-serializersmodelserializer" class="md-nav__link">
+    TicketSerializer (serializers.ModelSerializer):
+  </a>
+  
+    <nav class="md-nav" aria-label="TicketSerializer (serializers.ModelSerializer):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_codeself" class="md-nav__link">
+    get_code(self):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createself-validated_data" class="md-nav__link">
+    create(self, validated_data):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staffserializer-serializersmodelserializer" class="md-nav__link">
+    StaffSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#userserializer-serializersmodelserializer" class="md-nav__link">
+    UserSerializer (serializers.ModelSerializer):
+  </a>
+  
+    <nav class="md-nav" aria-label="UserSerializer (serializers.ModelSerializer):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#createself-validated_data_1" class="md-nav__link">
+    create(self, validated_data):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablespy" class="md-nav__link">
+    tables.py
+  </a>
+  
+    <nav class="md-nav" aria-label="tables.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filmtable-tablestable" class="md-nav__link">
+    FilmTable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinematableeditable-tablestable" class="md-nav__link">
+    CinemaTableEditable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinematableuneditable-tablestable" class="md-nav__link">
+    CinemaTableUneditable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postertable-tablestable" class="md-nav__link">
+    PosterTable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tickettable-tablestable" class="md-nav__link">
+    TicketTable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#halltable-tablestable" class="md-nav__link">
+    HallTable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timelinetable-tablestable" class="md-nav__link">
+    TimelineTable (tables.Table):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewpy" class="md-nav__link">
+    view.py
+  </a>
+  
+    <nav class="md-nav" aria-label="view.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_filmrequest" class="md-nav__link">
+    api_film(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_cinemarequest" class="md-nav__link">
+    api_cinema(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_timelinerequest" class="md-nav__link">
+    api_timeline(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_posterrequest" class="md-nav__link">
+    api_poster(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_hallrequest" class="md-nav__link">
+    api_hall(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_ticketrequest" class="md-nav__link">
+    api_ticket(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_staff_jobrequest" class="md-nav__link">
+    get_staff_job(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_userrequest" class="md-nav__link">
+    api_user(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createuserview-createapiview" class="md-nav__link">
+    CreateUserView (CreateAPIView):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinema_profilerequest-cinema_id" class="md-nav__link">
+    cinema_profile(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about_filmrequest-film_id" class="md-nav__link">
+    about_film(request, film_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about_devrequest" class="md-nav__link">
+    about_dev(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about_projectrequest" class="md-nav__link">
+    about_project(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filmtableviewexportmixin-singletableview" class="md-nav__link">
+    FilmTableView(ExportMixin, SingleTableView):
+  </a>
+  
+    <nav class="md-nav" aria-label="FilmTableView(ExportMixin, SingleTableView):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getself-request-args-kwargs" class="md-nav__link">
+    get(self, request, *args, **kwargs):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinema_table_allrequest" class="md-nav__link">
+    cinema_table_all(request):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_cinema_updaterequest-cinema_id" class="md-nav__link">
+    form_cinema_update(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_cinema_insertrequest" class="md-nav__link">
+    form_cinema_insert(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_poster_table_by_cinema_idrequest-cinema_id" class="md-nav__link">
+    get_poster_table_by_cinema_id(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_poster_insertrequest-cinema_id" class="md-nav__link">
+    form_poster_insert(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_timeline_table_by_cinema_idrequest-cinema_id" class="md-nav__link">
+    get_timeline_table_by_cinema_id(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_timeline_insertrequest-cinema_id" class="md-nav__link">
+    form_timeline_insert(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_hall_table_by_cinema_idrequest-cinema_id" class="md-nav__link">
+    get_hall_table_by_cinema_id(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_hall_insertrequest-cinema_id" class="md-nav__link">
+    form_hall_insert(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_hall_updaterequest-cinema_id-hall_id" class="md-nav__link">
+    form_hall_update(request, cinema_id, hall_id):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#adminpy" class="md-nav__link">
+    admin.py
+  </a>
+  
+    <nav class="md-nav" aria-label="admin.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filmadmin-adminmodeladmin" class="md-nav__link">
+    FilmAdmin (admin.ModelAdmin)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinemaadmin-adminmodeladmin" class="md-nav__link">
+    CinemaAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#posteradmin-adminmodeladmin" class="md-nav__link">
+    PosterAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timelineadmin-adminmodeladmin" class="md-nav__link">
+    TimelineAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#halladmin-adminmodeladmin" class="md-nav__link">
+    HallAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticketadmin-adminmodeladmin" class="md-nav__link">
+    TicketAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staffadmin-adminmodeladmin" class="md-nav__link">
+    StaffAdmin (admin.ModelAdmin):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#formspy" class="md-nav__link">
+    forms.py
+  </a>
+  
+    <nav class="md-nav" aria-label="forms.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#hallform-formsmodelform" class="md-nav__link">
+    HallForm (forms.ModelForm):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinemaform-formsmodelform" class="md-nav__link">
+    CinemaForm (forms.ModelForm):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#posterform-formsmodelform" class="md-nav__link">
+    PosterForm (forms.ModelForm):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timelineform-formsmodelform" class="md-nav__link">
+    TimelineForm (forms.ModelForm):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modelspy" class="md-nav__link">
+    models.py
+  </a>
+  
+    <nav class="md-nav" aria-label="models.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#film-modelsmodel" class="md-nav__link">
+    Film (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinema-modelsmodel" class="md-nav__link">
+    Cinema (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#poster-modelsmodel" class="md-nav__link">
+    Poster (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hall-modelsmodel" class="md-nav__link">
+    Hall (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timeline-modelsmodel" class="md-nav__link">
+    Timeline (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticket-modelsmodel" class="md-nav__link">
+    Ticket (models.Model):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staff-modelsmodel" class="md-nav__link">
+    Staff (models.Model):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#permissionpy" class="md-nav__link">
+    permission.py
+  </a>
+  
+    <nav class="md-nav" aria-label="permission.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#isstafforadminwriteonly-permissionsbasepermission" class="md-nav__link">
+    IsStaffOrAdminWriteOnly (permissions.BasePermission):
+  </a>
+  
+    <nav class="md-nav" aria-label="IsStaffOrAdminWriteOnly (permissions.BasePermission):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#has_permissionself-request-view" class="md-nav__link">
+    has_permission(self, request, view):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#serializerspy" class="md-nav__link">
+    serializers.py
+  </a>
+  
+    <nav class="md-nav" aria-label="serializers.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filmserializer-serializersmodelserializer" class="md-nav__link">
+    FilmSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinemaserializer-serializersmodelserializer" class="md-nav__link">
+    CinemaSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timelineserializer-serializersmodelserializer" class="md-nav__link">
+    TimelineSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#posterserializer-serializersmodelserializer" class="md-nav__link">
+    PosterSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hallserializer-serializersmodelserializer" class="md-nav__link">
+    HallSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ticketserializer-serializersmodelserializer" class="md-nav__link">
+    TicketSerializer (serializers.ModelSerializer):
+  </a>
+  
+    <nav class="md-nav" aria-label="TicketSerializer (serializers.ModelSerializer):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_codeself" class="md-nav__link">
+    get_code(self):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createself-validated_data" class="md-nav__link">
+    create(self, validated_data):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#staffserializer-serializersmodelserializer" class="md-nav__link">
+    StaffSerializer (serializers.ModelSerializer):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#userserializer-serializersmodelserializer" class="md-nav__link">
+    UserSerializer (serializers.ModelSerializer):
+  </a>
+  
+    <nav class="md-nav" aria-label="UserSerializer (serializers.ModelSerializer):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#createself-validated_data_1" class="md-nav__link">
+    create(self, validated_data):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tablespy" class="md-nav__link">
+    tables.py
+  </a>
+  
+    <nav class="md-nav" aria-label="tables.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#filmtable-tablestable" class="md-nav__link">
+    FilmTable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinematableeditable-tablestable" class="md-nav__link">
+    CinemaTableEditable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinematableuneditable-tablestable" class="md-nav__link">
+    CinemaTableUneditable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#postertable-tablestable" class="md-nav__link">
+    PosterTable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tickettable-tablestable" class="md-nav__link">
+    TicketTable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#halltable-tablestable" class="md-nav__link">
+    HallTable (tables.Table):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#timelinetable-tablestable" class="md-nav__link">
+    TimelineTable (tables.Table):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#viewpy" class="md-nav__link">
+    view.py
+  </a>
+  
+    <nav class="md-nav" aria-label="view.py">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#api_filmrequest" class="md-nav__link">
+    api_film(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_cinemarequest" class="md-nav__link">
+    api_cinema(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_timelinerequest" class="md-nav__link">
+    api_timeline(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_posterrequest" class="md-nav__link">
+    api_poster(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_hallrequest" class="md-nav__link">
+    api_hall(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_ticketrequest" class="md-nav__link">
+    api_ticket(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_staff_jobrequest" class="md-nav__link">
+    get_staff_job(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#api_userrequest" class="md-nav__link">
+    api_user(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#createuserview-createapiview" class="md-nav__link">
+    CreateUserView (CreateAPIView):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinema_profilerequest-cinema_id" class="md-nav__link">
+    cinema_profile(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about_filmrequest-film_id" class="md-nav__link">
+    about_film(request, film_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about_devrequest" class="md-nav__link">
+    about_dev(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about_projectrequest" class="md-nav__link">
+    about_project(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filmtableviewexportmixin-singletableview" class="md-nav__link">
+    FilmTableView(ExportMixin, SingleTableView):
+  </a>
+  
+    <nav class="md-nav" aria-label="FilmTableView(ExportMixin, SingleTableView):">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getself-request-args-kwargs" class="md-nav__link">
+    get(self, request, *args, **kwargs):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cinema_table_allrequest" class="md-nav__link">
+    cinema_table_all(request):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_cinema_updaterequest-cinema_id" class="md-nav__link">
+    form_cinema_update(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_cinema_insertrequest" class="md-nav__link">
+    form_cinema_insert(request):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_poster_table_by_cinema_idrequest-cinema_id" class="md-nav__link">
+    get_poster_table_by_cinema_id(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_poster_insertrequest-cinema_id" class="md-nav__link">
+    form_poster_insert(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_timeline_table_by_cinema_idrequest-cinema_id" class="md-nav__link">
+    get_timeline_table_by_cinema_id(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_timeline_insertrequest-cinema_id" class="md-nav__link">
+    form_timeline_insert(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_hall_table_by_cinema_idrequest-cinema_id" class="md-nav__link">
+    get_hall_table_by_cinema_id(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_hall_insertrequest-cinema_id" class="md-nav__link">
+    form_hall_insert(request, cinema_id):
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#form_hall_updaterequest-cinema_id-hall_id" class="md-nav__link">
+    form_hall_update(request, cinema_id, hall_id):
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/AndrewMalitchuk/cinema-server-monolith/edit/master/docs/server_app.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                  
+                
+                
+                <h1 id="server_app">server_app</h1>
+<h2 id="adminpy">admin.py</h2>
+<h3 id="filmadmin-adminmodeladmin">FilmAdmin (<code>admin.ModelAdmin</code>)</h3>
+<p>A class for displaying Cinema entity in proper way for Admin-page</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>list_display</code>: A list of fields for displaying in Admin-page</li>
+<li><code>list_display_links</code>: A list of fields for links</li>
+<li><code>search_fields</code>: A list of fields for searching</li>
+</ul>
+<h3 id="cinemaadmin-adminmodeladmin">CinemaAdmin (<code>admin.ModelAdmin</code>):</h3>
+<p>A class for displaying Cinema entity in proper way for Admin-page</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>list_display</code>: A list of fields for displaying in Admin-page</li>
+<li><code>list_display_links</code>: A list of fields for links</li>
+<li><code>search_fields</code>: A list of fields for searching</li>
+</ul>
+<h3 id="posteradmin-adminmodeladmin">PosterAdmin (<code>admin.ModelAdmin</code>):</h3>
+<p>A class for displaying Poster entity in proper way for Admin-page</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>list_display</code>: A list of fields for displaying in Admin-page</li>
+<li><code>list_display_links</code>: A list of fields for links</li>
+<li><code>search_fields</code>: A list of fields for searching</li>
+</ul>
+<h3 id="timelineadmin-adminmodeladmin">TimelineAdmin (<code>admin.ModelAdmin</code>):</h3>
+<p>A class for displaying Timeline entity in proper way for Admin-page</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>list_display</code>: A list of fields for displaying in Admin-page</li>
+<li><code>list_display_links</code>: A list of fields for links</li>
+<li><code>search_fields</code>: A list of fields for searching</li>
+</ul>
+<h3 id="halladmin-adminmodeladmin">HallAdmin (<code>admin.ModelAdmin</code>):</h3>
+<p>A class for displaying Hall entity in proper way for Admin-page</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>list_display</code>: A list of fields for displaying in Admin-page</li>
+<li><code>list_display_links</code>: A list of fields for links</li>
+<li><code>search_fields</code>: A list of fields for searching</li>
+</ul>
+<h3 id="ticketadmin-adminmodeladmin">TicketAdmin (<code>admin.ModelAdmin</code>):</h3>
+<p>A class for displaying Ticket entity in proper way for Admin-page</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>list_display</code>: A list of fields for displaying in Admin-page</li>
+<li><code>list_display_links</code>: A list of fields for links</li>
+<li><code>search_fields</code>: A list of fields for searching</li>
+</ul>
+<h3 id="staffadmin-adminmodeladmin">StaffAdmin (<code>admin.ModelAdmin</code>):</h3>
+<p>A class for displaying Staff entity in proper way for Admin-page</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>list_display</code>: A list of fields for displaying in Admin-page</li>
+<li><code>list_display_links</code>: A list of fields for links</li>
+<li><code>search_fields</code>: A list of fields for searching</li>
+</ul>
+<h2 id="formspy">forms.py</h2>
+<h3 id="hallform-formsmodelform">HallForm (<code>forms.ModelForm</code>):</h3>
+<p>A class that represents a form for Hall entity</p>
+<h3 id="cinemaform-formsmodelform">CinemaForm (<code>forms.ModelForm</code>):</h3>
+<p>A class that represents a form for Cinema entity</p>
+<h3 id="posterform-formsmodelform">PosterForm (<code>forms.ModelForm</code>):</h3>
+<p>A class that represents a form for Poster entity</p>
+<h3 id="timelineform-formsmodelform">TimelineForm (<code>forms.ModelForm</code>):</h3>
+<p>A class that represents a form for Timeline entity</p>
+<h2 id="modelspy">models.py</h2>
+<h3 id="film-modelsmodel">Film (<code>models.Model</code>):</h3>
+<p>A class that represents Film entity</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>GENRE</code>: An enumeration for available genres</li>
+<li><code>title</code>: A film's title</li>
+<li><code>description</code>: A film's description</li>
+<li><code>date</code>: A film's date</li>
+<li><code>duration</code>: A film's duration</li>
+<li><code>genre</code>: A film's genre</li>
+<li><code>video_url</code>: A film's trailer URL (<code>youtube</code>)</li>
+<li><code>pic_url</code>: A film's poster URL</li>
+</ul>
+<h3 id="cinema-modelsmodel">Cinema (<code>models.Model</code>):</h3>
+<p>A class that represents Cinema entity</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>name</code>: A cinema's name</li>
+<li><code>address</code>: A cinema's address in current city</li>
+<li><code>city</code>: City's name</li>
+<li><code>telephone</code>: A cinema's telephone</li>
+<li><code>geo_lat</code>: Latitude for location on the map</li>
+<li><code>geo_lon</code>: Longitude for location on the map</li>
+<li><code>pic_url</code>: A cinema's picture/logo URL</li>
+</ul>
+<h3 id="poster-modelsmodel">Poster (<code>models.Model</code>):</h3>
+<p>A class that represents Poster entity</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>cinema_id</code>: Cinema's ID for linking</li>
+<li><code>film_id</code>: Film's ID for linking</li>
+</ul>
+<h3 id="hall-modelsmodel">Hall (<code>models.Model</code>):</h3>
+<p>A class that represents Hall entity</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>name</code>: A hall's name</li>
+<li><code>cinema_id</code>: Cinema's ID for linking</li>
+<li><code>hall_json</code>: JSON-entity for hall rendering</li>
+</ul>
+<h3 id="timeline-modelsmodel">Timeline (<code>models.Model</code>):</h3>
+<p>A class that represents Timeline entity</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>cinema_id</code>: Cinema's ID for linking</li>
+<li><code>film_id</code>: Film's ID for linking</li>
+<li><code>hall_id</code>: Hall's ID for linking</li>
+<li><code>time</code>: A session's time</li>
+<li><code>date</code>: A session's date</li>
+<li><code>price</code>: A price for current price</li>
+</ul>
+<h3 id="ticket-modelsmodel">Ticket (<code>models.Model</code>):</h3>
+<p>A class that represents Ticket entity</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>STATUS</code>: A enumeration that contains Ticket's status</li>
+<li><code>place</code>: Place in hall for current session</li>
+<li><code>status</code>: Ticket's status</li>
+<li><code>user</code>: A User's ID</li>
+<li><code>timeline_id</code>: Timeline's ID for linking</li>
+</ul>
+<h3 id="staff-modelsmodel">Staff (<code>models.Model</code>):</h3>
+<p>A class that represents Staff entity.</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>user_id</code>: User's ID for linking</li>
+<li><code>cinema_id</code>: Cinema's ID for linking</li>
+</ul>
+<h2 id="permissionpy">permission.py</h2>
+<h3 id="isstafforadminwriteonly-permissionsbasepermission">IsStaffOrAdminWriteOnly (<code>permissions.BasePermission</code>):</h3>
+<p>Custom permission for certain REST endpoints</p>
+<p>So if you are certain user or anon - you could only fulfill GET request to marked endpoints; if you are staff or
+admin - you could fulfill all types of requests</p>
+<p><strong>Methods</strong>:</p>
+<h4 id="has_permissionself-request-view"><code>has_permission(self, request, view)</code>:</h4>
+<p>Check your user's type to allow access to write operations</p>
+<ul>
+<li><em>return</em> True if permission is granted</li>
+</ul>
+<h2 id="serializerspy">serializers.py</h2>
+<h3 id="filmserializer-serializersmodelserializer">FilmSerializer (<code>serializers.ModelSerializer</code>):</h3>
+<p>Serializer for Film entity</p>
+<h3 id="cinemaserializer-serializersmodelserializer">CinemaSerializer (<code>serializers.ModelSerializer</code>):</h3>
+<p>Serializer for Cinema entity</p>
+<h3 id="timelineserializer-serializersmodelserializer">TimelineSerializer (<code>serializers.ModelSerializer</code>):</h3>
+<p>Serializer for Timeline entity</p>
+<h3 id="posterserializer-serializersmodelserializer">PosterSerializer (<code>serializers.ModelSerializer</code>):</h3>
+<p>Serializer for Poster entity</p>
+<h3 id="hallserializer-serializersmodelserializer">HallSerializer (<code>serializers.ModelSerializer</code>):</h3>
+<p>Serializer for Hall entity</p>
+<h3 id="ticketserializer-serializersmodelserializer">TicketSerializer (<code>serializers.ModelSerializer</code>):</h3>
+<p>Serializer for Film entity</p>
+<p><strong>Methods</strong>:</p>
+<h4 id="get_codeself"><code>get_code(self)</code>:</h4>
+<p>Generate ticket's QR code</p>
+<ul>
+<li><em>return</em> unique ticket code</li>
+</ul>
+<h4 id="createself-validated_data"><code>create(self, validated_data)</code>:</h4>
+<p>Create new Ticket entity using pre-generated unique QR-code</p>
+<ul>
+<li><em>param</em> validated_data</li>
+<li><em>return</em> created Ticket entity</li>
+</ul>
+<h3 id="staffserializer-serializersmodelserializer">StaffSerializer (<code>serializers.ModelSerializer</code>):</h3>
+<p>Serializer for Film entity</p>
+<h3 id="userserializer-serializersmodelserializer">UserSerializer (<code>serializers.ModelSerializer</code>):</h3>
+<p>Serializer for Film entity</p>
+<p><strong>Methods</strong>:</p>
+<h4 id="createself-validated_data_1"><code>create(self, validated_data)</code>:</h4>
+<p>Create new User from mobile-client; pay attention on is_staff field - it is False</p>
+<ul>
+<li><em>param</em> validated_data</li>
+<li><em>return</em> created User</li>
+</ul>
+<h2 id="tablespy">tables.py</h2>
+<h3 id="filmtable-tablestable">FilmTable (<code>tables.Table</code>):</h3>
+<p>Table for Film entities; used for generation bootstrap-table</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>about_col</code>: extra column for opening "About Film" page</li>
+</ul>
+<h3 id="cinematableeditable-tablestable">CinemaTableEditable (<code>tables.Table</code>):</h3>
+<p>Table for Cinema entities (<code>editable</code>); used for generation bootstrap-table</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>update_col</code>: extra column for updating entity</li>
+<li><code>delete_col</code>: extra column for deleting entity</li>
+<li><code>about_col</code>: extra column for opening "About Cinema" page</li>
+</ul>
+<h3 id="cinematableuneditable-tablestable">CinemaTableUneditable (<code>tables.Table</code>):</h3>
+<p>Table for Cinema entities (<code>uneditable</code>); used for generation bootstrap-table</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>about_col</code>: extra column for opening "About Cinema" page</li>
+</ul>
+<h3 id="postertable-tablestable">PosterTable (<code>tables.Table</code>):</h3>
+<p>Table for Poster entities; used for generation bootstrap-table</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>delete_col</code>: extra column for deleting entity</li>
+</ul>
+<h3 id="tickettable-tablestable">TicketTable (<code>tables.Table</code>):</h3>
+<p>Table for Ticket entities; used for generation bootstrap-table</p>
+<h3 id="halltable-tablestable">HallTable (<code>tables.Table</code>):</h3>
+<p>Table for Hall entities; used for generation bootstrap-table</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>update_col</code>: extra column for updating entity</li>
+<li><code>delete_col</code>: extra column for deleting entity</li>
+</ul>
+<h3 id="timelinetable-tablestable">TimelineTable (<code>tables.Table</code>):</h3>
+<p>Table for Timeline entities; used for generation bootstrap-table</p>
+<p><strong>Attributes</strong>:</p>
+<ul>
+<li><code>delete_col</code>: extra column for deleting entity</li>
+</ul>
+<h2 id="viewpy">view.py</h2>
+<h3 id="api_filmrequest"><code>api_film(request)</code>:</h3>
+<p>REST endpoint for Film entity</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>return</em> Film entity</li>
+</ul>
+<h3 id="api_cinemarequest"><code>api_cinema(request)</code>:</h3>
+<p>REST endpoint for Cinema entity</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>return</em> Cinema entity</li>
+</ul>
+<h3 id="api_timelinerequest"><code>api_timeline(request)</code>:</h3>
+<p>REST endpoint for Timeline entity</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>return</em> Cinema entity</li>
+</ul>
+<h3 id="api_posterrequest"><code>api_poster(request)</code>:</h3>
+<p>REST endpoint for Poster entity</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>return</em> Poster entity</li>
+</ul>
+<h3 id="api_hallrequest"><code>api_hall(request)</code>:</h3>
+<p>REST endpoint for Hall entity</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>return</em> Hall entity</li>
+</ul>
+<h3 id="api_ticketrequest"><code>api_ticket(request)</code>:</h3>
+<p>REST endpoint for Ticket entity</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>return</em> Ticket entity</li>
+</ul>
+<h3 id="get_staff_jobrequest"><code>get_staff_job(request)</code>:</h3>
+<p>REST endpoint for Staff entity; used for getting Staff' job</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>return</em> Staff entity</li>
+</ul>
+<h3 id="api_userrequest"><code>api_user(request)</code>:</h3>
+<p>REST endpoint for User entity</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>return</em> User entity</li>
+</ul>
+<h3 id="createuserview-createapiview">CreateUserView (<code>CreateAPIView</code>):</h3>
+<p>REST endpoint for creating new user</p>
+<h3 id="cinema_profilerequest-cinema_id"><code>cinema_profile(request, cinema_id)</code>:</h3>
+<p>Get Cinema's profile</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: current cinema's ID</li>
+<li><em>return</em> chosen Cinema</li>
+</ul>
+<h3 id="about_filmrequest-film_id"><code>about_film(request, film_id)</code>:</h3>
+<p>Get Film's info</p>
+<ul>
+<li><em>param</em> request:</li>
+<li><em>param</em> film_id: current Film's ID</li>
+<li><em>return</em> chosen Film</li>
+</ul>
+<h3 id="about_devrequest"><code>about_dev(request)</code>:</h3>
+<p>Get about dev page</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>return</em> about dev page</li>
+</ul>
+<h3 id="about_projectrequest"><code>about_project(request)</code>:</h3>
+<p>Get about project page</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>return</em> about project page</li>
+</ul>
+<h3 id="filmtableviewexportmixin-singletableview">FilmTableView(<code>ExportMixin, SingleTableView</code>):</h3>
+<p>Get all Films entities as a table</p>
+<h4 id="getself-request-args-kwargs"><code>get(self, request, *args, **kwargs)</code>:</h4>
+<p>Returns Film's table</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> args</li>
+<li><em>param</em> kwargs</li>
+<li><em>return</em> Film's table       </li>
+</ul>
+<h4 id="cinema_table_allrequest"><code>cinema_table_all(request)</code>:</h4>
+<p>Returns all Cinema entities as a table</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>return</em> Cinema's table</li>
+</ul>
+<h3 id="form_cinema_updaterequest-cinema_id"><code>form_cinema_update(request, cinema_id)</code>:</h3>
+<p>Returns Cinema's update form</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: Cinema's ID for updating</li>
+<li><em>return</em> web-page for updating</li>
+</ul>
+<h3 id="form_cinema_insertrequest"><code>form_cinema_insert(request)</code>:</h3>
+<p>Returns Cinema's insert form</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>return</em> web-page for creating new entity</li>
+</ul>
+<h3 id="get_poster_table_by_cinema_idrequest-cinema_id"><code>get_poster_table_by_cinema_id(request, cinema_id)</code>:</h3>
+<p>Returns all Poster entities with certain Cinema's ID value</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: linked Cinema's ID</li>
+<li><em>return</em> table with all Posters </li>
+</ul>
+<h3 id="form_poster_insertrequest-cinema_id"><code>form_poster_insert(request, cinema_id)</code>:</h3>
+<p>Returns Poster's insert form</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: linked Cinema's ID</li>
+<li><em>return</em> web-page for creating new entity</li>
+</ul>
+<h3 id="get_timeline_table_by_cinema_idrequest-cinema_id"><code>get_timeline_table_by_cinema_id(request, cinema_id)</code>:</h3>
+<p>Returns all Timeline entities as a table with certain Cinema's ID value</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: linked Cinema's ID</li>
+<li><em>return</em> table with all Timeline</li>
+</ul>
+<h3 id="form_timeline_insertrequest-cinema_id"><code>form_timeline_insert(request, cinema_id)</code>:</h3>
+<p>Returns Timeline's insert form</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: linked Cinema's ID</li>
+<li><em>return</em> web-page for creating new entity</li>
+</ul>
+<h3 id="get_hall_table_by_cinema_idrequest-cinema_id"><code>get_hall_table_by_cinema_id(request, cinema_id)</code>:</h3>
+<p>Returns all Hall entities as a table with certain Cinema's ID value</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: linked Cinema's ID</li>
+<li><em>return</em> table with all Hall</li>
+</ul>
+<h3 id="form_hall_insertrequest-cinema_id"><code>form_hall_insert(request, cinema_id)</code>:</h3>
+<p>Returns Hall's insert form</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: linked Hall's ID</li>
+<li><em>return</em> web-page for creating new entity</li>
+</ul>
+<h3 id="form_hall_updaterequest-cinema_id-hall_id"><code>form_hall_update(request, cinema_id, hall_id)</code>:</h3>
+<p>Returns Hall's update form</p>
+<ul>
+<li><em>param</em> request</li>
+<li><em>param</em> cinema_id: linked Cinema's ID</li>
+<li><em>param</em> hall_id: Hall's ID for updating</li>
+<li><em>return</em> web-page for updating</li>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../server_monolith/" title="server_monolith" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                server_monolith
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.83fe6e3c.min.js"></script>
+      <script src="../assets/javascripts/bundle.7e1cb91c.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.37585f48.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
