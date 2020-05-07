@@ -11,7 +11,7 @@ This is a part of Bachelor diploma project "cinema-app" which consist of:
 * [mobile client for supervisor/conductor](https://github.com/AndrewMalitchuk/cinema-supervisor);
 * [simple web client](https://github.com/AndrewMalitchuk/cinema-server-monolith).
 
-The main part of this project is REST API, which was created using Django REST Framework. [Here]() you can see REST API documentation. Python DocString you can check [here](). 
+The main part of this project is REST API, which was created using Django REST Framework.
 
 You can see simple demo below or [download video](https://github.com/AndrewMalitchuk/cinema-server-monolith/blob/documentation/README/1.mp4). 
 
