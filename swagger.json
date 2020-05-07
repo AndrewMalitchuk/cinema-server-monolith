@@ -1,0 +1,1131 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a documentation for REST API of the cinema-server.",
+    "version": "1.0.0",
+    "title": "cinema-app",
+    "x-logo": {
+      "url": "http://127.0.0.1:8000/static/logo.png",
+      "backgroundColor": "#FFFFFF",
+      "altText": "cinema-app"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost",
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Hall",
+      "description": "Hall entities"
+    },
+    {
+      "name": "Poster",
+      "description": "Poster entities"
+    },
+    {
+      "name": "Ticket",
+      "description": "Ticket entities"
+    },
+    {
+      "name": "Timeline",
+      "description": "Timeline entities"
+    },
+    {
+      "name": "Cinema",
+      "description": "Cinema entities"
+    },
+    {
+      "name": "Film",
+      "description": "Film entities"
+    },
+    {
+      "name": "Token",
+      "description": "JWT Token"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/hall": {
+      "get": {
+        "tags": [
+          "Hall"
+        ],
+        "summary": "Get Hall entities",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Hall's id"
+          },
+          {
+            "in": "query",
+            "name": "cinema_id",
+            "type": "integer",
+            "description": "Linked Cinema's ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array of Hall's entities"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Hall"
+        ],
+        "summary": "Update certain Hall entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Hall's ID",
+            "name": "id"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "description": "Hall's name",
+            "name": "name"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "description": "Hall JSON entity for rendering",
+            "name": "hall_json"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Linked Cinema's ID",
+            "name": "cinema_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Hall entity"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Hall"
+        ],
+        "summary": "Create new Hall entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Hall's ID",
+            "name": "id"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "description": "Hall's name",
+            "name": "name"
+          },
+          {
+            "in": "formData",
+            "type": "string",
+            "description": "Hall JSON entity for rendering",
+            "name": "hall_json"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Linked Cinema's ID",
+            "name": "cinema_id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Hall entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Hall"
+        ],
+        "summary": "Delete Hall entity",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Hall's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Hall entity was deleted"
+          }
+        }
+      }
+    },
+    "/poster": {
+      "get": {
+        "tags": [
+          "Poster"
+        ],
+        "summary": "Get Poster entities",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Poster's id"
+          },
+          {
+            "in": "query",
+            "name": "cinema_id",
+            "type": "integer",
+            "description": "Linked Cinema's ID"
+          },
+          {
+            "in": "query",
+            "name": "film_id",
+            "type": "integer",
+            "description": "Linked Film's ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array of Poster's entities"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Poster"
+        ],
+        "summary": "Update certain Poster entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Hall's ID",
+            "name": "id"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Linked Cinema's ID",
+            "name": "cinema_id"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Linked Film's ID",
+            "name": "film_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Poster entity"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Poster"
+        ],
+        "summary": "Create new Hall entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Hall's ID",
+            "name": "id"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Linked Cinema's ID",
+            "name": "cinema_id"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Linked Film's ID",
+            "name": "film_id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Poster entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Poster"
+        ],
+        "summary": "Delete Poster entity",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Poster's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Poster entity was deleted"
+          }
+        }
+      }
+    },
+    "/ticket": {
+      "get": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Get Ticket entities",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Ticket's id"
+          },
+          {
+            "in": "query",
+            "name": "place",
+            "type": "string",
+            "description": "Place in Hall"
+          },
+          {
+            "in": "query",
+            "name": "code",
+            "type": "string",
+            "description": "Ticket's QR code"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
+            "description": "Ticket's status"
+          },
+          {
+            "in": "query",
+            "name": "user_id",
+            "type": "integer",
+            "description": "Owner ID"
+          },
+          {
+            "in": "query",
+            "name": "timeline_id",
+            "type": "integer",
+            "description": "Linked Timeline's ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array of Timeline's entities"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Update certain Ticket entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "integer",
+            "description": "Ticket's id"
+          },
+          {
+            "in": "formData",
+            "name": "place",
+            "type": "string",
+            "description": "Place in Hall"
+          },
+          {
+            "in": "formData",
+            "name": "code",
+            "type": "string",
+            "description": "Ticket's QR code"
+          },
+          {
+            "in": "formData",
+            "name": "status",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
+            "description": "Ticket's status"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Owner ID",
+            "name": "user_id"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Linked Timeline's ID",
+            "name": "timeline_id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Ticket entity"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Create new Ticket entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "integer",
+            "description": "Ticket's id"
+          },
+          {
+            "in": "formData",
+            "name": "place",
+            "type": "string",
+            "description": "Place in Hall"
+          },
+          {
+            "in": "formData",
+            "name": "code",
+            "type": "string",
+            "description": "Ticket's QR code"
+          },
+          {
+            "in": "formData",
+            "name": "status",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3"
+            ],
+            "description": "Ticket's status"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Owner ID",
+            "name": "user_id"
+          },
+          {
+            "in": "formData",
+            "type": "integer",
+            "description": "Linked Timeline's ID",
+            "name": "timeline_id"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Ticket entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Ticket"
+        ],
+        "summary": "Delete Ticket entity",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Ticket's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Ticket entity was deleted"
+          }
+        }
+      }
+    },
+    "/timeline": {
+      "get": {
+        "tags": [
+          "Timeline"
+        ],
+        "summary": "Get Timeline entities",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Timeline's id"
+          },
+          {
+            "in": "query",
+            "name": "cinema_id",
+            "type": "integer",
+            "description": "Linked Cinema's ID"
+          },
+          {
+            "in": "query",
+            "name": "film_id",
+            "type": "integer",
+            "description": "Linked Film's ID"
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "type": "string",
+            "description": "Timeline's date"
+          },
+          {
+            "in": "query",
+            "name": "time",
+            "type": "string",
+            "description": "Timeline's time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array of Timeline's entities"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Timeline"
+        ],
+        "summary": "Update certain Timeline entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "integer",
+            "description": "Timeline's id"
+          },
+          {
+            "in": "formData",
+            "name": "date",
+            "type": "string",
+            "description": "Timeline's date"
+          },
+          {
+            "in": "formData",
+            "name": "time",
+            "type": "string",
+            "description": "Timeline's time"
+          },
+          {
+            "in": "formData",
+            "name": "cinema_id",
+            "type": "integer",
+            "description": "Linked Cinema's ID"
+          },
+          {
+            "in": "formData",
+            "name": "film_id",
+            "type": "integer",
+            "description": "Linked Film's ID"
+          },
+          {
+            "in": "formData",
+            "name": "hall_id",
+            "type": "integer",
+            "description": "Linked Hall's ID"
+          },
+          {
+            "in": "formData",
+            "name": "price",
+            "type": "number",
+            "description": "Price for current timeline"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Timeline entity"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Timeline"
+        ],
+        "summary": "Create new Timeline entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "integer",
+            "description": "Timeline's id"
+          },
+          {
+            "in": "formData",
+            "name": "date",
+            "type": "string",
+            "description": "Timeline's date"
+          },
+          {
+            "in": "formData",
+            "name": "time",
+            "type": "string",
+            "description": "Timeline's time"
+          },
+          {
+            "in": "formData",
+            "name": "cinema_id",
+            "type": "integer",
+            "description": "Linked Cinema's ID"
+          },
+          {
+            "in": "formData",
+            "name": "film_id",
+            "type": "integer",
+            "description": "Linked Film's ID"
+          },
+          {
+            "in": "formData",
+            "name": "hall_id",
+            "type": "integer",
+            "description": "Linked Hall's ID"
+          },
+          {
+            "in": "formData",
+            "name": "price",
+            "type": "number",
+            "description": "Price for current timeline"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Timeline entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Timeline"
+        ],
+        "summary": "Delete Timeline entity",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Timeline's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Timeline entity was deleted"
+          }
+        }
+      }
+    },
+    "/cinema": {
+      "get": {
+        "tags": [
+          "Cinema"
+        ],
+        "summary": "Get Cinema entities",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Cinema's id"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "type": "string",
+            "description": "Cinema's name"
+          },
+          {
+            "in": "query",
+            "name": "city",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "description": "Cinema's city location"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array of Cinema's entities"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Cinema"
+        ],
+        "summary": "Update certain Cinema entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "integer",
+            "description": "Cinema's id"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "Cinema's name"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "Cinema's address"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "description": "Cinema's city location"
+          },
+          {
+            "in": "formData",
+            "name": "telephone",
+            "type": "string",
+            "description": "Cinema's administration phone"
+          },
+          {
+            "in": "formData",
+            "name": "geo_lat",
+            "type": "number",
+            "description": "Cinema's latitude location"
+          },
+          {
+            "in": "formData",
+            "name": "geo_lon",
+            "type": "number",
+            "description": "Cinema's longitude location"
+          },
+          {
+            "in": "formData",
+            "name": "pic_url",
+            "type": "string",
+            "description": "Cinema's picture URL"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Cinema entity"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Cinema"
+        ],
+        "summary": "Create new Cinema entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "integer",
+            "description": "Cinema's id"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "Cinema's name"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "Cinema's address"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "description": "Cinema's city location"
+          },
+          {
+            "in": "formData",
+            "name": "telephone",
+            "type": "string",
+            "description": "Cinema's administration phone"
+          },
+          {
+            "in": "formData",
+            "name": "geo_lat",
+            "type": "number",
+            "description": "Cinema's latitude location"
+          },
+          {
+            "in": "formData",
+            "name": "geo_lon",
+            "type": "number",
+            "description": "Cinema's longitude location"
+          },
+          {
+            "in": "formData",
+            "name": "pic_url",
+            "type": "string",
+            "description": "Cinema's picture URL"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Cinema entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Cinema"
+        ],
+        "summary": "Delete Cinema entity",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Cinema's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Cinema entity was deleted"
+          }
+        }
+      }
+    },
+    "/film": {
+      "get": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Get Film entities",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Film's id"
+          },
+          {
+            "in": "query",
+            "name": "title",
+            "type": "string",
+            "description": "Films's title"
+          },
+          {
+            "in": "query",
+            "name": "date",
+            "type": "string",
+            "description": "Films's premiere"
+          },
+          {
+            "in": "query",
+            "name": "genre",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "description": "Film's genre"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A JSON array of Film's entities"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Update certain Film entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "integer",
+            "description": "Film's id"
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "Film's title"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "Film's description"
+          },
+          {
+            "in": "formData",
+            "name": "date",
+            "type": "string",
+            "description": "Film premiere"
+          },
+          {
+            "in": "formData",
+            "name": "duration",
+            "type": "number",
+            "description": "Film duration"
+          },
+          {
+            "in": "formData",
+            "name": "genre",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "description": "Film's genre"
+          },
+          {
+            "in": "formData",
+            "name": "video_url",
+            "type": "string",
+            "description": "Film's trailer URL"
+          },
+          {
+            "in": "formData",
+            "name": "pic_url",
+            "type": "string",
+            "description": "Film's poster URL"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated Film entity"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Create new Film entity",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "id",
+            "type": "integer",
+            "description": "Film's id"
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "Film's title"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "Film's description"
+          },
+          {
+            "in": "formData",
+            "name": "date",
+            "type": "string",
+            "description": "Film premiere"
+          },
+          {
+            "in": "formData",
+            "name": "duration",
+            "type": "number",
+            "description": "Film duration"
+          },
+          {
+            "in": "formData",
+            "name": "genre",
+            "type": "integer",
+            "enum": [
+              "1",
+              "2",
+              "3",
+              "4",
+              "5"
+            ],
+            "description": "Film's genre"
+          },
+          {
+            "in": "formData",
+            "name": "video_url",
+            "type": "string",
+            "description": "Film's trailer URL"
+          },
+          {
+            "in": "formData",
+            "name": "pic_url",
+            "type": "string",
+            "description": "Film's poster URL"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created Film entity"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Film"
+        ],
+        "summary": "Delete Film entity",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "type": "integer",
+            "description": "Film's id"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Film entity was deleted"
+          }
+        }
+      }
+    },
+    "/token/refresh": {
+      "post": {
+        "tags": [
+          "Token"
+        ],
+        "summary": "Refresh JWT token",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "refresh",
+            "type": "string",
+            "description": "Current JWT token"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Refreshed JWT token"
+          }
+        }
+      }
+    },
+    "/token": {
+      "post": {
+        "tags": [
+          "Token"
+        ],
+        "summary": "Get JWT token",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "username",
+            "type": "string",
+            "description": "Username"
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "description": "Password"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Available JWT token"
+          }
+        }
+      }
+    }
+  }
+}
