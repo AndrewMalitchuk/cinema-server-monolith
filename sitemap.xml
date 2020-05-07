@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url>
-     <loc>http://127.0.0.1:8000/mkdocs/server_monolith/</loc>
+     <loc>https://andrewmalitchuk.github.io/cinema-server-monolith/</loc>
      <lastmod>2020-05-07</lastmod>
      <changefreq>daily</changefreq>
     </url><url>
-     <loc>http://127.0.0.1:8000/mkdocs/server_app/</loc>
+     <loc>https://andrewmalitchuk.github.io/cinema-server-monolith/</loc>
      <lastmod>2020-05-07</lastmod>
      <changefreq>daily</changefreq>
     </url>
