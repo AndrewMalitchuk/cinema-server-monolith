@@ -1,0 +1,10 @@
+site_name: cinema-server-monolith
+repo_url: https://github.com/AndrewMalitchuk/cinema-server-monolith
+site_url: http://127.0.0.1:8000/mkdocs
+site_author: Andrew Malitchuk
+theme: material
+nav:
+  - server_monolith: server_monolith.md
+  - server_app: server_app.md
+plugins:
+    - search

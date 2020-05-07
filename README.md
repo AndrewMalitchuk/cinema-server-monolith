@@ -36,4 +36,4 @@ Please make sure to update tests as appropriate.
 
 ## License
 
-cinema-server-monolith under the [Apache License, version 2.0 ]().
+cinema-server-monolith under the [Apache License, version 2.0 ](https://github.com/AndrewMalitchuk/cinema-server-monolith/blob/master/LICENSE).
